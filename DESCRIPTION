@@ -1,0 +1,16 @@
+Package: rbgm
+Type: Package
+Title: Utilities for BGM files for Atlantis
+Version: 0.0-1
+Author: Michael D. Sumner
+Maintainer: Michael D. Sumner <michael.sumner@aad.gov.au>
+Depends:
+    raster,
+    sp
+Imports:
+    geosphere
+Description: Tools for handling network data for Atlantis from box-geometry
+    model (BGM) files
+NeedsCompilation: no
+ByteCompile: yes
+License: GPL-3
