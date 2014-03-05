@@ -24,6 +24,10 @@ NULL
 ##' coordinates, the list is a named vector with the label for each
 ##' face
 ##' @importFrom geosphere gcIntermediate
+##' @examples
+##' ## pull in faces as a SpatialLinesDataFrame, densified to 30km between vertices
+##' x <- read.faces("file.bgm", densify = 30, sp = TRUE)
+##'
 read.faces <- function(x, sp = TRUE, densify, ...) {
     xlines <- readLines(x)
 
