@@ -26,7 +26,9 @@ NULL
 ##' @importFrom geosphere gcIntermediate
 ##' @examples
 ##' ## pull in faces as a SpatialLinesDataFrame, densified to 30km between vertices
+##' \dontrun{
 ##' x <- read.faces("file.bgm", densify = 30, sp = TRUE)
+##' }
 ##' @export
 read.faces <- function(x, sp = TRUE, densify, ...) {
     xlines <- readLines(x)
