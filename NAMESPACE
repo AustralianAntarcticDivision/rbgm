@@ -1,3 +1,0 @@
-import(raster)
-import(sp)
-importFrom(geosphere,gcIntermediate)
