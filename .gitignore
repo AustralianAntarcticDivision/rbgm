@@ -1,3 +1,4 @@
-man/*.Rd
+#man/*.Rd
 *~
-NAMESPACE
+.Rproj.user
+*.Rproj
