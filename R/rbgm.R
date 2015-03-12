@@ -85,3 +85,56 @@ densifymindist <- function(x, mindist, longlat = longlat) {
 }
 
 
+##' Build dz layer values for Atlantis from a bottom value, up through successive intervals. Each value is the positive offset required to rise
+##' to the top of the current interval. 
+##'
+##' Offset values are returned to move from \code{z} against the intervals in \code{zlayers}. The intervals are assumed
+##' to be sorted and increasing in value from \code{-Inf}inity. Once the maximum layer is reached the result is padded
+##' by that top value. 
+##' 
+##' @title Build Atlantis dz Values
+##' @param z lowermost value
+##' @param zlayers intervals of layer values
+##' @return numeric vector of offset values
+##' @export
+##' @examples 
+##' ## sanity tests
+##' build_dz(-5000)
+##' build_dz(-1500)
+##' ##build_dz(300)  ## error
+##' build_dz(0)    ## ok
+
+
+##' ## data
+##' dd <- c(-4396.49, -2100.84, -4448.81, -411.96, -2703.56, -5232.96, 
+##'        -4176.25, -2862.37, -3795.6, -1024.64, -897.93, -1695.82, -4949.76, 
+##'     -5264.24, -2886.81)
+##' ## all values in a matrix for checking
+##' ## [zlayers, dd]
+##'dzvals <- sapply(dd, build_dz)
+
+##' ## process into text
+##' f1 <- function(x) sprintf("somelabel,%i,%s", x, paste(build_dz(dd[x]), collapse = ","))
+##' tex1 <- sapply(seq(length(dd)),  f1)
+##' ## for example
+##' f2 <- function(x) {
+##' sprintf("morelabel,%i,%s", x, paste(as.integer(build_dz(dd[x])), collapse = ","))
+##' }
+##' tex2 <- sapply(seq(length(dd)),  f2)
+
+
+build_dz <- function(z, zlayers = c(-Inf, -2000, -1000, -750, -400, -300, -200, -100, -50, -20, 0)) {
+  if (length(z) > 1L) {
+    z <- z[1L]
+    warning("length of z is longer than 1, only the first element will be used")
+  }
+  layerindex <- findInterval(z, zlayers, rightmost.closed = TRUE) + 1L
+  
+  if (layerindex > length(zlayers)) stop("z is not in the intervals defined by zlayers")
+  startdz <- zlayers[layerindex] - z
+  out <- c(startdz, diff(zlayers[-seq(layerindex - 1)]))
+  c(out, rep(max(zlayers), (length(zlayers) - 1) - length(out)))
+}
+
+
+
