@@ -14,3 +14,4 @@ Description: Tools for handling network data for Atlantis from box-geometry
 NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
+RoxygenNote: 5.0.0

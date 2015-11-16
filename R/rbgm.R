@@ -9,6 +9,80 @@
 #' @import raster sp
 NULL
 
+grepItems <- function(tex, itemname, nitem) {
+  alist <- vector("list", nitem)
+  for (i in seq_along(alist)) {
+    alist[[i]] <- grep(sprintf("%s%i\\.", itemname, i - 1), tex, value = TRUE)
+  }
+  alist
+}
+
+faceparse <- function(x) {
+  ind <- grep("length", x)
+  x0 <- strsplit(x, "\\s+")
+  
+  len <- as.numeric(x0[[ind]][2])
+  p1 <- as.numeric(x0[[grep("p1", x)]][2:3])
+  p2 <- as.numeric(x0[[grep("p2", x)]][2:3])
+  cs <- as.numeric(x0[[grep("cs", x)]][2:3])
+  lr <- as.integer(x0[[grep("p1", x)]][2:3])
+  data_frame(x = c(p1[1], p2[1]), y = c(p1[2], p2[2]), cs = cs, lr = lr, len = c(0, len))
+  
+}
+
+boxparse <- function(x) {
+  vertind <- grep(".vert ", x)
+  verts <-  do.call(rbind, lapply(strsplit(x[vertind], "\\s+"), function(x) as.numeric(x[2:3])))
+  x <- x[-vertind]
+  insideind <- grep("inside", x)
+  centroid <- as.numeric(strsplit(x[insideind], "\\s+")[[1]][2:3])
+  
+  metalabs <- sapply(strsplit(sapply(strsplit(x[-insideind], "\\s+"), function(x) x[1]), "\\."), "[", 2)
+  
+  metavals <- sapply(strsplit(x[-insideind], "\\s+"), function(x) x[-1])
+  names(metavals) <- metalabs
+  
+  list(verts = data_frame(x = verts[,1], y = verts[,2]), 
+       faces =  data_frame(iface = i_parse(metavals[["iface"]]), ibox = i_parse(metavals[["ibox"]])), 
+       meta = metavals[!names(metavals) %in% c("iface", "ibox")])
+}
+
+i_parse <- function(x) as.numeric(unlist(strsplit(x, "\\s+")))
+
+## which triangle is each point in 
+ptTriangle <- function(T, P, pt) {
+  pt_t <- rep(NA_integer_, nrow(pt))
+  
+  for (i in seq(nrow(T))) {
+    triang <- P[T[i,], ]
+    asub <- pt[,1] >= min(triang[,1]) & pt[,1] <= max(triang[,1]) &
+      pt[,2] >= min(triang[,2]) & pt[,2] <= max(triang[,2])
+    if (any(asub)) {
+    uvw <- geometry::cart2bary(triang, pt[asub, ])
+    pt_t[asub][uvw[,1] > 0 & uvw[, 2] > 0 & rowSums(uvw[,1:2]) < 1] <- i
+    }
+  }
+  pt_t
+}
+
+
+ptPolygon <- function(boxes, pt) {
+  pt_p <- rep(NA_integer_, nrow(pt))
+  
+  
+  for (i in seq(length(boxes))) {
+    poly <- boxes[[i]]$vert %>% dplyr::select(x, y) %>% as.matrix
+    asub <- pt[,1] >= min(poly[,1]) & pt[,1] <= max(poly[,1]) &
+      pt[,2] >= min(poly[,2]) & pt[,2] <= max(poly[,2])
+    if (any(asub)) {
+    #  print(i)
+    pip <- point.in.polygon(pt[asub,1], pt[asub,2], poly[,1], poly[,2], mode.checked = TRUE) > 0
+    #print(sum(pip))
+    pt_p[asub][pip] <- i
+    }
+  }
+  pt_p
+}
 
 ##' Partial read for .bgm files
 ##'
