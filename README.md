@@ -2,10 +2,13 @@ rbgm - R tools for Box Geometry model files
 ================================================
 
 rbgm allows reading of geometry from BGM files, either in raw
-coordinate form or as Spatial objects
+coordinate form or as Spatial objects. 
+
+There is some overlapping functionality with oms, for coupling with ROMS output. This is subject to change. 
 
 There is support to "densify" (or segmentize) the line faces to a
-minimum distance between vertices.
+minimum distance between vertices based on Earth geometry.
+
 
 ## Clone and build with roxygen documentation
 
