@@ -59,27 +59,78 @@ box <- ptPolygon(boxes, ll)
 
 ## extract surface temperature
 temp <- raster(roms, varname = "temp", level =1 )
+h <- raster(roms, varname = "h")
+Cs_r <- local({
+  library(RNetCDF)
+  nc <- open.nc(roms)
+  var.get.nc(nc, "Cs_r")
+})
+
 
 btemp <- numeric(length(boxes))
 for (i in seq_along(btemp)) btemp[i] <- mean(extract(temp, which(box == i & !is.na(box))), na.rm = TRUE)
 cols <- palr::sstPal(btemp  * 3)
 
+library(rgl)
+cols <- c("", "", "", "", "green", "grey")
+
+for (offs in c(-2000, -1000, -750, -400, -300, -200, -100, -50, -20, 0)) {
+  for (i in seq_along(boxes)[5:6]) shade3d(box2oh(boxes[[i]], offs), col = cols[i])
+}
+aspect3d(1, 1, 0.25)
+
+
+
+
+
 plot(facepairs$x, facepairs$y)
 lapply(seq_along(boxes), function(i) pbox1(boxes[[i]], col = cols[i]))
+lapply(seq_along(boxes), function(i) text(mean(boxes[[i]]$verts$x), mean(boxes[[i]]$verts$y), lab = boxes[[i]]$meta$botz))
 
 ## convert a face into indexes for a plane
 library(nabor)
 #install.packages("nabor")
 
 nnfun <- WKNNF(ll)
-plot(temp)
+ex <- 20 + extent(xyFromCell(lon, nnfun$query(as.matrix(facepairs[, c("x", "y")]), k = 1, eps = 0)$nn.idx))
+
+pal <- palr::sstPal(palette = TRUE)
 for (j in seq(1, nrow(facepairs) - 1, by = 2)) {
   ln <- facepairs[c(j, j + 1),] %>% dplyr::select(x, y) %>% as.matrix
   ln1 <- cbind(approx(1:2, ln[,1])$y, approx(1:2, ln[,2])$y)
   res <- nnfun$query(ln1, k = 1, eps = 0)
   ## line in ROMS space is 
-  res$nn.idx
-   points(xyFromCell(temp, res$nn.idx), pch = 16, cex = 0.4)
+  #res$nn.idx
+  # points(xyFromCell(temp, res$nn.idx), pch = 16, cex = 0.4)
+   romline <- xyFromCell(temp, res$nn.idx)
+   faceXYindex <- extract(temp, spLines(romline), cellnumbers = TRUE)[[1]][, "cell"]
+   romdepth <- outer(extract(h, faceXYindex), Cs_r)
+   sslice <- tslice <- wslice <- uslice <- vslice <- matrix(NA_real_, ncol = 31, nrow = length(faceXYindex))
+    for (i in 1:31) {
+      uslice[, i] <- extract(raster(roms, varname = "u", level = i), faceXYindex)
+      vslice[, i] <- extract(raster(roms, varname = "v", level = i), faceXYindex)
+      wslice[, i] <- extract(raster(roms, varname = "w", level = i), faceXYindex)
+      tslice[, i] <- extract(raster(roms, varname = "salt", level = i), faceXYindex)
+      sslice[, i] <- extract(raster(roms, varname = "temp", level = i), faceXYindex)
+      
+      
+    }
+
+  par(mfrow = c(2, 2))
+  
+  plot(crop(temp, ex))
+  for (aa in seq_along(boxes)) {
+    xy <- as.matrix(boxes[[aa]]$verts[, c("x", "y")])
+    polygon(xyFromCell(lon, nnfun$query(xy, k = 1, eps = 0)$nn.idx))
+    lines(xyFromCell(lon, nnfun$query(ln1, k = 1, eps = 0)$nn.idx), col = "red", lwd = 4)
+  }
+  plot(facepairs$x, facepairs$y)
+  lapply(seq_along(boxes), function(i) pbox1(boxes[[i]], col = "transparent"))
+  lines(ln1, lwd = 4, col = "red")
+   image(sqrt(uslice^2 + vslice^2 + wslice^2), col = pal$cols)
+   contour(romdepth, add = T, level = c(seq(0, -500, by = -50), seq(550, -5000, by = -500)))
+  
+   scan("", 1)
 }
 
 

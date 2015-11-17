@@ -9,6 +9,28 @@
 #' @import raster sp
 NULL
 
+box2pslg <- function(x) {
+  x <- head(x$verts, -1) %>% dplyr::select(x, y) %>% as.matrix
+  RTriangle::pslg(x, S = segmaker(x))
+}
+segmaker <- function(x) {
+  on.exit(options(op))
+  op <- options(warn = -1)
+  matrix(seq(nrow(x)), nrow = nrow(x) + 1, ncol  = 2)[seq(nrow(x)), ]
+}
+box2oh <- function(x) {
+  tri <- RTriangle::triangulate(box2pslg(x))
+}
+
+box2oh <- function(x, offset = 0) {
+  tri <- RTriangle::triangulate(box2pslg(x))
+  obj <- rgl::tetrahedron3d()
+  obj$vb <- t(cbind(tri$P, as.numeric(x$meta$botz) + offset, 1))
+  obj$it <- t(tri$T)
+  obj
+}
+
+
 grepItems <- function(tex, itemname, nitem) {
   alist <- vector("list", nitem)
   for (i in seq_along(alist)) {
