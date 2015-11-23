@@ -9,8 +9,29 @@
 #' @import raster sp
 NULL
 
+gris_bgm <- function(x) {
+  x <- read_bgm(x)
+  
+  
+  ## gris format
+  v <- x$verts %>% mutate(.vx0 = row_number())
+  bXv <- v %>% mutate(.br0 = rep(seq(nrow(x$faces)), each = 2)) %>% dplyr::select(.br0, .vx0)
+  bXv2 <- data_frame(.br0 = unlist(lapply(seq_along(x$boxes), function(xa) rep(xa, length(x$boxes[[xa]])))) + max(bXv$.br0), 
+                    .vx0 = unlist(x$boxes))
 
+  v2 <- bXv2  %>% dplyr::select(-.br0)  %>% inner_join(v) 
+  bXv2$.vx0 <- bXv2$.vx0 + nrow(v)
+ # v2 <- bXv2 <- NULL
+  gr <- gris:::normalizeVerts2(bind_rows(v, v2),  bXv %>% bind_rows(bXv2), c("x", "y"))
+  
+  gr$b <- gr$bXv %>% dplyr::select(.br0) %>% distinct() %>% mutate(.ob0 = .br0)
+  gr$o <- data_frame(.ob0 = seq(nrow(gr$b)), elem = c(rep("face", nrow(x$faces)), rep("box", length(x$boxes))))
+  class(gr) <- c("gris", "list")
+  tri <- RTriangle::triangulate(gris::mkpslg(gris:::normalizeVerts2(v, bXv, c("x", "y"))))
+  
+}
 
+#' @importFrom dplyr %>%
 read_bgm <- function(x, sp = FALSE) {
   tx <- readLines(x)  
   ## all face tokens
@@ -39,18 +60,14 @@ read_bgm <- function(x, sp = FALSE) {
   
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
   verts <- facepairs %>% dplyr::select(x, y) 
+  boxind <- lapply(boxes, function(x) (verts %>% mutate(nr = row_number()) %>% inner_join(x$verts))$nr)
+
+
   faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
-  boxes <- lapply(boxes, function(x) x$faces$iface)
-  list(verts = verts, faces = faces, boxes = boxes, bnd_verts = bnd_verts, extra = extra)
+  boxfaces <- lapply(boxes, function(x) x$faces$iface + 1)
+  list(verts = verts, faces = faces, boxes = boxind, bnd_verts = bnd_verts, extra = extra, boxfaces = boxfaces)
 }
 
-
-
-## gris format
-v <- facepairs  %>% dplyr::mutate(.vx0 = row_number())
-bXv <- v%>% mutate(.br0 = face) %>% dplyr::select(.br0, .vx0)
-v$face <- NULL
-tri <- RTriangle::triangulate(gris::mkpslg(gris:::normalizeVerts2(v, bXv, c("x", "y"))))
 
 
 
