@@ -9,6 +9,51 @@
 #' @import raster sp
 NULL
 
+
+
+read_bgm <- function(x, sp = FALSE) {
+  tx <- readLines(x)  
+  ## all face tokens
+  facesInd <- grep("^face", tx)
+  boxesInd <- grep("^box", tx)
+  ## parse boxes
+  bnd_vertInd <- grep("^bnd_vert", tx)
+  
+  ## all comments
+  hashInd <- grep("^#", tx)
+  ## unique starting tokens
+  ust <- sort(unique(sapply(strsplit(tx[-c(facesInd, boxesInd, bnd_vertInd, hashInd)], "\\s+"), "[", 1)))
+  extra <- sapply(ust, function(x) gsub("\\s+$", "", gsub("^\\s+", "", gsub(x, "", grep(x, tx, value = TRUE)))))
+
+  ## WTF
+  extra["projection"] <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
+  ## parse faces
+  ## expect extra["nface"]s
+
+  ## sanity check
+  ##if (!length(facesInd) == length(unlist(tx[facesInd]))) warning("faces data and count out of synch")
+  faceslist <- grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
+  facepairs <- do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- faceparse(faceslist[[xi]]); a$face <- xi - 1; a}))
+  boxeslist <- grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
+  boxes <-                  lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$box <- xi - 1; a})
+  
+  bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
+  verts <- facepairs %>% dplyr::select(x, y) 
+  faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
+  boxes <- lapply(boxes, function(x) x$faces$iface)
+  list(verts = verts, faces = faces, boxes = boxes, bnd_verts = bnd_verts, extra = extra)
+}
+
+
+
+## gris format
+v <- facepairs  %>% dplyr::mutate(.vx0 = row_number())
+bXv <- v%>% mutate(.br0 = face) %>% dplyr::select(.br0, .vx0)
+v$face <- NULL
+tri <- RTriangle::triangulate(gris::mkpslg(gris:::normalizeVerts2(v, bXv, c("x", "y"))))
+
+
+
 box2pslg <- function(x) {
   x <- head(x$verts, -1) %>% dplyr::select(x, y) %>% as.matrix
   RTriangle::pslg(x, S = segmaker(x))
@@ -47,7 +92,7 @@ faceparse <- function(x) {
   p1 <- as.numeric(x0[[grep("p1", x)]][2:3])
   p2 <- as.numeric(x0[[grep("p2", x)]][2:3])
   cs <- as.numeric(x0[[grep("cs", x)]][2:3])
-  lr <- as.integer(x0[[grep("p1", x)]][2:3])
+  lr <- as.integer(x0[[grep("lr", x)]][2:3])
   data_frame(x = c(p1[1], p2[1]), y = c(p1[2], p2[2]), cs = cs, lr = lr, len = c(0, len))
   
 }

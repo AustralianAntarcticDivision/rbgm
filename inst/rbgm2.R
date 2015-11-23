@@ -8,7 +8,8 @@ library(dplyr)
 #facepslg(facepairs[facepairs$face %in% boxes[[9]]$faces$iface, ])
 
 #tx <- readLines("/home/shared/data/Atlantis/SETas/VMPA_setas.bgm")
-tx <- readLines("/home/shared/data/Atlantis/BanzareBank/BanzareAtlantis.bgm")
+#tx <- readLines("/home/shared/data/Atlantis/BanzareBank/BanzareAtlantis.bgm")
+tx <- readLines("/home/shared/data/Atlantis/Parameters/antarctica_90.bgm")
 ## all face tokens
 facesInd <- grep("^face", tx)
 boxesInd <- grep("^box", tx)
@@ -29,9 +30,9 @@ extra["projection"] <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
 
 ## sanity check
 ##if (!length(facesInd) == length(unlist(tx[facesInd]))) warning("faces data and count out of synch")
-faceslist <- grepItems(tx[facesInd], "face", extra["nface"])
+faceslist <- grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
 facepairs <- do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::faceparse(faceslist[[xi]]); a$face <- xi - 1; a}))
-boxeslist <- grepItems(tx[boxesInd], "box", extra["nbox"])
+boxeslist <- grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
 #boxes <- do.call(bind_rows, 
 boxes <-                  lapply(seq_along(boxeslist), function(xi) {a <- rbgm:::boxparse(boxeslist[[xi]]); a$box <- xi - 1; a})
                  #)
@@ -50,6 +51,7 @@ roms <- "/rdsi/PRIVATE/dev/ROMS/s_corney/cpolar/ocean_his_3101_uvwtempsalt.nc"
 lon <- raster(roms, varname = "lon_u")
 lat <- raster(roms, varname = "lat_u")
 ll <- cbind(values(lon), values(lat))
+
 
 ## triangle identity
 tri_ <- rbgm:::ptTriangle(tri$T, tri$P, ll)
@@ -94,6 +96,13 @@ library(nabor)
 nnfun <- WKNNF(ll)
 ex <- 20 + extent(xyFromCell(lon, nnfun$query(as.matrix(facepairs[, c("x", "y")]), k = 1, eps = 0)$nn.idx))
 
+scl <- function(x) (x - min(x))/diff(range(x))
+magPal <- function(d) {
+  ncolor = 56
+  x <- scl(d) * (ncolor - 1) + 1
+  cols <- grey(seq(0, 1, length = ncolor))
+  cols[x]
+}
 pal <- palr::sstPal(palette = TRUE)
 for (j in seq(1, nrow(facepairs) - 1, by = 2)) {
   ln <- facepairs[c(j, j + 1),] %>% dplyr::select(x, y) %>% as.matrix
@@ -105,18 +114,23 @@ for (j in seq(1, nrow(facepairs) - 1, by = 2)) {
    romline <- xyFromCell(temp, res$nn.idx)
    faceXYindex <- extract(temp, spLines(romline), cellnumbers = TRUE)[[1]][, "cell"]
    romdepth <- outer(extract(h, faceXYindex), Cs_r)
-   sslice <- tslice <- wslice <- uslice <- vslice <- matrix(NA_real_, ncol = 31, nrow = length(faceXYindex))
+   angle <- sslice <- tslice <- wslice <- uslice <- vslice <- matrix(NA_real_, ncol = 31, nrow = length(faceXYindex))
     for (i in 1:31) {
       uslice[, i] <- extract(raster(roms, varname = "u", level = i), faceXYindex)
       vslice[, i] <- extract(raster(roms, varname = "v", level = i), faceXYindex)
       wslice[, i] <- extract(raster(roms, varname = "w", level = i), faceXYindex)
       tslice[, i] <- extract(raster(roms, varname = "salt", level = i), faceXYindex)
       sslice[, i] <- extract(raster(roms, varname = "temp", level = i), faceXYindex)
-      
+    
+      angle[,i] <- extract(raster(roms, varname = "angle", level = i), faceXYindex)
       
     }
 
-  par(mfrow = c(2, 2))
+   #u(LON,LAT)=u(XI,ETA)*cos(angle(i,j))-v(XI,ETA)*sin(angle(i,j))
+   #v(LON,LAT)=u(XI,ETA)*sin(angle(i,j))+v(XI,ETA)*cos(angle(i,j))
+   uslice <- uslice * cos(angle) - vslice * cos(angle)
+   vslice <- uslice * sin(angle) + vslice * cos(angle)
+  par(mfrow = c(2, 2), mar = rep(0, 4))
   
   plot(crop(temp, ex))
   for (aa in seq_along(boxes)) {
@@ -127,7 +141,9 @@ for (j in seq(1, nrow(facepairs) - 1, by = 2)) {
   plot(facepairs$x, facepairs$y)
   lapply(seq_along(boxes), function(i) pbox1(boxes[[i]], col = "transparent"))
   lines(ln1, lwd = 4, col = "red")
-   image(sqrt(uslice^2 + vslice^2 + wslice^2), col = pal$cols)
+  mag <- sqrt(uslice^2 + vslice^2 + wslice^2)
+  cols <- matrix(magPal(mag), nrow = nrow(mag))
+   image(mag, col = pal$cols)
    contour(romdepth, add = T, level = c(seq(0, -500, by = -50), seq(550, -5000, by = -500)))
   
    scan("", 1)
@@ -144,3 +160,24 @@ pf <- function(x) {
     lines((x %>% subset(face == i))[, c("x", "y")], col = "red")
   }
 }
+
+nnfun <- WKNNF(ll)
+jbox <- 11
+ln <- facepairs  %>% filter(face == boxes[[jbox]]$faces$iface[1]) %>% dplyr::select(x, y) %>% as.matrix
+ln1 <- cbind(approx(1:2, ln[,1])$y, approx(1:2, ln[,2])$y)
+res <- nnfun$query(ln1, k = 1, eps = 0)
+romline <- xyFromCell(temp, res$nn.idx)
+faceXYindex <- extract(temp, spLines(romline), cellnumbers = TRUE)[[1]][, "cell"]
+romdepth <- outer(extract(h, faceXYindex), Cs_r)
+angle <- sslice <- tslice <- wslice <- uslice <- vslice <- matrix(NA_real_, ncol = 31, nrow = length(faceXYindex))
+for (i in 1:31) {
+  uslice[, i] <- extract(raster(roms, varname = "u", level = i), faceXYindex)
+  vslice[, i] <- extract(raster(roms, varname = "v", level = i), faceXYindex)
+  wslice[, i] <- extract(raster(roms, varname = "w", level = i), faceXYindex)
+  tslice[, i] <- extract(raster(roms, varname = "salt", level = i), faceXYindex)
+  sslice[, i] <- extract(raster(roms, varname = "temp", level = i), faceXYindex)
+  
+  angle[,i] <- extract(raster(roms, varname = "angle", level = i), faceXYindex)
+  
+}
+
