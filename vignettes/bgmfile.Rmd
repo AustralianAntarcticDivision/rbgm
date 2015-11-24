@@ -39,7 +39,7 @@ invisible(NULL)
 
 BGM files store the "box geometry" for Atlantis ecosystem models. These consist of **boxes** (polygons) composed of **faces** (line segments composing individual polygon edges) and and overall **boundary** that delimits the domain of the model. 
 
-The boundary is composed of boundary polygons that are not boxes in the model, but some box edges are on this boundary (needs clarification.)
+The boundary is composed of boundary polygons that are not boxes in the model, but some box edges are on this boundary (this needs some clarification.)
 
 We read in some examples. The **rbgm** package includes tools to read the BGM format, it returns a table of all X/Y vertices and lists of indices for the boxes and faces. (This is work in progress which will include the boundary and all attributes in the format). 
 
