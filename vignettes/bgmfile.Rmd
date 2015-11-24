@@ -1,0 +1,61 @@
+---
+title: "BGM files"
+author: "Michael Sumner"
+date: "24 November 2015"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+scol <- function(alpha = 1) {
+    ss <- sample(255, 3, replace = TRUE)
+    rgb(ss[1], ss[2], ss[2], max = 255)
+}
+
+m2 <- function(x) {
+ if (length(x) == 2) matrix(x, ncol = 2) else x
+}
+meanxy <- function(x) {
+    m2(apply(x, 2, mean))
+}
+
+plotall <- function(x) {
+  
+  plot(x$verts)
+  doh <- lapply(seq_along(x$boxind), function(i) polygon(x$verts[x$boxind[[i]], ], col = scol()))
+  doh <- lapply(x$faceind, function(a) lines(x$verts[a, ], lwd = 3))
+points(x$verts[x$bndind, ], pch = 16)
+
+doh <- lapply(seq_along(x$faceind), function(a) text(meanxy(x$verts[x$faceind[[a]], ]), lab = as.character(a-1), col = "lightgrey") )
+
+
+doh <- lapply(seq_along(x$boxind), function(a) text(meanxy(x$verts[x$boxind[[a]], ]), lab = as.character(a-1)) )
+invisible(NULL)
+}
+```
+
+## Box Geometry Model files
+
+BGM files store the "box geometry" for Atlantis ecosystem models. These consist of **boxes** (polygons) composed of **faces** (line segments composing individual polygon edges) and and overall **boundary** that delimits the domain of the model. 
+
+The boundary is composed of boundary polygons that are not boxes in the model, but some box edges are on this boundary (needs clarification.)
+
+We read in some examples. The **rbgm** package includes tools to read the BGM format, it returns a table of all X/Y vertices and lists of indices for the boxes and faces. (This is work in progress which will include the boundary and all attributes in the format). 
+
+```{r}
+
+f1 <- system.file("extdata/EastAntarctica_LL.bgm", package = "rbgm")
+library(rbgm)
+b1 <- rbgm:::read_bgm(f1)
+
+```
+
+Plot the elements of the BGM format. 
+
+```{r}
+plotall(b1)
+
+
+
+```

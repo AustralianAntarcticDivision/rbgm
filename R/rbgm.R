@@ -19,7 +19,7 @@ gris_bgm <- function(x) {
   bXv2 <- data_frame(.br0 = unlist(lapply(seq_along(x$boxes), function(xa) rep(xa, length(x$boxes[[xa]])))) + max(bXv$.br0), 
                     .vx0 = unlist(x$boxes))
 
-  v2 <- bXv2  %>% dplyr::select(-.br0)  %>% inner_join(v) 
+  v2 <- bXv2  %>% dplyr::select(-.br0)  %>% inner_join(v, c(".vx0" = ".vx0")) 
   bXv2$.vx0 <- bXv2$.vx0 + nrow(v)
  # v2 <- bXv2 <- NULL
   gr <- gris:::normalizeVerts2(bind_rows(v, v2),  bXv %>% bind_rows(bXv2), c("x", "y"))
@@ -31,7 +31,15 @@ gris_bgm <- function(x) {
   
 }
 
-#' @importFrom dplyr %>%
+
+##' Partial read for .bgm files
+##'
+##' Read geometry from BGM files
+##'
+##' @title Read BGM
+##' @param x path to a bgm file
+##' @export
+#' @importFrom dplyr %>% select data_frame arrange bind_rows distinct mutate inner_join
 read_bgm <- function(x, sp = FALSE) {
   tx <- readLines(x)  
   ## all face tokens
@@ -66,9 +74,9 @@ read_bgm <- function(x, sp = FALSE) {
   ## I think bnd_verts already all included in box_verts
   allverts <- bind_rows(verts, boxverts, bnd_verts) %>% distinct() %>% arrange(x, y) %>% mutate(nr = row_number())
   
-  boxind <- lapply(boxes, function(x) (allverts %>% inner_join(x$verts %>% mutate(ord = row_number())) %>% arrange(ord))$nr)
-  faceind <- lapply(split(facepairs %>% dplyr::select(x, y, face), facepairs$face), function(x) (allverts %>% inner_join(x %>% mutate(ord = row_number())) %>% arrange(ord))$nr)
-  bndind <-  ((allverts %>% inner_join(bnd_verts %>% mutate(ord = row_number()))) %>% arrange(ord))$nr
+  boxind <- lapply(boxes, function(x) (allverts %>% inner_join(x$verts %>% mutate(ord = row_number()), c("x" = "x", "y" = "y")) %>% arrange(ord))$nr)
+  faceind <- lapply(split(facepairs %>% dplyr::select(x, y, face), facepairs$face), function(x) (allverts %>% inner_join(x %>% mutate(ord = row_number()), c("x" = "x", "y" = "y")) %>% arrange(ord))$nr)
+  bndind <-  ((allverts %>% inner_join(bnd_verts %>% mutate(ord = row_number()), c("x" = "x", "y" = "y"))) %>% arrange(ord))$nr
   
   ##allverts %>% inner_join(boxes[[2]]$verts %>% mutate(ord = row_number())) %>% arrange(ord)
  

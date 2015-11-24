@@ -8,7 +8,7 @@ Depends:
     raster,
     sp
 Imports:
-    geosphere
+    dplyr, geosphere
 Description: Tools for handling network data for Atlantis from box-geometry
     model (BGM) files
 NeedsCompilation: no
