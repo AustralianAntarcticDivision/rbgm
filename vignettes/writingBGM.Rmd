@@ -23,6 +23,22 @@ pg <- graticule(seq(50, 110, length = 8), seq(-70, -40, length = 6), proj = "+pr
 
 Populate with suitable or dummy values for Atlantis. 
 
+These are the box attributes: 
+
+Name  | Description | Source
+------------- | -------------
+label  | Box0 etc. | boxid input
+inside  | coordinate (intersecting centroid) | implicit
+nconn  | number of faces and "connecting" boxes | implicit
+iface  | index of the faces (nconn) | implicit
+ibox  | index of the connecting boxes (ncoon) | implicit
+botz  | depth of the box | botz input
+area  | area of the box (in units of the vertices) | implicit
+vertmix  | vertical mixing | input
+horizmix  | horizontal mixing | input
+vert.0  | first vertex | input
+vert.1  | second vertex etc. | input
+
 ```{r}
 mkcent <- function(g) {
  x <- as.data.frame(coordinates(rgeos::gPointOnSurface(g, byid = TRUE)))

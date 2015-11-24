@@ -22,7 +22,7 @@ meanxy <- function(x) {
 
 plotall <- function(x) {
   
-  plot(x$verts)
+  plot(x$verts, cex = 2)
   doh <- lapply(seq_along(x$boxind), function(i) polygon(x$verts[x$boxind[[i]], ], col = scol()))
   doh <- lapply(x$faceind, function(a) lines(x$verts[a, ], lwd = 3))
 points(x$verts[x$bndind, ], pch = 16)
@@ -43,6 +43,23 @@ The boundary is composed of boundary polygons that are not boxes in the model, b
 
 We read in some examples. The **rbgm** package includes tools to read the BGM format, it returns a table of all X/Y vertices and lists of indices for the boxes and faces. (This is work in progress which will include the boundary and all attributes in the format). 
 
+These are the box attributes: 
+
+Name  | Description | Source
+------------- | -------------
+label  | Box0 etc. | boxid input
+inside  | coordinate (intersecting centroid) | implicit
+nconn  | number of faces and "connecting" boxes | implicit
+iface  | index of the faces (nconn) | implicit
+ibox  | index of the connecting boxes (ncoon) | implicit
+botz  | depth of the box | botz input
+area  | area of the box (in units of the vertices) | implicit
+vertmix  | vertical mixing | input
+horizmix  | horizontal mixing | input
+vert.0  | first vertex | input
+vert.1  | second vertex etc. | input
+
+
 ```{r}
 
 f1 <- system.file("extdata/EastAntarctica_LL.bgm", package = "rbgm")
@@ -51,7 +68,7 @@ b1 <- read_bgm(f1)
 
 ```
 
-Plot the elements of the BGM format. 
+Plot the elements of the BGM format. Faces are shown as thick black lines, filled points are vertices on non-boundary boxes, open points are boundary vertices, black labels are box IDs (starting at 0), grey labels are face IDs (starting at 0). 
 
 ```{r}
 plotall(b1)
