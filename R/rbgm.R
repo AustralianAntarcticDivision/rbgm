@@ -60,8 +60,8 @@ read_bgm <- function(x, sp = FALSE) {
   
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
   verts <- facepairs %>% dplyr::select(x, y) 
-  boxind <- lapply(boxes, function(x) (verts %>% mutate(nr = row_number()) %>% inner_join(x$verts))$nr)
-
+  ## maintain the order before the join
+  boxind <- lapply(boxes, function(x) (verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) %>% arrange(ord)))$nr)
 
   faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
   boxfaces <- lapply(boxes, function(x) x$faces$iface + 1)
