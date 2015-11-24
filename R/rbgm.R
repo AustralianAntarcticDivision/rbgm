@@ -59,13 +59,27 @@ read_bgm <- function(x, sp = FALSE) {
   boxes <-                  lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$box <- xi - 1; a})
   
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
-  verts <- facepairs %>% dplyr::select(x, y) 
+  bnd_verts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2])
+  boxverts <- do.call(bind_rows, lapply(boxes, "[[", "verts"))
+ 
+  verts <- facepairs %>% dplyr::select(x, y)   
+  ## I think bnd_verts already all included in box_verts
+  allverts <- bind_rows(verts, boxverts, bnd_verts) %>% distinct() %>% arrange(x, y) %>% mutate(nr = row_number())
+  
+  boxind <- lapply(boxes, function(x) (allverts %>% inner_join(x$verts %>% mutate(ord = row_number())) %>% arrange(ord))$nr)
+  faceind <- lapply(split(facepairs %>% dplyr::select(x, y, face), facepairs$face), function(x) (allverts %>% inner_join(x %>% mutate(ord = row_number())) %>% arrange(ord))$nr)
+  bndind <-  ((allverts %>% inner_join(bnd_verts %>% mutate(ord = row_number()))) %>% arrange(ord))$nr
+  
+  ##allverts %>% inner_join(boxes[[2]]$verts %>% mutate(ord = row_number())) %>% arrange(ord)
+ 
   ## maintain the order before the join
-  boxind <- lapply(boxes, function(x) (verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) %>% arrange(ord)))$nr)
+ # boxind <- lapply(boxes, function(x) (verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) %>% arrange(ord)))$nr)
 
-  faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
+  allverts <- allverts %>% dplyr::select(x, y)
+  ##(verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) ) %>% arrange(ord))$nr
+ #faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
   boxfaces <- lapply(boxes, function(x) x$faces$iface + 1)
-  list(verts = verts, faces = faces, boxes = boxind, bnd_verts = bnd_verts, extra = extra, boxfaces = boxfaces)
+  list(verts = allverts, facepairs = facepairs, faceind = faceind, bndind = bndind, boxind = boxind, extra = extra, boxfaces = boxfaces)
 }
 
 
