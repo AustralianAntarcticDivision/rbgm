@@ -9,6 +9,7 @@ Depends:
     sp
 Imports:
     dplyr, geosphere
+Suggests: graticule
 Description: Tools for handling network data for Atlantis from box-geometry
     model (BGM) files
 NeedsCompilation: no

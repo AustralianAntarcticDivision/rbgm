@@ -1,0 +1,67 @@
+---
+title: "Writing BGM"
+author: "Michael Sumner"
+date: "24 November 2015"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## BGM from Spatial data in R
+
+Create a dummy Spatial polygon layer (could be read from shapefile or whatever). 
+
+```{r}
+library(graticule)
+
+## polygon map in LAEA
+
+pg <- graticule(seq(50, 110, length = 8), seq(-70, -40, length = 6), proj = "+proj=laea +ellps=WGS84 +lon_0=65 +lat_0=-90", tiles = TRUE)
+```
+
+Let's say that the outside margin of polygons are boundary boxes. 
+
+```{r}
+
+library(gris)
+gr <- gris(pg)
+
+## find outer verts (only those branches where a vertex occurs just once)
+out <- (gr$bXv %>% inner_join((gr$v  %>% inner_join(gr$bXv)  %>% group_by(.vx0)  %>% summarize(nv  = n())  %>% filter(nv == 1))) %>% 
+  select(.br0) %>% inner_join(gr$b) %>% distinct(.br0))$.ob0
+
+plot(gr[out, ])
+
+gr$o$boundary <- 0
+gr$o$boundary[out] <- 1
+
+## pull out boxes
+allbox <- gr$o
+## first must be a boundary
+isbound <- allbox$boundary == 1
+ord <- c(which(isbound)[1], which(!isbound), which(isbound)[-1])
+allbox <- allbox[ord, ]
+#allverts <- allbox %>% inner_join(gr$b, c(".ob0" = ".ob0")) %>% inner_join(gr$bXv, c(".br0" =".br0")) %>% inner_join(gr$v, c(".vx0" = ".vx0")) 
+mkbox <- function(x, num) {
+  
+  enames <- c("label", "inside", "nconn", "iface", "ibox", "botz", "area", "vertmix", "horizmix")
+  # Box number 0
+# box0.label	Box0
+# box0.inside	96.61082843655237 -58.71767790250464
+# box0.nconn	8
+# box0.iface	15 29 28 26 25 23 22 6 
+# box0.ibox	21 21 22 23 23 24 24 24 
+# box0.botz	0.0
+# box0.area	144.94569776898845
+# box0.vertmix	0.0
+# box0.horizmix	0.0
+# box0.vert 111.3499999997004 -62.24999999960016
+# box0.vert
+  
+  sprintf("box%i.", "", "") 
+}
+for (i in seq(nrow(allbox))) {
+    
+}
