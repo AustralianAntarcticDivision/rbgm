@@ -47,7 +47,7 @@ We read in some examples. The **rbgm** package includes tools to read the BGM fo
 
 f1 <- system.file("extdata/EastAntarctica_LL.bgm", package = "rbgm")
 library(rbgm)
-b1 <- rbgm:::read_bgm(f1)
+b1 <- read_bgm(f1)
 
 ```
 

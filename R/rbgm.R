@@ -15,16 +15,16 @@ gris_bgm <- function(x) {
   
   ## gris format
   v <- x$verts %>% mutate(.vx0 = row_number())
-  bXv <- v %>% mutate(.br0 = rep(seq(nrow(x$faces)), each = 2)) %>% dplyr::select(.br0, .vx0)
+  bXv <- v %>% mutate(.br0 = rep(seq(nrow(x$faces)), each = 2)) %>% select(.br0, .vx0)
   bXv2 <- data_frame(.br0 = unlist(lapply(seq_along(x$boxes), function(xa) rep(xa, length(x$boxes[[xa]])))) + max(bXv$.br0), 
                     .vx0 = unlist(x$boxes))
 
-  v2 <- bXv2  %>% dplyr::select(-.br0)  %>% inner_join(v, c(".vx0" = ".vx0")) 
+  v2 <- bXv2  %>% select(-.br0)  %>% inner_join(v, c(".vx0" = ".vx0")) 
   bXv2$.vx0 <- bXv2$.vx0 + nrow(v)
  # v2 <- bXv2 <- NULL
   gr <- gris:::normalizeVerts2(bind_rows(v, v2),  bXv %>% bind_rows(bXv2), c("x", "y"))
   
-  gr$b <- gr$bXv %>% dplyr::select(.br0) %>% distinct() %>% mutate(.ob0 = .br0)
+  gr$b <- gr$bXv %>% select(.br0) %>% distinct() %>% mutate(.ob0 = .br0)
   gr$o <- data_frame(.ob0 = seq(nrow(gr$b)), elem = c(rep("face", nrow(x$faces)), rep("box", length(x$boxes))))
   class(gr) <- c("gris", "list")
   tri <- RTriangle::triangulate(gris::mkpslg(gris:::normalizeVerts2(v, bXv, c("x", "y"))))
@@ -70,12 +70,12 @@ read_bgm <- function(x, sp = FALSE) {
   bnd_verts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2])
   boxverts <- do.call(bind_rows, lapply(boxes, "[[", "verts"))
  
-  verts <- facepairs %>% dplyr::select(x, y)   
+  verts <- facepairs %>% select(x, y)   
   ## I think bnd_verts already all included in box_verts
   allverts <- bind_rows(verts, boxverts, bnd_verts) %>% distinct() %>% arrange(x, y) %>% mutate(nr = row_number())
   
   boxind <- lapply(boxes, function(x) (allverts %>% inner_join(x$verts %>% mutate(ord = row_number()), c("x" = "x", "y" = "y")) %>% arrange(ord))$nr)
-  faceind <- lapply(split(facepairs %>% dplyr::select(x, y, face), facepairs$face), function(x) (allverts %>% inner_join(x %>% mutate(ord = row_number()), c("x" = "x", "y" = "y")) %>% arrange(ord))$nr)
+  faceind <- lapply(split(facepairs %>% select(x, y, face), facepairs$face), function(x) (allverts %>% inner_join(x %>% mutate(ord = row_number()), c("x" = "x", "y" = "y")) %>% arrange(ord))$nr)
   bndind <-  ((allverts %>% inner_join(bnd_verts %>% mutate(ord = row_number()), c("x" = "x", "y" = "y"))) %>% arrange(ord))$nr
   
   ##allverts %>% inner_join(boxes[[2]]$verts %>% mutate(ord = row_number())) %>% arrange(ord)
@@ -83,7 +83,7 @@ read_bgm <- function(x, sp = FALSE) {
   ## maintain the order before the join
  # boxind <- lapply(boxes, function(x) (verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) %>% arrange(ord)))$nr)
 
-  allverts <- allverts %>% dplyr::select(x, y)
+  allverts <- allverts %>% select(x, y)
   ##(verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) ) %>% arrange(ord))$nr
  #faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
   boxfaces <- lapply(boxes, function(x) x$faces$iface + 1)
@@ -94,7 +94,7 @@ read_bgm <- function(x, sp = FALSE) {
 
 
 box2pslg <- function(x) {
-  x <- head(x$verts, -1) %>% dplyr::select(x, y) %>% as.matrix
+  x <- head(x$verts, -1) %>% select(x, y) %>% as.matrix
   RTriangle::pslg(x, S = segmaker(x))
 }
 segmaker <- function(x) {
@@ -177,7 +177,7 @@ ptPolygon <- function(boxes, pt) {
   
   
   for (i in seq(length(boxes))) {
-    poly <- boxes[[i]]$vert %>% dplyr::select(x, y) %>% as.matrix
+    poly <- boxes[[i]]$vert %>% select(x, y) %>% as.matrix
     asub <- pt[,1] >= min(poly[,1]) & pt[,1] <= max(poly[,1]) &
       pt[,2] >= min(poly[,2]) & pt[,2] <= max(poly[,2])
     if (any(asub)) {
