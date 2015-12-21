@@ -39,7 +39,7 @@ gris_bgm <- function(x) {
 ##' @title Read BGM
 ##' @param x path to a bgm file
 ##' @export
-#' @importFrom dplyr %>% select data_frame arrange bind_rows distinct mutate inner_join
+#' @importFrom dplyr %>% select as_data_frame data_frame arrange bind_rows distinct mutate inner_join
 read_bgm <- function(x, sp = FALSE) {
   tx <- readLines(x)  
   ## all face tokens
@@ -69,7 +69,8 @@ read_bgm <- function(x, sp = FALSE) {
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
   bnd_verts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2])
   boxverts <- do.call(bind_rows, lapply(boxes, "[[", "verts"))
- 
+  boxdata <- do.call(bind_rows, lapply(boxes, function(a) as_data_frame(a[["meta"]])))
+  
   verts <- facepairs %>% select(x, y)   
   ## I think bnd_verts already all included in box_verts
   allverts <- bind_rows(verts, boxverts, bnd_verts) %>% distinct() %>% arrange(x, y) %>% mutate(nr = row_number())
@@ -87,7 +88,9 @@ read_bgm <- function(x, sp = FALSE) {
   ##(verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) ) %>% arrange(ord))$nr
  #faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
   boxfaces <- lapply(boxes, function(x) x$faces$iface + 1)
-  list(verts = allverts, facepairs = facepairs, faceind = faceind, bndind = bndind, boxind = boxind, extra = extra, boxfaces = boxfaces)
+  list(verts = allverts, facepairs = facepairs, faceind = faceind, 
+       bndind = bndind, boxind = boxind, extra = extra, boxfaces = boxfaces, 
+       boxdata = boxdata)
 }
 
 
