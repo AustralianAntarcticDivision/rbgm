@@ -27,10 +27,10 @@ plotall <- function(x) {
   doh <- lapply(x$faceind, function(a) lines(x$verts[a, ], lwd = 3))
 points(x$verts[x$bndind, ], pch = 16)
 
-doh <- lapply(seq_along(x$faceind), function(a) text(meanxy(x$verts[x$faceind[[a]], ]), lab = as.character(a-1), col = "lightgrey") )
+doh <- lapply(seq_along(x$faceind), function(a) text(meanxy(x$verts[x$faceind[[a]], ]), cex = 0.7, lab = as.character(a-1), col = "darkgrey") )
 
 
-doh <- lapply(seq_along(x$boxind), function(a) text(meanxy(x$verts[x$boxind[[a]], ]), lab = as.character(a-1)) )
+doh <- lapply(seq_along(x$boxind), function(a) text(meanxy(x$verts[x$boxind[[a]], ]), cex = 0.7,  lab = as.character(a-1)) )
 invisible(NULL)
 }
 ```
