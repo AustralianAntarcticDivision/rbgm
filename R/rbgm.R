@@ -70,7 +70,7 @@ read_bgm <- function(x, sp = FALSE) {
   bnd_verts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2])
   boxverts <- do.call(bind_rows, lapply(boxes, "[[", "verts"))
   boxdata <- do.call(bind_rows, lapply(boxes, function(a) as_data_frame(a[["meta"]])))
-  
+  for (i in seq(ncol(boxdata))) boxdata[[i]] <- type.convert(boxdata[[i]], as.is = TRUE)
   verts <- facepairs %>% select(x, y)   
   ## I think bnd_verts already all included in box_verts
   allverts <- bind_rows(verts, boxverts, bnd_verts) %>% distinct() %>% arrange(x, y) %>% mutate(nr = row_number())
