@@ -8,11 +8,13 @@ Depends:
     raster,
     sp
 Imports:
-    dplyr, geosphere
-Suggests: graticule
+    dplyr,
+    geosphere
+Suggests:
+    graticule
 Description: Tools for handling network data for Atlantis from box-geometry
     model (BGM) files
 NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

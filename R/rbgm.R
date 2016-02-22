@@ -12,10 +12,11 @@ NULL
 gris_bgm <- function(x) {
   x <- read_bgm(x)
   
-  
+  data_frame(face = unlist(x$boxfaces) - 1) %>%  inner_join(x$facepairs)
+  data_frame(face = unlist(x$boxind) - 1, box = rep(seq_along(x$boxind), sapply(x$boxind, length))) %>%  inner_join(x$facepairs)
   ## gris format
   v <- x$verts %>% mutate(.vx0 = row_number())
-  bXv <- v %>% mutate(.br0 = rep(seq(nrow(x$faces)), each = 2)) %>% select(.br0, .vx0)
+  bXv <- v %>% mutate(.br0 = rep(seq(nrow(x$facepairs)), each = 2)) %>% select(.br0, .vx0)
   bXv2 <- data_frame(.br0 = unlist(lapply(seq_along(x$boxes), function(xa) rep(xa, length(x$boxes[[xa]])))) + max(bXv$.br0), 
                     .vx0 = unlist(x$boxes))
 
