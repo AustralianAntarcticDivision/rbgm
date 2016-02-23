@@ -72,9 +72,3 @@ More information
 ----------------
 
 The BGM format and usage is described at the (registration-required) Atlantis wiki: <http://atlantis.cmar.csiro.au/>
-
-Questions
----------
-
--   polygon maps may have lines requiring denser sets of vertices (say for lines of constant latitude), this can be an issue for ROMS where all lookup is done in long-lat (the coupler should sort this out IMO, not BGM)
--

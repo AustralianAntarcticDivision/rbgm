@@ -41,7 +41,7 @@ devtools::install_github("mdsumner/rbgm")
 
 ## Example
 
-```{r, fig.width = 10, fig.height = 8}
+```{r}
 library(rbgm)
 ## example data set in package
 fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
@@ -65,8 +65,4 @@ text(do.call(rbind, lapply(coordinates(sldf), function(x) apply(x[[1]], 2, mean)
 
 The BGM format and usage is described at the (registration-required) Atlantis wiki: http://atlantis.cmar.csiro.au/
 
-## Questions
-
-* polygon maps may have lines requiring denser sets of vertices (say for lines of constant latitude), this can be an issue for ROMS where all lookup is done in long-lat (the coupler should sort this out IMO, not BGM)
-* 
 
