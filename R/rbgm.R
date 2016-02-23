@@ -106,17 +106,6 @@ segmaker <- function(x) {
   op <- options(warn = -1)
   matrix(seq(nrow(x)), nrow = nrow(x) + 1, ncol  = 2)[seq(nrow(x)), ]
 }
-box2oh <- function(x) {
-  tri <- RTriangle::triangulate(box2pslg(x))
-}
-
-box2oh <- function(x, offset = 0) {
-  tri <- RTriangle::triangulate(box2pslg(x))
-  obj <- rgl::tetrahedron3d()
-  obj$vb <- t(cbind(tri$P, as.numeric(x$meta$botz) + offset, 1))
-  obj$it <- t(tri$T)
-  obj
-}
 
 
 grepItems <- function(tex, itemname, nitem) {
@@ -157,93 +146,8 @@ boxparse <- function(x) {
        meta = metavals[!names(metavals) %in% c("iface", "ibox")])
 }
 
-i_parse <- function(x) as.numeric(unlist(strsplit(x, "\\s+")))
-
-## which triangle is each point in 
-ptTriangle <- function(T, P, pt) {
-  pt_t <- rep(NA_integer_, nrow(pt))
-  
-  for (i in seq(nrow(T))) {
-    triang <- P[T[i,], ]
-    asub <- pt[,1] >= min(triang[,1]) & pt[,1] <= max(triang[,1]) &
-      pt[,2] >= min(triang[,2]) & pt[,2] <= max(triang[,2])
-    if (any(asub)) {
-    uvw <- geometry::cart2bary(triang, pt[asub, ])
-    pt_t[asub][uvw[,1] > 0 & uvw[, 2] > 0 & rowSums(uvw[,1:2]) < 1] <- i
-    }
-  }
-  pt_t
-}
 
 
-ptPolygon <- function(boxes, pt) {
-  pt_p <- rep(NA_integer_, nrow(pt))
-  
-  
-  for (i in seq(length(boxes))) {
-    poly <- boxes[[i]]$vert %>% select(x, y) %>% as.matrix
-    asub <- pt[,1] >= min(poly[,1]) & pt[,1] <= max(poly[,1]) &
-      pt[,2] >= min(poly[,2]) & pt[,2] <= max(poly[,2])
-    if (any(asub)) {
-    #  print(i)
-    pip <- point.in.polygon(pt[asub,1], pt[asub,2], poly[,1], poly[,2], mode.checked = TRUE) > 0
-    #print(sum(pip))
-    pt_p[asub][pip] <- i
-    }
-  }
-  pt_p
-}
-
-##' Partial read for .bgm files
-##'
-##' Read geometry from BGM files
-##'
-##' @title Read BGM
-##' @param x bgm file
-##' @param sp return Spatial object or list
-##' @param densify factor to increase density of vertices
-##' @param ... arguments passed to \code{\link{gcIntermediate}}
-##' @return A SpatialLinesDataFrame if \code{sp} is \code{TRUE},
-##' otherwise a list of 2x2 matrices containing the end point
-##' coordinates, the list is a named vector with the label for each
-##' face
-##' @importFrom geosphere gcIntermediate
-##' @examples
-##' ## pull in faces as a SpatialLinesDataFrame, densified to 30km between vertices
-##' \dontrun{
-##' x <- read.faces("file.bgm", densify = 30, sp = TRUE)
-##' }
-##' @export
-read.faces <- function(x, sp = TRUE, densify, ...) {
-    xlines <- readLines(x)
-
-    ## assume PROJ.4 string occurs at first mention of "projection"
-    projind <- grep("^projection", xlines)[1L]
-    prjstring <- gsub("^projection ", "", xlines[projind])
-
-    facenumind <- grep("# Face", xlines)
-    facenum <- sapply(strsplit(xlines[facenumind], " "), function(x) x[length(x)])
-    strfacept <- function(x) do.call("rbind", lapply(strsplit(x, " "), function(x) as.numeric(x[-1])))
-
-    xf <- lapply(facenumind, function(x) strfacept(xlines[c(x + c(1L, 2L))]))
-
-    if (!missing(densify)) {
-        if (!densify > 1) stop("densify must be an integer > 1")
-        ##xf <- lapply(xf, function(x) gcIntermediate(x[1L,], x[2L,], n = densify, addStartEnd = TRUE, ...))
-        xf <- lapply(xf, densifymindist, mindist = densify, longlat = isLonLat(prjstring))
-    }
-    if (sp) {
-        sLines <- vector("list", length(facenum))
-        for (i in seq_along(sLines)) {
-            ## single pair coordinate line, each a Lines object (so each can have attributes)
-            sLines[[i]] <- Lines(list(Line(xf[[i]])), facenum[i])
-        }
-        spLines <- SpatialLines(sLines, proj4string = CRS(prjstring))
-        spdf <- SpatialLinesDataFrame(spLines, data.frame(id = facenum, row.names = facenum))
-        return(spdf)
-    }
-    xf
-}
 
 ##' Densify vertices so that no span is  is greater than mindist
 ##'
