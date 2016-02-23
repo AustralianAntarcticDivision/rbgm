@@ -51,8 +51,16 @@ plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.
 (spdf <- boxSpatial(bgm))
 (sldf <- faceSpatial(bgm))
 text(coordinates(spdf), labels = spdf$label, col = grey(seq(1, 0, length = nrow(bgm$boxes))), cex = 0.8)
+## isolate boxes that are outside the boundary
+
+## just get a single boundary for the inner
+plot(boundarySpatial(bgm), border = "dodgerblue", lwd = 7, add = TRUE)
+## or subset the boundary boxes
+plot(subset(spdf, boundary), border = "firebrick", lwd = 3, add = TRUE)
+
 
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
+
 
 plot(sldf, col = rainbow(nrow(sldf)), lwd = 2,  add = TRUE)
 text(do.call(rbind, lapply(coordinates(sldf), function(x) apply(x[[1]], 2, mean))), 
