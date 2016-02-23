@@ -17,8 +17,8 @@ NULL
 #'
 #' @return Spatial* object 
 #' \itemize{
-#' \item boxSpatial \tab \code{\link[sp]{SpatialPolygonsDataFrame}} \cr 
-#' \item faceSpatial \tab \code{\link[sp]{SpatialLinesDataFrame}} \cr
+#' \item boxSpatial \code{\link[sp]{SpatialPolygonsDataFrame}} 
+#' \item faceSpatial  \code{\link[sp]{SpatialLinesDataFrame}} 
 #' }
 #' @export
 #' @rdname rbgm-Spatial
