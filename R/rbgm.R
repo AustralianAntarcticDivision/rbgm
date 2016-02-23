@@ -39,9 +39,28 @@ boxSpatial <- function(bgm) {
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
+  ## test for inside boundary
+  inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
+  data$boundary <- inside < 1
   SpatialPolygonsDataFrame(sptableBox(boxverts, object = "label", crs = bgm$extra["projection"]), data)
 }
 
+sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_) {
+  p1 <- lapply(split(x[, xy], x[[object]]), function(x) Polygon(as.matrix(x)))
+  IDs <- unique(x[[object]])
+  p1 <- p1[IDs]  ## override the lex sort
+  p2 <- lapply(seq_along(p1), function(ii) Polygons(p1[ii], IDs[ii]))
+  SpatialPolygons(p2, proj4string = CRS(crs))             
+} 
+
+#' @export
+#' @rdname rbgm-Spatial
+boundarySpatial <- function(bgm) {
+  SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(bgm$boundaryvertices %>% select(x, y) %>% as.matrix)), "bdy"))), 
+                           data.frame(label = "boundary", row.names = "bdy"))
+}
+
+  
 #' @export
 #' @rdname rbgm-Spatial
 faceSpatial <- function(bgm) {
@@ -63,12 +82,7 @@ sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character
   l2 <- lapply(seq_along(l1), function(ii) Lines(l1[ii], IDs[ii]))
   SpatialLines(l2, proj4string = CRS(crs))
 }
-sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_) {
-  p1 <- lapply(split(x[, xy], x[[object]]), function(x) Polygon(as.matrix(x)))
-  IDs <- unique(x[[object]])
-  p2 <- lapply(seq_along(p1), function(ii) Polygons(p1[ii], IDs[ii]))
-  SpatialPolygons(p2, proj4string = CRS(crs))             
-} 
+
 ##' Partial read for .bgm files
 ##'
 ##' Read geometry from BGM files
