@@ -6,33 +6,69 @@
 #' @name rbgm-package
 #' @docType package
 #' @author Michael D. Sumner
-#' @import raster sp
 NULL
 
-gris_bgm <- function(x) {
-  x <- read_bgm(x)
-  
-  data_frame(face = unlist(x$boxfaces) - 1) %>%  inner_join(x$facepairs)
-  data_frame(face = unlist(x$boxind) - 1, box = rep(seq_along(x$boxind), sapply(x$boxind, length))) %>%  inner_join(x$facepairs)
-  ## gris format
-  v <- x$verts %>% mutate(.vx0 = row_number())
-  bXv <- v %>% mutate(.br0 = rep(seq(nrow(x$facepairs)), each = 2)) %>% select(.br0, .vx0)
-  bXv2 <- data_frame(.br0 = unlist(lapply(seq_along(x$boxes), function(xa) rep(xa, length(x$boxes[[xa]])))) + max(bXv$.br0), 
-                    .vx0 = unlist(x$boxes))
 
-  v2 <- bXv2  %>% select(-.br0)  %>% inner_join(v, c(".vx0" = ".vx0")) 
-  bXv2$.vx0 <- bXv2$.vx0 + nrow(v)
- # v2 <- bXv2 <- NULL
-  gr <- gris:::normalizeVerts2(bind_rows(v, v2),  bXv %>% bind_rows(bXv2), c("x", "y"))
+
+#' Extract 
+#'
+#' Take the output of \code{\link{read_bgm}} and return a \code{\link[sp]{Spatial}} object. 
+#' @param bgm 
+#'
+#' @return Spatial* object 
+#' \itemize{
+#' \item boxSpatial \tab \code{\link[sp]{SpatialPolygonsDataFrame}} \cr 
+#' \item faceSpatial \tab \code{\link[sp]{SpatialLinesDataFrame}} \cr
+#' }
+#' @export
+#' @rdname rbgm-Spatial
+#' @examples
+#' fname <- system.file("extdata", "Antarctica_28", package = "rbgm")
+#' bgm <- read_bgm(fname)
+#' spdf <- boxSpatial(bgm)
+#' sldf <- faceSpatial(bgm)
+#' 
+#' plot(boxSpatial(b), col = grey(seq(0, 1, length = nrow(b$boxes))))
+#' plot(faceSpatial(b), col = rainbow(nrow(b$faces)), lwd = 2,  add = TRUE)
+boxSpatial <- function(bgm) {
+  data <- bgm$boxes
+  boxverts <- data %>% select(.bx0, label) %>% 
+    inner_join(bgm$boxesXverts, ".bx0") %>% 
+    inner_join(bgm$vertices, ".vx0") %>% 
+    select(-.vx0, -.bx0)
   
-  gr$b <- gr$bXv %>% select(.br0) %>% distinct() %>% mutate(.ob0 = .br0)
-  gr$o <- data_frame(.ob0 = seq(nrow(gr$b)), elem = c(rep("face", nrow(x$faces)), rep("box", length(x$boxes))))
-  class(gr) <- c("gris", "list")
-  tri <- RTriangle::triangulate(gris::mkpslg(gris:::normalizeVerts2(v, bXv, c("x", "y"))))
+  data <- as.data.frame(data)
+  rownames(data) <- data$label
+  SpatialPolygonsDataFrame(sptableBox(boxverts, object = "label", crs = bgm$extra["projection"]), data)
+}
+
+#' @export
+#' @rdname rbgm-Spatial
+faceSpatial <- function(bgm) {
+  data <- bgm$faces  %>% mutate(label = sprintf("face%i", .fx0))
+  faceverts <- data %>% select(.fx0, label) %>% 
+    inner_join(bgm$facesXverts, ".fx0") %>% 
+    inner_join(bgm$vertices, ".vx0") %>% 
+    select(-.vx0, -.fx0)
+  
+  data <- as.data.frame(data)
+  rownames(data) <- data$label
+  SpatialLinesDataFrame(sptableFace(faceverts, object = "label", crs = bgm$extra["projection"]), data)
   
 }
 
-
+sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character_) {
+  l1 <- lapply(split(x[, xy], x[[object]]), function(x) Line(as.matrix(x)))
+  IDs <- unique(x[[object]])
+  l2 <- lapply(seq_along(l1), function(ii) Lines(l1[ii], IDs[ii]))
+  SpatialLines(l2, proj4string = CRS(crs))
+}
+sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_) {
+  p1 <- lapply(split(x[, xy], x[[object]]), function(x) Polygon(as.matrix(x)))
+  IDs <- unique(x[[object]])
+  p2 <- lapply(seq_along(p1), function(ii) Polygons(p1[ii], IDs[ii]))
+  SpatialPolygons(p2, proj4string = CRS(crs))             
+} 
 ##' Partial read for .bgm files
 ##'
 ##' Read geometry from BGM files
@@ -40,58 +76,65 @@ gris_bgm <- function(x) {
 ##' @title Read BGM
 ##' @param x path to a bgm file
 ##' @export
-#' @importFrom dplyr %>% select as_data_frame data_frame arrange bind_rows distinct mutate inner_join
-read_bgm <- function(x, sp = FALSE) {
+#' @importFrom dplyr %>% select as_data_frame data_frame arrange bind_rows bind_cols distinct mutate inner_join
+read_bgm <- function(x) {
   tx <- readLines(x)  
-  ## all face tokens
+  
+
+  ## all indexes
   facesInd <- grep("^face", tx)
   boxesInd <- grep("^box", tx)
-  ## parse boxes
   bnd_vertInd <- grep("^bnd_vert", tx)
-  
   ## all comments
   hashInd <- grep("^#", tx)
+  
   ## unique starting tokens
   ust <- sort(unique(sapply(strsplit(tx[-c(facesInd, boxesInd, bnd_vertInd, hashInd)], "\\s+"), "[", 1)))
   extra <- sapply(ust, function(x) gsub("\\s+$", "", gsub("^\\s+", "", gsub(x, "", grep(x, tx, value = TRUE)))))
-
-  ## WTF
+  ## what's left
   extra["projection"] <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
-  ## parse faces
-  ## expect extra["nface"]s
-
-  ## sanity check
-  ##if (!length(facesInd) == length(unlist(tx[facesInd]))) warning("faces data and count out of synch")
-  faceslist <- grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
-  facepairs <- do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- faceparse(faceslist[[xi]]); a$face <- xi - 1; a}))
-  boxeslist <- grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
-  boxes <-                  lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$box <- xi - 1; a})
+  
+  faceslist <- rbgm:::grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
+  ## remove len, cs, lr from faceparse, all belong on the face not the face verts
+  faceverts <-  do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+  faces <-   do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+ 
+  
+  boxeslist <- rbgm:::grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
+  boxes0 <- lapply(seq_along(boxeslist), function(xi) {a <- rbgm:::boxparse(boxeslist[[xi]]); a$.bx0 <- xi - 1; a})
+  ## we only need boxverts for non-face boxes (boundary faces), but use to check data sense
+  boxverts <- do.call(bind_rows, lapply(seq_along(boxes0), function(xa) {aa <- boxes0[[xa]]$verts; .bx0 = rep(xa - 1, nrow(boxes0[[xa]]$verts)); aa$.bx0 <- .bx0; aa}))
+  boxes<- do.call(bind_rows, lapply(boxes0, function(a) bind_cols(as_data_frame(a[["meta"]]), as_data_frame(a[c("insideX", "insideY", ".bx0")]))))
+  facesXboxes <- do.call(bind_rows, lapply(boxes0, "[[", "faces"))
   
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
-  bnd_verts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2])
-  boxverts <- do.call(bind_rows, lapply(boxes, "[[", "verts"))
-  boxdata <- do.call(bind_rows, lapply(boxes, function(a) as_data_frame(a[["meta"]])))
-  for (i in seq(ncol(boxdata))) boxdata[[i]] <- type.convert(boxdata[[i]], as.is = TRUE)
-  verts <- facepairs %>% select(x, y)   
+  boundaryverts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
+  
+for (i in seq(ncol(boxes))) {
+  if (is.character(boxes[[i]])) {
+    boxes[[i]] <- type.convert(boxes[[i]], as.is = TRUE)
+  }
+}
+  
+  ## OUTPUT
+  ## vertices     x,y, .vx0
+  ## facesXverts  .vx0, .fx0, .p0 ## .po is p1/p2 ends of face
+  ## faces        .fx0, length, cos0, sin0, leftbox, rightbox  ## cos/sin rel. to (0, 0) left/right looking from p2
+  ## facesXboxes  .bx0, .fx0
+  ## boxesXverts  .bx0, .vx0
+  ## boxes        .bx0, label, insideX, insideY, nconn, botz, area, vertmix, horizmix
+  
+  
+    
   ## I think bnd_verts already all included in box_verts
-  allverts <- bind_rows(verts, boxverts, bnd_verts) %>% distinct() %>% arrange(x, y) %>% mutate(nr = row_number())
+  vertices <- bind_rows(faceverts[, c("x", "y")], boxverts[, c("x", "y")], boundaryverts[, c("x", "y")]) %>% distinct() %>% arrange(x, y) %>% mutate(.vx0 = row_number())
   
-  boxind <- lapply(boxes, function(x) (allverts %>% inner_join(x$verts %>% mutate(ord = row_number()), c("x" = "x", "y" = "y")) %>% arrange(ord))$nr)
-  faceind <- lapply(split(facepairs %>% select(x, y, face), facepairs$face), function(x) (allverts %>% inner_join(x %>% mutate(ord = row_number()), c("x" = "x", "y" = "y")) %>% arrange(ord))$nr)
-  bndind <-  ((allverts %>% inner_join(bnd_verts %>% mutate(ord = row_number()), c("x" = "x", "y" = "y"))) %>% arrange(ord))$nr
+  facesXverts <- faceverts %>% mutate(.p0 = rep(1:2, length = nrow(faceverts)))  %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% select(-x, -y)
   
-  ##allverts %>% inner_join(boxes[[2]]$verts %>% mutate(ord = row_number())) %>% arrange(ord)
- 
-  ## maintain the order before the join
- # boxind <- lapply(boxes, function(x) (verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) %>% arrange(ord)))$nr)
+  boxesXverts <- boxverts %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% select(-x, -y)
 
-  allverts <- allverts %>% select(x, y)
-  ##(verts %>% mutate(nr = row_number()) %>% inner_join(x$verts %>% mutate(ord = row_number()) ) %>% arrange(ord))$nr
- #faces <- matrix(seq(nrow(verts)), byrow = TRUE, ncol = 2)
-  boxfaces <- lapply(boxes, function(x) x$faces$iface + 1)
-  list(verts = allverts, facepairs = facepairs, faceind = faceind, 
-       bndind = bndind, boxind = boxind, extra = extra, boxfaces = boxfaces, 
-       boxdata = boxdata)
+ # allverts <- allverts %>% select(x, y)
+  list(vertices = vertices, facesXverts = facesXverts, faces = faces, facesXboxes = facesXboxes, boxesXverts = boxesXverts, boxes = boxes, boundaryvertices = boundaryverts, extra = extra)
 }
 
 
@@ -108,43 +151,7 @@ segmaker <- function(x) {
 }
 
 
-grepItems <- function(tex, itemname, nitem) {
-  alist <- vector("list", nitem)
-  for (i in seq_along(alist)) {
-    alist[[i]] <- grep(sprintf("%s%i\\.", itemname, i - 1), tex, value = TRUE)
-  }
-  alist
-}
 
-faceparse <- function(x) {
-  ind <- grep("length", x)
-  x0 <- strsplit(x, "\\s+")
-  
-  len <- as.numeric(x0[[ind]][2])
-  p1 <- as.numeric(x0[[grep("p1", x)]][2:3])
-  p2 <- as.numeric(x0[[grep("p2", x)]][2:3])
-  cs <- as.numeric(x0[[grep("cs", x)]][2:3])
-  lr <- as.integer(x0[[grep("lr", x)]][2:3])
-  data_frame(x = c(p1[1], p2[1]), y = c(p1[2], p2[2]), cs = cs, lr = lr, len = c(0, len))
-  
-}
-
-boxparse <- function(x) {
-  vertind <- grep(".vert ", x)
-  verts <-  do.call(rbind, lapply(strsplit(x[vertind], "\\s+"), function(x) as.numeric(x[2:3])))
-  x <- x[-vertind]
-  insideind <- grep("inside", x)
-  centroid <- as.numeric(strsplit(x[insideind], "\\s+")[[1]][2:3])
-  
-  metalabs <- sapply(strsplit(sapply(strsplit(x[-insideind], "\\s+"), function(x) x[1]), "\\."), "[", 2)
-  
-  metavals <- sapply(strsplit(x[-insideind], "\\s+"), function(x) x[-1])
-  names(metavals) <- metalabs
-  
-  list(verts = data_frame(x = verts[,1], y = verts[,2]), 
-       faces =  data_frame(iface = i_parse(metavals[["iface"]]), ibox = i_parse(metavals[["ibox"]])), 
-       meta = metavals[!names(metavals) %in% c("iface", "ibox")])
-}
 
 
 
@@ -158,18 +165,18 @@ boxparse <- function(x) {
 ##' @param longlat calculate distance on great circle or Cartesian
 ##' @return matrix of (possibly) densified coordinates
 densifymindist <- function(x, mindist, longlat = longlat) {
-    if (missing(mindist)) {
-        warning("No minimum distance specified, no densifying done")
-        return(x)
-    }
-
-    dist <- spDistsN1(x[1L,,drop=FALSE], x[2L,,drop=FALSE], longlat = TRUE)
-    if (dist >= mindist) {
-        n <- dist %/% mindist
-        x <- gcIntermediate(x[1L,], x[2L,], n = n, addStartEnd = TRUE)
-    }
-    x
-
+  if (missing(mindist)) {
+    warning("No minimum distance specified, no densifying done")
+    return(x)
+  }
+  
+  dist <- spDistsN1(x[1L,,drop=FALSE], x[2L,,drop=FALSE], longlat = TRUE)
+  if (dist >= mindist) {
+    n <- dist %/% mindist
+    x <- gcIntermediate(x[1L,], x[2L,], n = n, addStartEnd = TRUE)
+  }
+  x
+  
 }
 
 

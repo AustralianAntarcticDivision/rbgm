@@ -4,7 +4,7 @@
 \alias{read_bgm}
 \title{Read BGM}
 \usage{
-read_bgm(x, sp = FALSE)
+read_bgm(x)
 }
 \arguments{
 \item{x}{path to a bgm file}
