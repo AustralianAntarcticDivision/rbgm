@@ -11,7 +11,7 @@ Imports:
     dplyr,
     geosphere
 Suggests:
-    graticule
+    graticule, roxygen2
 Description: Tools for handling network data for Atlantis from box-geometry
     model (BGM) files
 NeedsCompilation: no

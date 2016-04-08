@@ -19,16 +19,16 @@ knitr::opts_chunk$set(
 
 ## rbgm - R tools for Box Geometry model files
 
-rbgm allows reading of geometry from BGM files, either in raw
+`rbgm` allows reading of geometry from BGM files, either in raw
 coordinate form or as Spatial objects. 
 
-rbgm aims to make all of this straightforward: 
+Rbgm aims to make all of the following straightforward: 
 
 * read of the BGM format, maintaining all topology and attributes
 * use of the BGM specification for visualization and data extraction
 * creation of BGM from from shapefiles, R spatial objects and whatever else
 
-There is some overlapping functionality with [oms](https://github.com/mdsumner/oms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building
+There is some overlapping functionality with [angstroms](https://github.com/mdsumner/angstroms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building
 topological data structures. All of these packages are in development and are subject to change. 
 
 
@@ -41,22 +41,68 @@ devtools::install_github("mdsumner/rbgm")
 
 ## Example
 
+Read in the built-in example .bgm file with `read_bgm`, and plot it as box-polygons. 
+
 ```{r}
 library(rbgm)
+library(scales)  ## for alpha function
 ## example data set in package
 fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
 bgm <- read_bgm(fname)
+plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
+
+```
+
+The function `read_bgm` returns a generic list structure of tables, which currently includes the following. More on these later. 
+
+```{r}
+print(names(bgm))
+```
+
+There are two functions for converting from the raw .bgm data structures to `Spatial` objects, as defined in the `sp` package. (Spatial objects are formal GIS-like data that store a table of attribute data against a set of matching polygons, lines or points.)
+
+* `boxSpatial` converts to a `SpatialPolygonsDataFrame`, with a table of attributes relevant to the boxes
+* `faceSpatial` converts to a `SpatialLinesDataFram`, with attributes for the faces (straight line edges that define box boundaries)
+
+From these conversions we can export to GIS formats like shapefiles. 
+
+It's important to note that the Spatial objects cannot store the full topological and attribute information present in the .bgm, so these are convenience converters that are one-way. We can generate .bgm from these objects, but it cannot be stored in just one Spatial object. 
+
+These converter functions provide fully-functional objects with complete coordinate system metadata, that we can subset, interrogate and plot. 
+
+```{r}
+(spdf <- boxSpatial(bgm))
+
+(sldf <- faceSpatial(bgm))
+```
+
+
+Subset based on attribute
+
+```{r}
+subset(spdf, horizmix == 0, select = label)
+
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
 
-(spdf <- boxSpatial(bgm))
-(sldf <- faceSpatial(bgm))
 text(coordinates(spdf), labels = spdf$label, col = grey(seq(1, 0, length = nrow(bgm$boxes))), cex = 0.8)
-## isolate boxes that are outside the boundary
 
-## just get a single boundary for the inner
-plot(boundarySpatial(bgm), border = "dodgerblue", lwd = 7, add = TRUE)
-## or subset the boundary boxes
-plot(subset(spdf, boundary), border = "firebrick", lwd = 3, add = TRUE)
+```
+
+For illustration isolate boxes that are outside the boundary. 
+
+```{r}
+
+## subset the boundary boxes
+plot(subset(spdf, boundary), border = "firebrick", lwd = 3)
+
+## or just get a single boundary for the inner
+plot(boundarySpatial(bgm), border = alpha("dodgerblue", 0.3), lwd = 7, add = TRUE)
+
+```
+
+Plot the boxes and then label the faces. 
+
+```{r}
 
 
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
