@@ -1,8 +1,4 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-    ## Loading required package: raster
-
-    ## Loading required package: sp
-
 [![Travis-CI Build Status](https://travis-ci.org/mdsumner/rbgm.svg?branch=master)](https://travis-ci.org/mdsumner/rbgm) [![](http://www.r-pkg.org/badges/version/rbgm)](http://www.r-pkg.org/pkg/rbgm) [![](http://cranlogs.r-pkg.org/badges/rbgm)](http://www.r-pkg.org/pkg/rbgm)
 
 rbgm - R tools for Box Geometry model files
