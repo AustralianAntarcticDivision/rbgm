@@ -30,8 +30,7 @@ Rbgm aims to make all of the following straightforward:
 There is some overlapping functionality with [angstroms](https://github.com/mdsumner/angstroms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building
 topological data structures, and [spbabel](https://github.com/mdsumner/babel) for interfacing Spatial with ggplot2, dplyr and other database-based tools. *All of these packages are in development and are subject to change, please let me know if you are interested and/or I can help with their use.* 
 
-
-## Development
+## Installation
 
 Install from Github using `devtools`. 
 
@@ -40,11 +39,24 @@ Install from Github using `devtools`.
 devtools::install_github("mdsumner/rbgm")
 ```
 
+## Development
+
+To obtain the development version of `rbgm` use the following steps in RStudio. 
+
+1. Install packages `install.packages("devtools", "roxygen2", "knitr", "htmltools")`.  
+2. Create a New Project in RStudio, select Version Control, and then Git. [See here to get Git]( https://support.rstudio.com/hc/en-us/articles/200532077?version=0.99.892&mode=desktop)
+3. Enter "https://github.com/mdsumner/rbgm.git".
+4. Go to Tools/Options/Project Options ... and under Build Tools select "Generate documentation with roxygen", click on all options.
+5. Ctrl-SHIFT-b to build the package and reload.
+
+
 ### How can I contribute to rbgm? 
 
-Help test the package! 
+Install, use, test the package, and let me know! 
 
-In particular, I'd like to get a huge collection of existing .bgm files - is there an collection somewhere already? 
+Please use the Issues tab on GitHub to add feature requests and bug reports. 
+
+use [Pull Requests](http://r-pkgs.had.co.nz/git.html#git-pullreq) if you have changes you'd like to contribute. 
 
 
 ## Example

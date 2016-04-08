@@ -12,8 +12,8 @@ Rbgm aims to make all of the following straightforward:
 
 There is some overlapping functionality with [angstroms](https://github.com/mdsumner/angstroms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building topological data structures, and [spbabel](https://github.com/mdsumner/babel) for interfacing Spatial with ggplot2, dplyr and other database-based tools. *All of these packages are in development and are subject to change, please let me know if you are interested and/or I can help with their use.*
 
-Development
------------
+Installation
+------------
 
 Install from Github using `devtools`.
 
@@ -22,11 +22,24 @@ Install from Github using `devtools`.
 devtools::install_github("mdsumner/rbgm")
 ```
 
+Development
+-----------
+
+To obtain the development version of `rbgm` use the following steps in RStudio.
+
+1.  Install packages `install.packages("devtools", "roxygen2", "knitr", "htmltools")`.
+2.  Create a New Project in RStudio, select Version Control, and then Git. [See here to get Git](https://support.rstudio.com/hc/en-us/articles/200532077?version=0.99.892&mode=desktop)
+3.  Enter "<https://github.com/mdsumner/rbgm.git>".
+4.  Go to Tools/Options/Project Options ... and under Build Tools select "Generate documentation with roxygen", click on all options.
+5.  Ctrl-SHIFT-b to build the package and reload.
+
 ### How can I contribute to rbgm?
 
-Help test the package!
+Install, use, test the package, and let me know!
 
-In particular, I'd like to get a huge collection of existing .bgm files - is there an collection somewhere already?
+Please use the Issues tab on GitHub to add feature requests and bug reports.
+
+use [Pull Requests](http://r-pkgs.had.co.nz/git.html#git-pullreq) if you have changes you'd like to contribute.
 
 Example
 -------
@@ -69,7 +82,7 @@ These converter functions provide fully-functional objects with complete coordin
 #> class       : SpatialPolygonsDataFrame 
 #> features    : 28 
 #> extent      : -1991376, 1840092, -1049317, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> coord. ref. : ++proj=laea ++lat_0=-63 ++lon_0=82 ++x_0=0 ++y_0=0 ++datum=WGS84 ++units=m ++no_defs ++ellps=WGS84 
 #> variables   : 10
 #> names       : label, nconn,  botz,         area, vertmix, horizmix,    insideX,    insideY, .bx0, boundary 
 #> min values  :  Box0,     3, -2120,  12850972822,   0e+00,        0, -1128926.5, -135019.93,    0,     TRUE 
@@ -79,7 +92,7 @@ These converter functions provide fully-functional objects with complete coordin
 #> class       : SpatialLinesDataFrame 
 #> features    : 90 
 #> extent      : -1542253, 1469523, -685013.8, 696650.8  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> coord. ref. : ++proj=laea ++lat_0=-63 ++lon_0=82 ++x_0=0 ++y_0=0 ++datum=WGS84 ++units=m ++no_defs ++ellps=WGS84 
 #> variables   : 7
 #> names       :       cosine,          sine, leftbox, rightbox,    length, .fx0, label 
 #> min values  : -0.027850857, -0.0433564821,       0,        0,  28877.31,    0, face0 
@@ -93,7 +106,7 @@ subset(spdf, horizmix == 0, select = label)
 #> class       : SpatialPolygonsDataFrame 
 #> features    : 4 
 #> extent      : -1991376, 1840092, -916229.8, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> coord. ref. : ++proj=laea ++lat_0=-63 ++lon_0=82 ++x_0=0 ++y_0=0 ++datum=WGS84 ++units=m ++no_defs ++ellps=WGS84 
 #> variables   : 1
 #> names       : label 
 #> min values  :  Box0 
