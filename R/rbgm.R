@@ -110,16 +110,18 @@ read_bgm <- function(x) {
   
   faceslist <- rbgm:::grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
   ## remove len, cs, lr from faceparse, all belong on the face not the face verts
-  faceverts <-  do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
-  faces <-   do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+  faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+  faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
  
   
   boxeslist <- rbgm:::grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
-  boxes0 <- lapply(seq_along(boxeslist), function(xi) {a <- rbgm:::boxparse(boxeslist[[xi]]); a$.bx0 <- xi - 1; a})
+  boxes0 <- lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$.bx0 <- xi - 1; a})
   ## we only need boxverts for non-face boxes (boundary faces), but use to check data sense
-  boxverts <- do.call(bind_rows, lapply(seq_along(boxes0), function(xa) {aa <- boxes0[[xa]]$verts; .bx0 = rep(xa - 1, nrow(boxes0[[xa]]$verts)); aa$.bx0 <- .bx0; aa}))
-  boxes<- do.call(bind_rows, lapply(boxes0, function(a) bind_cols(as_data_frame(a[["meta"]]), as_data_frame(a[c("insideX", "insideY", ".bx0")]))))
-  facesXboxes <- do.call(bind_rows, lapply(boxes0, "[[", "faces"))
+  boxverts <- do.call(dplyr::bind_rows, lapply(seq_along(boxes0), function(xa) {aa <- boxes0[[xa]]$verts; .bx0 = rep(xa - 1, nrow(boxes0[[xa]]$verts)); aa$.bx0 <- .bx0; aa}))
+  boxes<- do.call(dplyr::bind_rows, 
+                  lapply(boxes0, function(a) dplyr::bind_cols(dplyr::as_data_frame(a[["meta"]]), 
+                                                              dplyr::as_data_frame(a[c("insideX", "insideY", ".bx0")]))))
+  facesXboxes <- do.call(dplyr::bind_rows, lapply(boxes0, "[[", "faces"))
   
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
   boundaryverts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
