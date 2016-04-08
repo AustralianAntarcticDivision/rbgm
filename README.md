@@ -1,4 +1,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+    ## Loading required package: raster
+
+    ## Loading required package: sp
+
 [![Travis-CI Build Status](https://travis-ci.org/mdsumner/rbgm.svg?branch=master)](https://travis-ci.org/mdsumner/rbgm) [![](http://www.r-pkg.org/badges/version/rbgm)](http://www.r-pkg.org/pkg/rbgm) [![](http://cranlogs.r-pkg.org/badges/rbgm)](http://www.r-pkg.org/pkg/rbgm)
 
 rbgm - R tools for Box Geometry model files
@@ -14,13 +18,21 @@ Rbgm aims to make all of the following straightforward:
 
 There is some overlapping functionality with [angstroms](https://github.com/mdsumner/angstroms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building topological data structures. All of these packages are in development and are subject to change.
 
-Install dev version
--------------------
+Development
+-----------
+
+Install from Github using `devtools`.
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("mdsumner/rbgm")
 ```
+
+### How can I contribute to rbgm?
+
+Help test the package!
+
+In particular, I'd like to get a huge collection of existing .bgm files - is there an collection somewhere already?
 
 Example
 -------
@@ -29,8 +41,6 @@ Read in the built-in example .bgm file with `read_bgm`, and plot it as box-polyg
 
 ``` r
 library(rbgm)
-#> Loading required package: raster
-#> Loading required package: sp
 library(scales)  ## for alpha function
 ## example data set in package
 fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
