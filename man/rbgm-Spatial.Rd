@@ -13,7 +13,7 @@ boundarySpatial(bgm)
 faceSpatial(bgm)
 }
 \arguments{
-\item{bgm}{}
+\item{bgm}{BGM file}
 }
 \value{
 Spatial* object 
@@ -26,12 +26,12 @@ Spatial* object
 Take the output of \code{\link{read_bgm}} and return a \code{\link[sp]{Spatial}} object.
 }
 \examples{
-fname <- system.file("extdata", "Antarctica_28", package = "rbgm")
+fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
 bgm <- read_bgm(fname)
 spdf <- boxSpatial(bgm)
 sldf <- faceSpatial(bgm)
 
-plot(boxSpatial(b), col = grey(seq(0, 1, length = nrow(b$boxes))))
-plot(faceSpatial(b), col = rainbow(nrow(b$faces)), lwd = 2,  add = TRUE)
+plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(b$boxes))))
+plot(faceSpatial(bgm), col = rainbow(nrow(b$faces)), lwd = 2,  add = TRUE)
 }
 

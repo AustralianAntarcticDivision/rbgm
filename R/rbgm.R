@@ -3,6 +3,9 @@
 #' Tools for handling network data for Atlantis from box-geometry
 #' model (BGM) files
 #'
+#' @importFrom dplyr row_number
+#' @importFrom raster isLonLat 
+#' @importFrom sp spDistsN1 Line Lines SpatialLines CRS SpatialLinesDataFrame
 #' @name rbgm-package
 #' @docType package
 #' @author Michael D. Sumner
@@ -13,7 +16,7 @@ NULL
 #' Extract 
 #'
 #' Take the output of \code{\link{read_bgm}} and return a \code{\link[sp]{Spatial}} object. 
-#' @param bgm 
+#' @param bgm BGM file
 #'
 #' @return Spatial* object 
 #' \itemize{
@@ -22,20 +25,22 @@ NULL
 #' }
 #' @export
 #' @rdname rbgm-Spatial
+#' @importFrom sp point.in.polygon Polygon Polygons SpatialPolygons SpatialPolygonsDataFrame 
+#' @importFrom dplyr inner_join select
 #' @examples
-#' fname <- system.file("extdata", "Antarctica_28", package = "rbgm")
+#' fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
 #' bgm <- read_bgm(fname)
 #' spdf <- boxSpatial(bgm)
 #' sldf <- faceSpatial(bgm)
 #' 
-#' plot(boxSpatial(b), col = grey(seq(0, 1, length = nrow(b$boxes))))
-#' plot(faceSpatial(b), col = rainbow(nrow(b$faces)), lwd = 2,  add = TRUE)
+#' plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(b$boxes))))
+#' plot(faceSpatial(bgm), col = rainbow(nrow(b$faces)), lwd = 2,  add = TRUE)
 boxSpatial <- function(bgm) {
   data <- bgm$boxes
-  boxverts <- data %>% select(.bx0, label) %>% 
+  boxverts <- data %>% select_(".bx0", "label") %>% 
     inner_join(bgm$boxesXverts, ".bx0") %>% 
     inner_join(bgm$vertices, ".vx0") %>% 
-    select(-.vx0, -.bx0)
+    dplyr::select(quote(-.vx0), quote(-.bx0))
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
@@ -56,7 +61,7 @@ sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_
 #' @export
 #' @rdname rbgm-Spatial
 boundarySpatial <- function(bgm) {
-  SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(bgm$boundaryvertices %>% select(x, y) %>% as.matrix)), "bdy"))), 
+  SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(bgm$boundaryvertices %>% dplyr::select_("x", "y") %>% as.matrix)), "bdy"))), 
                            data.frame(label = "boundary", row.names = "bdy"))
 }
 
@@ -64,11 +69,11 @@ boundarySpatial <- function(bgm) {
 #' @export
 #' @rdname rbgm-Spatial
 faceSpatial <- function(bgm) {
-  data <- bgm$faces  %>% mutate(label = sprintf("face%i", .fx0))
-  faceverts <- data %>% select(.fx0, label) %>% 
+  data <- bgm$faces  %>% dplyr::mutate_("label" = sprintf("face%i", .fx0))
+  faceverts <- data %>% dplyr::select_(".fx0", "label") %>% 
     inner_join(bgm$facesXverts, ".fx0") %>% 
     inner_join(bgm$vertices, ".vx0") %>% 
-    select(-.vx0, -.fx0)
+    select_(quote(-.vx0), quote(-.fx0))
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
@@ -90,7 +95,7 @@ sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character
 ##' @title Read BGM
 ##' @param x path to a bgm file
 ##' @export
-#' @importFrom dplyr %>% select as_data_frame data_frame arrange bind_rows bind_cols distinct mutate inner_join
+#' @importFrom dplyr %>% select distinct_ as_data_frame data_frame arrange bind_rows bind_cols distinct mutate inner_join
 read_bgm <- function(x) {
   tx <- readLines(x)  
   
@@ -108,13 +113,13 @@ read_bgm <- function(x) {
   ## what's left
   extra["projection"] <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
   
-  faceslist <- rbgm:::grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
+  faceslist <- grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
   ## remove len, cs, lr from faceparse, all belong on the face not the face verts
-  faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
-  faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+  faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+  faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
  
   
-  boxeslist <- rbgm:::grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
+  boxeslist <- grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
   boxes0 <- lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$.bx0 <- xi - 1; a})
   ## we only need boxverts for non-face boxes (boundary faces), but use to check data sense
   boxverts <- do.call(dplyr::bind_rows, lapply(seq_along(boxes0), function(xa) {aa <- boxes0[[xa]]$verts; .bx0 = rep(xa - 1, nrow(boxes0[[xa]]$verts)); aa$.bx0 <- .bx0; aa}))
@@ -143,11 +148,11 @@ for (i in seq(ncol(boxes))) {
   
     
   ## I think bnd_verts already all included in box_verts
-  vertices <- bind_rows(faceverts[, c("x", "y")], boxverts[, c("x", "y")], boundaryverts[, c("x", "y")]) %>% distinct() %>% arrange(x, y) %>% mutate(.vx0 = row_number())
+  vertices <- bind_rows(faceverts[, c("x", "y")], boxverts[, c("x", "y")], boundaryverts[, c("x", "y")]) %>% distinct_() %>% dplyr::arrange_("x", "y") %>% mutate(.vx0 = row_number())
   
-  facesXverts <- faceverts %>% mutate(.p0 = rep(1:2, length = nrow(faceverts)))  %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% select(-x, -y)
+  facesXverts <- faceverts %>% mutate(.p0 = rep(1:2, length = nrow(faceverts)))  %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% dplyr::select_(quote(-x), quote(-y))
   
-  boxesXverts <- boxverts %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% select(-x, -y)
+  boxesXverts <- boxverts %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% dplyr::select_(quote(-x), quote(-y))
 
  # allverts <- allverts %>% select(x, y)
   list(vertices = vertices, facesXverts = facesXverts, faces = faces, facesXboxes = facesXboxes, boxesXverts = boxesXverts, boxes = boxes, boundaryvertices = boundaryverts, extra = extra)
@@ -155,9 +160,9 @@ for (i in seq(ncol(boxes))) {
 
 
 
-
+#' @importFrom dplyr select_
 box2pslg <- function(x) {
-  x <- head(x$verts, -1) %>% select(x, y) %>% as.matrix
+  x <- head(x$verts, -1) %>% dplyr::select_("x", "y") %>% as.matrix
   RTriangle::pslg(x, S = segmaker(x))
 }
 segmaker <- function(x) {

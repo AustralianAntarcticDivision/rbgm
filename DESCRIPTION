@@ -12,7 +12,7 @@ Imports:
     dplyr,
     geosphere
 Suggests:
-    bgmfiles, graticule, roxygen2, scales, testthat
+    bgmfiles, graticule, roxygen2, RTriangle, scales, testthat
 Description: Tools for Atlantis box-geometry model (BGM) files. 
 NeedsCompilation: no
 ByteCompile: yes
