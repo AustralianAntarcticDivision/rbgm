@@ -2,8 +2,9 @@ Package: rbgm
 Type: Package
 Title: Utilities for BGM files for Atlantis
 Version: 0.0-1
-Author: Michael D. Sumner
-Maintainer: Michael D. Sumner <michael.sumner@aad.gov.au>
+Authors@R: c(
+    person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
+    )
 Depends:
     raster,
     sp
@@ -11,10 +12,11 @@ Imports:
     dplyr,
     geosphere
 Suggests:
-    graticule, roxygen2
+    bgmfiles, graticule, roxygen2
 Description: Tools for handling network data for Atlantis from box-geometry
     model (BGM) files
 NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
 RoxygenNote: 5.0.1
+Remotes: AustralianAntarcticDivision/bgmfiles
