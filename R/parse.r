@@ -27,7 +27,8 @@ facedataparse <- function(x) {
 
 
 boxparse <- function(x) {
-  vertind <- grep(".vert ", x)
+  ## need variable amounts of white space, some are tabs, some single space
+  vertind <- grep(".vert\\s+", x)
   verts <-  do.call(rbind, lapply(strsplit(x[vertind], "\\s+"), function(x) as.numeric(x[2:3])))
   x <- x[-vertind]
   insideind <- grep("inside", x)
@@ -35,7 +36,8 @@ boxparse <- function(x) {
   
   metalabs <- sapply(strsplit(sapply(strsplit(x[-insideind], "\\s+"), function(x) x[1]), "\\."), "[", 2)
   
-  metavals <- sapply(strsplit(x[-insideind], "\\s+"), function(x) x[-1])
+  ## use lapply to avoid type de-stability :)
+  metavals <- lapply(strsplit(x[-insideind], "\\s+"), function(x) x[-1])
   names(metavals) <- metalabs
   
   list(verts = data_frame(x = verts[,1], y = verts[,2]), 
