@@ -1,6 +1,4 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/mdsumner/rbgm.svg?branch=master)](https://travis-ci.org/mdsumner/rbgm) [![](http://www.r-pkg.org/badges/version/rbgm)](http://www.r-pkg.org/pkg/rbgm) [![](http://cranlogs.r-pkg.org/badges/rbgm)](http://www.r-pkg.org/pkg/rbgm)
-
 rbgm - R tools for Box Geometry model files
 -------------------------------------------
 
@@ -12,7 +10,7 @@ Rbgm aims to make all of the following straightforward:
 -   use of the BGM specification for visualization and data extraction
 -   creation of BGM from from shapefiles, R spatial objects and whatever else
 
-There is some overlapping functionality with [angstroms](https://github.com/mdsumner/angstroms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building topological data structures. All of these packages are in development and are subject to change.
+There is some overlapping functionality with [angstroms](https://github.com/mdsumner/angstroms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building topological data structures, and [spbabel](https://github.com/mdsumner/babel) for interfacing Spatial with ggplot2, dplyr and other database-based tools. *All of these packages are in development and are subject to change, please let me know if you are interested and/or I can help with their use.*
 
 Development
 -----------
