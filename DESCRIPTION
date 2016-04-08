@@ -13,8 +13,7 @@ Imports:
     geosphere
 Suggests:
     bgmfiles, graticule, roxygen2, scales, testthat
-Description: Tools for handling network data for Atlantis from box-geometry
-    model (BGM) files
+Description: Tools for Atlantis box-geometry model (BGM) files. 
 NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
