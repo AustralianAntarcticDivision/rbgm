@@ -150,7 +150,13 @@ text(do.call(rbind, lapply(coordinates(sldf), function(x) apply(x[[1]], 2, mean)
 
 ![](figure/README-unnamed-chunk-8-1.png)<!-- -->
 
-More information
-----------------
+Obtain the boundary polygon and plot.
+
+``` r
+plot(boundarySpatial(bgm), lwd = 4, col = "grey")
+plot(boxSpatial(bgm), add = TRUE)
+```
+
+![](figure/README-unnamed-chunk-9-1.png)<!-- --> \#\# More information
 
 The BGM format and usage is described at the (registration-required) Atlantis wiki: <http://atlantis.cmar.csiro.au/>
