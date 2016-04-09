@@ -30,8 +30,11 @@ To obtain the development version of `rbgm` use the following steps in RStudio.
 1.  Install packages `install.packages("devtools", "roxygen2", "knitr", "htmltools")`.
 2.  Create a New Project in RStudio, select Version Control, and then Git. [See here to get Git](https://support.rstudio.com/hc/en-us/articles/200532077?version=0.99.892&mode=desktop)
 3.  Enter "<https://github.com/mdsumner/rbgm.git>".
-4.  Go to Tools/Options/Project Options ... and under Build Tools select "Generate documentation with roxygen", click on all options.
-5.  Ctrl-SHIFT-b to build the package and reload.
+4.  Run this to install all required dependencies for building and testing: `devtools::install_deps(dependencies = TRUE)`
+5.  Go to Tools/Options/Project Options ... and under Build Tools select "Generate documentation with roxygen", click on all options.
+6.  Ctrl-SHIFT-B to build the package and reload.
+7.  Ctrl-SHIFT-T to run the tests.
+8.  Ctrl-SHIFT-E to run R CMD check.
 
 ### How can I contribute to rbgm?
 
