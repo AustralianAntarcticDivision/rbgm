@@ -1,5 +1,20 @@
 
 
+# fixproj("proj=aea lat_1=-18 lat_2=-36 lat_0=0 lon_0=134 x_0=3000000 y_0=6000000 ellps=GRS80 towgs84=0,0,0,0,0,0,0 units=m no_defs")
+# fixproj("+proj=longlat +a=6378137.0 +es=0.0066943799901413165 +lon_0=0d00 +lat_0=0d00 +x_0=0.0 +y_0=0.0")
+# 
+fixproj <- function(x) {
+  ## split on space
+  ss <- strsplit(x[1], "\\s+")[[1]]
+  paste(unlist(lapply(ss, prependplus)), collapse = " ")
+}
+
+prependplus <- function(x) {
+  if (!grepl("^\\+", x)) {
+    x <- sprintf("+%s", x)
+  }
+  x
+}
 ##' Densify vertices so that no span is  is greater than mindist
 ##'
 ##' Using great circle distance in km add vertices to a matrix of longitude latitude coordinates

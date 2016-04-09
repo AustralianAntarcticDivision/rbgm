@@ -19,10 +19,12 @@ read_bgm <- function(x) {
   hashInd <- grep("^#", tx)
   
   ## unique starting tokens
-  ust <- sort(unique(sapply(strsplit(tx[-c(facesInd, boxesInd, bnd_vertInd, hashInd)], "\\s+"), "[", 1)))
-  extra <- sapply(ust, function(x) gsub("\\s+$", "", gsub("^\\s+", "", gsub(x, "", grep(x, tx, value = TRUE)))))
-  ## what's left
-  extra["projection"] <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
+  ust <- sort(unique(unlist(lapply(strsplit(tx[-c(facesInd, boxesInd, bnd_vertInd, hashInd)], "\\s+"), "[", 1))))
+  ust <- ust[nchar(ust) > 0]
+  extra <- lapply(ust, function(x) gsub("\\s+$", "", gsub("^\\s+", "", gsub(x, "", grep(x, tx, value = TRUE)))))
+  names(extra) <- ust
+  ## some (most?) .bgm have PROJ.4 strings without "+" denoting arguments
+  extra$projection <- fixproj(extra$projection)  # <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
   
   faceslist <- grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
   ## remove len, cs, lr from faceparse, all belong on the face not the face verts
