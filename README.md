@@ -135,7 +135,6 @@ text(coordinates(spdf), labels = spdf$label, col = grey(seq(1, 0, length = nrow(
 For illustration isolate boxes that are outside the boundary.
 
 ``` r
-
 ## subset the boundary boxes
 plot(subset(spdf, boundary), border = "firebrick", lwd = 3)
 
@@ -148,8 +147,6 @@ plot(boundarySpatial(bgm), border = alpha("dodgerblue", 0.3), lwd = 7, add = TRU
 Plot the boxes and then label the faces.
 
 ``` r
-
-
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
 
 
@@ -167,6 +164,9 @@ plot(boundarySpatial(bgm), lwd = 4, col = "grey")
 plot(boxSpatial(bgm), add = TRUE)
 ```
 
-![](figure/README-unnamed-chunk-9-1.png)<!-- --> \#\# More information
+![](figure/README-unnamed-chunk-9-1.png)<!-- -->
+
+More information
+----------------
 
 The BGM format and usage is described at the (registration-required) Atlantis wiki: <http://atlantis.cmar.csiro.au/>

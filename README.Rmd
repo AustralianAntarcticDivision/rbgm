@@ -83,7 +83,6 @@ library(scales)  ## for alpha function
 fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
 bgm <- read_bgm(fname)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
-
 ```
 
 The function `read_bgm` returns a generic list structure of tables, which currently includes the following. More on these later. 
@@ -118,33 +117,27 @@ subset(spdf, horizmix == 0, select = label)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
 
 text(coordinates(spdf), labels = spdf$label, col = grey(seq(1, 0, length = nrow(bgm$boxes))), cex = 0.8)
-
 ```
 
 For illustration isolate boxes that are outside the boundary. 
 
 ```{r}
-
 ## subset the boundary boxes
 plot(subset(spdf, boundary), border = "firebrick", lwd = 3)
 
 ## or just get a single boundary for the inner
 plot(boundarySpatial(bgm), border = alpha("dodgerblue", 0.3), lwd = 7, add = TRUE)
-
 ```
 
 Plot the boxes and then label the faces. 
 
 ```{r}
-
-
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
 
 
 plot(sldf, col = rainbow(nrow(sldf)), lwd = 2,  add = TRUE)
 text(do.call(rbind, lapply(coordinates(sldf), function(x) apply(x[[1]], 2, mean))), 
      labels = gsub("ace", "", sldf$label), cex = 0.8, col = rainbow(nrow(sldf)), pos = 3)
-
 ```
 
 Obtain the boundary polygon and plot. 
@@ -153,6 +146,7 @@ Obtain the boundary polygon and plot.
 plot(boundarySpatial(bgm), lwd = 4, col = "grey")
 plot(boxSpatial(bgm), add = TRUE)
 ```
+
 ## More information
 
 The BGM format and usage is described at the (registration-required) Atlantis wiki: http://atlantis.cmar.csiro.au/
