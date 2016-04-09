@@ -10,7 +10,8 @@ test_that("read_bgm works", {
   expect_silent(lapply(files, read_bgm))
 })
 
-b <- read_bgm(sample(files, 1))
+for (i in seq_along(files)) {
+b <- read_bgm(files[i])
 test_that("conversion to Spatial works", {
           expect_that(boxSpatial(b), is_a("SpatialPolygonsDataFrame"))
           expect_that(faceSpatial(b), is_a("SpatialLinesDataFrame"))
@@ -18,3 +19,5 @@ test_that("conversion to Spatial works", {
 }
           
           )
+}
+
