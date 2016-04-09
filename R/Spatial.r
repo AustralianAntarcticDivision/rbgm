@@ -8,6 +8,7 @@
 #' \itemize{
 #' \item boxSpatial \code{\link[sp]{SpatialPolygonsDataFrame}} 
 #' \item faceSpatial  \code{\link[sp]{SpatialLinesDataFrame}} 
+#' \item boundarySpatial \code{\link[sp]{SpatialPolygonsDataFrame}} 
 #' }
 #' @export
 #' @rdname rbgm-Spatial
