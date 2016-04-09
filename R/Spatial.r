@@ -20,8 +20,8 @@
 #' spdf <- boxSpatial(bgm)
 #' sldf <- faceSpatial(bgm)
 #' 
-#' plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(b$boxes))))
-#' plot(faceSpatial(bgm), col = rainbow(nrow(b$faces)), lwd = 2,  add = TRUE)
+#' plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
+#' plot(faceSpatial(bgm), col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
 boxSpatial <- function(bgm) {
   data <- bgm$boxes
   boxverts <- data %>% select_(".bx0", "label") %>% 
@@ -34,7 +34,7 @@ boxSpatial <- function(bgm) {
   ## test for inside boundary
   inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
   data$boundary <- inside < 1
-  SpatialPolygonsDataFrame(sptableBox(boxverts, object = "label", crs = bgm$extra["projection"]), data)
+  SpatialPolygonsDataFrame(sptableBox(boxverts, object = "label", crs = bgm$extra$projection), data)
 }
 
 sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_) {
@@ -65,7 +65,7 @@ faceSpatial <- function(bgm) {
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
-  SpatialLinesDataFrame(sptableFace(faceverts, object = "label", crs = bgm$extra["projection"]), data)
+  SpatialLinesDataFrame(sptableFace(faceverts, object = "label", crs = bgm$extra$projection), data)
   
 }
 
