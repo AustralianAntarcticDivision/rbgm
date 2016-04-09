@@ -44,6 +44,16 @@ Please use the Issues tab on GitHub to add feature requests and bug reports.
 
 use [Pull Requests](http://r-pkgs.had.co.nz/git.html#git-pullreq) if you have changes you'd like to contribute.
 
+Related work
+------------
+
+-   [mfdbatlantis](https://github.com/mareframe/mfdbatlantis) MareFrame Atlantis routines
+-   [atlantistools](https://github.com/alketh/atlantistools) data processing and visualisation tool for R
+-   [ratlantis](https://github.com/jsgosnell/ratlantis) R code for interfacing with Atlantis ecosystem modeling software
+-   [vat](https://github.com/mareframe/vat) Visualizing Atlantis Tool (vat)
+-   [EastAntarctica\_Atlantis](https://github.com/AustralianAntarcticDivision/EastAntarctica_Atlantis) Project work at Australian Antarctic Division and the Antarctic Climate and Ecosystems CRC
+-   [AtlantisNEUS\_R](https://github.com/erikjsolsen/AtlantisNEUS_R) R code (scripts and functions) to interact with and analyze output from the Atlantis NEAU End-2-end marine ecosystem model
+
 Example
 -------
 
@@ -85,7 +95,7 @@ These converter functions provide fully-functional objects with complete coordin
 #> class       : SpatialPolygonsDataFrame 
 #> features    : 28 
 #> extent      : -1991376, 1840092, -1049317, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : ++proj=laea ++lat_0=-63 ++lon_0=82 ++x_0=0 ++y_0=0 ++datum=WGS84 ++units=m ++no_defs ++ellps=WGS84 
+#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #> variables   : 10
 #> names       : label, nconn,  botz,         area, vertmix, horizmix,    insideX,    insideY, .bx0, boundary 
 #> min values  :  Box0,     3, -2120,  12850972822,   0e+00,        0, -1128926.5, -135019.93,    0,     TRUE 
@@ -95,7 +105,7 @@ These converter functions provide fully-functional objects with complete coordin
 #> class       : SpatialLinesDataFrame 
 #> features    : 90 
 #> extent      : -1542253, 1469523, -685013.8, 696650.8  (xmin, xmax, ymin, ymax)
-#> coord. ref. : ++proj=laea ++lat_0=-63 ++lon_0=82 ++x_0=0 ++y_0=0 ++datum=WGS84 ++units=m ++no_defs ++ellps=WGS84 
+#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #> variables   : 7
 #> names       :       cosine,          sine, leftbox, rightbox,    length, .fx0, label 
 #> min values  : -0.027850857, -0.0433564821,       0,        0,  28877.31,    0, face0 
@@ -109,7 +119,7 @@ subset(spdf, horizmix == 0, select = label)
 #> class       : SpatialPolygonsDataFrame 
 #> features    : 4 
 #> extent      : -1991376, 1840092, -916229.8, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : ++proj=laea ++lat_0=-63 ++lon_0=82 ++x_0=0 ++y_0=0 ++datum=WGS84 ++units=m ++no_defs ++ellps=WGS84 
+#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #> variables   : 1
 #> names       : label 
 #> min values  :  Box0 

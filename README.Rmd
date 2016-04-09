@@ -61,6 +61,16 @@ Please use the Issues tab on GitHub to add feature requests and bug reports.
 
 use [Pull Requests](http://r-pkgs.had.co.nz/git.html#git-pullreq) if you have changes you'd like to contribute. 
 
+## Related work
+
+
+* [mfdbatlantis](https://github.com/mareframe/mfdbatlantis) MareFrame Atlantis routines
+* [atlantistools](https://github.com/alketh/atlantistools) data processing and visualisation tool for R
+* [ratlantis](https://github.com/jsgosnell/ratlantis)  R code for interfacing with Atlantis ecosystem modeling software
+* [vat](https://github.com/mareframe/vat)	 Visualizing Atlantis Tool (vat)
+* [EastAntarctica_Atlantis](https://github.com/AustralianAntarcticDivision/EastAntarctica_Atlantis) Project work at Australian Antarctic Division and the Antarctic Climate and Ecosystems CRC
+* [AtlantisNEUS_R](https://github.com/erikjsolsen/AtlantisNEUS_R) R code (scripts and functions) to interact with and analyze output from the Atlantis NEAU End-2-end marine ecosystem model
+
 
 ## Example
 
