@@ -49,6 +49,7 @@ Related work
 
 -   [mfdbatlantis](https://github.com/mareframe/mfdbatlantis) MareFrame Atlantis routines
 -   [atlantistools](https://github.com/alketh/atlantistools) data processing and visualisation tool for R
+-   [shinyrAtlantis](https://github.com/shanearichards/shinyrAtlantis)
 -   [ratlantis](https://github.com/jsgosnell/ratlantis) R code for interfacing with Atlantis ecosystem modeling software
 -   [vat](https://github.com/mareframe/vat) Visualizing Atlantis Tool (vat)
 -   [EastAntarctica\_Atlantis](https://github.com/AustralianAntarcticDivision/EastAntarctica_Atlantis) Project work at Australian Antarctic Division and the Antarctic Climate and Ecosystems CRC
