@@ -153,7 +153,7 @@ build_dz <- function(z, zlayers = c(-Inf, -2000, -1000, -750, -400, -300, -200, 
 # }
 # 
 # gris_bgm <- function(x) {
-#   x <- read_bgm(x)
+#   x <- bgmfile(x)
 #   
 #   data_frame(face = unlist(x$boxfaces) - 1) %>%  inner_join(x$facepairs)
 #   data_frame(face = unlist(x$boxind) - 1, box = rep(seq_along(x$boxind), sapply(x$boxind, length))) %>%  inner_join(x$facepairs)

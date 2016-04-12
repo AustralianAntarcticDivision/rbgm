@@ -1,7 +1,7 @@
 
 #' Extract 
 #'
-#' Take the output of \code{\link{read_bgm}} and return a \code{\link[sp]{Spatial}} object. 
+#' Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object. 
 #' @param bgm BGM file
 #'
 #' @return Spatial* object 
@@ -16,7 +16,7 @@
 #' @importFrom dplyr inner_join select
 #' @examples
 #' fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
-#' bgm <- read_bgm(fname)
+#' bgm <- bgmfile(fname)
 #' spdf <- boxSpatial(bgm)
 #' sldf <- faceSpatial(bgm)
 #' 

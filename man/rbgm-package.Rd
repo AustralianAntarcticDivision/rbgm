@@ -21,7 +21,7 @@ model (BGM) files
 \section{I. Import}{
  
 \tabular{ll}{
- \code{\link{read_bgm}} \tab read directly from a .bgm file  \cr
+ \code{\link{bgm}} \tab read directly from a .bgm file  \cr
  \code{\link{read.faces}} \tab read faces in with option to densify vertices \cr
 }
 }

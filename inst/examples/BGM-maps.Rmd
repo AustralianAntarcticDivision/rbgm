@@ -33,7 +33,7 @@ breakproj <- function(x) {
 files <- bgmfiles()
 
 for (i in seq_along(files)) {
-  bgm <- read_bgm(files[i])
+  bgm <- bgmfile(files[i])
   boxes <- boxSpatial(bgm)
   plot(boxes, col = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))))
   op <- par(xpd = NA)
@@ -54,7 +54,7 @@ Convert each to XYZ on the globe and plot.
 #devtools::install_github("mdsumner/gris", ref = "cran-sprint")
 library(gris)
 for (i in seq_along(files)) {
-  bgm <- read_bgm(files[i])
+  bgm <- bgmfile(files[i])
   boxes <- boxSpatial(bgm)
   bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
  g <- gris(bll)

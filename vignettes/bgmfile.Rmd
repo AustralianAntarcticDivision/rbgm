@@ -64,7 +64,7 @@ vert.1  | second vertex etc. | input
 
 f1 <- system.file("extdata/EastAntarctica_LL.bgm", package = "rbgm")
 library(rbgm)
-b1 <- read_bgm(f1)
+b1 <- bgmfile(f1)
 
 ```
 

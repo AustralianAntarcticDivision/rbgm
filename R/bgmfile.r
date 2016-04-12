@@ -1,13 +1,31 @@
+#' Functions now deprecated
+#' 
+#' read_bgm - use bgmfile
+#' @name rbgm-deprecated
+#' @rdname rbgm-deprecated
+#' @aliases read_bgm
+#' 
+#' @param x path to a bgm file
+#' @param ... reserved
+#' @export
+read_bgm <- function(x, ...) {
+  .Deprecated(new = "bgmfile", package = "rbgm")
+  bgm(x)
+}
+
 
 ##' Partial read for .bgm files
 ##'
 ##' Read geometry from BGM files
 ##'
 ##' @title Read BGM
+##'
 ##' @param x path to a bgm file
+##' @param ... ignored for now
+##'
 ##' @export
 #' @importFrom dplyr %>% select distinct_ as_data_frame data_frame arrange bind_rows bind_cols distinct mutate inner_join
-read_bgm <- function(x) {
+bgmfile <- function(x, ...) {
   
   
   tx <- readLines(x)  

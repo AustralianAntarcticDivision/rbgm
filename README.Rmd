@@ -77,18 +77,18 @@ use [Pull Requests](http://r-pkgs.had.co.nz/git.html#git-pullreq) if you have ch
 
 ## Example
 
-Read in the built-in example .bgm file with `read_bgm`, and plot it as box-polygons. 
+Read in the built-in example .bgm file with `bgmfile`, and plot it as box-polygons. 
 
 ```{r}
 library(rbgm)
 library(scales)  ## for alpha function
 ## example data set in package
 fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
-bgm <- read_bgm(fname)
+bgm <- bgmfile(fname)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
 ```
 
-The function `read_bgm` returns a generic list structure of tables, which currently includes the following. More on these later. 
+The function `bgmfile` returns a generic list structure of tables, which currently includes the following. More on these later. 
 
 ```{r}
 print(names(bgm))

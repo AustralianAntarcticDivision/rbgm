@@ -2,7 +2,7 @@
 library(rbgm)
 ## example data set in package
 fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
-bgm <- read_bgm(fname)
+bgm <- bgm(fname)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
 
 ##  bgm format doesn't know which boxes are boundary
