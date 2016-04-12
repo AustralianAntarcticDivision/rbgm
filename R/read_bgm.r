@@ -8,9 +8,10 @@
 ##' @export
 #' @importFrom dplyr %>% select distinct_ as_data_frame data_frame arrange bind_rows bind_cols distinct mutate inner_join
 read_bgm <- function(x) {
+  
+  
   tx <- readLines(x)  
-  
-  
+ 
   ## all indexes
   facesInd <- grep("^face", tx)
   boxesInd <- grep("^box", tx)
@@ -25,8 +26,9 @@ read_bgm <- function(x) {
   names(extra) <- ust
   ## some (most?) .bgm have PROJ.4 strings without "+" denoting arguments
   extra$projection <- fixproj(extra$projection)  # <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
-  
-  faceslist <- grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
+  ## nface is repeated in Guam_utm1.bgm
+  numfaces <- as.numeric(strsplit(extra["nface"][[1]], "\\s+")[[1]][1])
+  faceslist <- grepItems(tx[facesInd], "face", numfaces)
   ## remove len, cs, lr from faceparse, all belong on the face not the face verts
   faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
   faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
