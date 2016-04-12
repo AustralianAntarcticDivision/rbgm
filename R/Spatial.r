@@ -53,6 +53,30 @@ boundarySpatial <- function(bgm) {
 }
 
 
+# Compare this to \code{\link{pointSpatial}} which returns all instances of the vertices with information about which boxes. 
+
+#' Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}. 
+#'
+#' @param bgm BGM object from \code{\link{bgmfile}}
+#'
+#' @return  \code{\link[sp]{SpatialPointsDataFrame}}
+#' @export
+#'
+nodeSpatial <- function(bgm) {
+  SpatialPointsDataFrame(as.matrix(bgm$vertices[, c("x", "y")]), data.frame(.vx0 = bgm$vertices$.vx0), 
+                         proj4string = CRS(bgm$extra["projection"][[1]]))
+}
+
+#' @rdname nodeSpatial
+#' @export 
+pointSpatial <- function(bgm) {
+  bgmv <- bgm$vertices %>% inner_join(bgm$facesXverts)
+  df <- bgmv
+  df$x <- NULL
+  df$y <- NULL
+  SpatialPointsDataFrame(as.matrix(bgmv[, c("x", "y")]), as.data.frame(df), 
+                         proj4string = CRS(bgm$extra["projection"][[1]]))
+}
 #' @export
 #' @rdname rbgm-Spatial
 faceSpatial <- function(bgm) {

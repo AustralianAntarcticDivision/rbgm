@@ -16,6 +16,9 @@ test_that("conversion to Spatial works", {
           expect_that(boxSpatial(b), is_a("SpatialPolygonsDataFrame"))
           expect_that(faceSpatial(b), is_a("SpatialLinesDataFrame"))
           expect_that(boundarySpatial(b), is_a("SpatialPolygonsDataFrame"))
+          expect_that(pointSpatial(b), is_a("SpatialPointsDataFrame"))
+          expect_that(nodeSpatial(b), is_a("SpatialPointsDataFrame"))
+         # testthat::expect_lt(nrow(pointSpatial(b)), nrow(nodeSpatial(b)))
 }
           
           )

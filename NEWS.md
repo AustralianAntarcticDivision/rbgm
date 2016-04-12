@@ -1,5 +1,7 @@
 # dev
 
+* added functions pointSpatial and nodeSpatial 
+
 * new function bgmfile to replace deprecated read_bgm
 
 * new tests and changes to capture Guam_utm1 variant
