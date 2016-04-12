@@ -1,0 +1,68 @@
+---
+title: "BGM maps"
+author: "Michael Sumner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r,echo=FALSE, message = FALSE}
+
+library(rbgm)
+library(bgmfiles)
+
+library(rgdal)
+
+```
+This vignette shows each BGM file from the package bgmfiles in a map. 
+
+
+```{r,fig.width=7, fig.height = 7}
+library(rbgm)
+library(bgmfiles)
+
+library(rgdal)
+
+## turn +proj into line separated text
+breakproj <- function(x) {
+  paste(strsplit(x, " ")[[1]], collapse = "\n")
+}
+files <- bgmfiles()
+
+for (i in seq_along(files)) {
+  bgm <- read_bgm(files[i])
+  boxes <- boxSpatial(bgm)
+  plot(boxes, col = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))))
+  op <- par(xpd = NA)
+  llgridlines(boxes)
+  par(op)
+  title(basename(files[i]), cex = 0.8)
+  mtext(breakproj(proj4string(boxes)), cex = 0.75, side = 2, las = 1, adj = 0, line = 2, at = par("usr")[3], xpd = NA)
+  
+}
+
+
+```
+
+
+Convert each to XYZ on the globe and plot. 
+
+```{r}
+#devtools::install_github("mdsumner/gris", ref = "cran-sprint")
+library(gris)
+for (i in seq_along(files)) {
+  bgm <- read_bgm(files[i])
+  boxes <- boxSpatial(bgm)
+  bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
+ g <- gris(bll)
+ gt <- triangulate(g)
+ plot3d(gt, add = i > 1)
+}
+
+plot3d(triangulate(gris(wrld_simpl)), add = TRUE, col = "black")
+rgl::light3d(specular = "aliceblue", viewpoint.rel = FALSE)
+rgl::bg3d("black")
+```
