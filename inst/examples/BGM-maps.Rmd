@@ -50,19 +50,25 @@ for (i in seq_along(files)) {
 
 Convert each to XYZ on the globe and plot. 
 
-```{r}
+```{r,eval=FALSE}
 #devtools::install_github("mdsumner/gris", ref = "cran-sprint")
 library(gris)
+
+
 for (i in seq_along(files)) {
   bgm <- bgmfile(files[i])
   boxes <- boxSpatial(bgm)
   bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
  g <- gris(bll)
- gt <- triangulate(g)
- plot3d(gt, add = i > 1)
+ gt <- gris::triangulate(g)
+ gris::plot3d(gt, add = i > 1)
 }
+library(rgl)
+library(maptools); data(wrld_simpl)
+wtab <- ggplot2::fortify(wrld_simpl)
+points3d(llh2xyz(cbind(wtab[, c("long", "lat")], 0)), col = "white")
 
-plot3d(triangulate(gris(wrld_simpl)), add = TRUE, col = "black")
-rgl::light3d(specular = "aliceblue", viewpoint.rel = FALSE)
+#plot3d(triangulate(gris(wrld_simpl)), add = TRUE, col = "black")
+#rgl::light3d(specular = "aliceblue", viewpoint.rel = FALSE)
 rgl::bg3d("black")
 ```
