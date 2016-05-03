@@ -22,7 +22,7 @@ before_install:
   - ./configure --prefix=/usr
   - make
   - sudo make install
-  - cd /home/travis/build/mdsumner/graticule
+  - cd /home/travis/build/mdsumner/rbgm
 
 install:
   - ./pkg-build.sh install_deps
