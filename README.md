@@ -98,7 +98,7 @@ These converter functions provide fully-functional objects with complete coordin
 #> class       : SpatialPolygonsDataFrame 
 #> features    : 28 
 #> extent      : -1991376, 1840092, -1049317, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 
+#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #> variables   : 10
 #> names       : label, nconn,  botz,         area, vertmix, horizmix,    insideX,    insideY, .bx0, boundary 
 #> min values  :  Box0,     3, -2120,  12850972822,   0e+00,        0, -1128926.5, -135019.93,    0,     TRUE 
@@ -108,7 +108,7 @@ These converter functions provide fully-functional objects with complete coordin
 #> class       : SpatialLinesDataFrame 
 #> features    : 90 
 #> extent      : -1542253, 1469523, -685013.8, 696650.8  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 
+#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #> variables   : 7
 #> names       :       cosine,          sine, leftbox, rightbox,    length, .fx0, label 
 #> min values  : -0.027850857, -0.0433564821,       0,        0,  28877.31,    0, face0 
@@ -122,7 +122,7 @@ subset(spdf, horizmix == 0, select = label)
 #> class       : SpatialPolygonsDataFrame 
 #> features    : 4 
 #> extent      : -1991376, 1840092, -916229.8, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 
+#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #> variables   : 1
 #> names       : label 
 #> min values  :  Box0 
@@ -184,14 +184,14 @@ library(rbgm)
 library(bgmfiles)
 
 library(rgdal)
-#> rgdal: version: 1.1-8, (SVN revision 616)
+#> rgdal: version: 1.1-10, (SVN revision 622)
 #>  Geospatial Data Abstraction Library extensions to R successfully loaded
 #>  Loaded GDAL runtime: GDAL 2.0.1, released 2015/09/15
 #>  Path to GDAL shared files: E:/inst/R/R/library/rgdal/gdal
 #>  GDAL does not use iconv for recoding strings.
 #>  Loaded PROJ.4 runtime: Rel. 4.9.1, 04 March 2015, [PJ_VERSION: 491]
 #>  Path to PROJ.4 shared files: E:/inst/R/R/library/rgdal/proj
-#>  Linking to sp version: 1.2-2
+#>  Linking to sp version: 1.2-3
 
 ## turn +proj into line separated text
 breakproj <- function(x) {
@@ -211,16 +211,17 @@ for (i in seq_along(files)) {
 }
 ```
 
-![](figure/README-unnamed-chunk-10-1.png)<!-- -->![](figure/README-unnamed-chunk-10-2.png)<!-- -->![](figure/README-unnamed-chunk-10-3.png)<!-- -->![](figure/README-unnamed-chunk-10-4.png)<!-- -->![](figure/README-unnamed-chunk-10-5.png)<!-- -->![](figure/README-unnamed-chunk-10-6.png)<!-- -->![](figure/README-unnamed-chunk-10-7.png)<!-- -->
+![](figure/README-unnamed-chunk-10-1.png)<!-- -->![](figure/README-unnamed-chunk-10-2.png)<!-- -->![](figure/README-unnamed-chunk-10-3.png)<!-- -->![](figure/README-unnamed-chunk-10-4.png)<!-- -->![](figure/README-unnamed-chunk-10-5.png)<!-- -->![](figure/README-unnamed-chunk-10-6.png)<!-- -->![](figure/README-unnamed-chunk-10-7.png)<!-- -->![](figure/README-unnamed-chunk-10-8.png)<!-- -->![](figure/README-unnamed-chunk-10-9.png)<!-- -->
+
+In-dev plot methods, see mapview and mdsumner/gris
+--------------------------------------------------
 
 Make a single map of every BGM.
 
 ``` r
 library(mapview)
-#> Loading required package: leaflet
 m <- mapView()
 library(maptools);data(wrld_simpl);plot(wrld_simpl)
-#> Checking rgeos availability: TRUE
  centroids <- matrix(NA_real_, nrow = length(files), ncol = 2)
 
 for (i in seq_along(files)) {
@@ -234,11 +235,6 @@ for (i in seq_along(files)) {
    centroids[i, ] <- coordinates(rgeos::gCentroid(bll))
 }
 points(centroids, col = "red", pch = 19)
-```
-
-![](figure/README-unnamed-chunk-11-1.png)<!-- -->
-
-``` r
 m 
 ```
 

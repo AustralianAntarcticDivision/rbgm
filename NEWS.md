@@ -1,5 +1,9 @@
 # dev
 
+* readme includes all example files in bgmfiles
+
+* new example files added
+
 * added functions pointSpatial and nodeSpatial 
 
 * new function bgmfile to replace deprecated read_bgm

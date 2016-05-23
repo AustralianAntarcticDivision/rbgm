@@ -185,9 +185,12 @@ for (i in seq_along(files)) {
 
 ```
 
+
+## In-dev plot methods, see mapview and mdsumner/gris
+
 Make a single map of every BGM. 
 
-```{r}
+```{r, eval=FALSE}
 library(mapview)
 m <- mapView()
 library(maptools);data(wrld_simpl);plot(wrld_simpl)
