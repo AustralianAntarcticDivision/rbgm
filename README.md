@@ -60,20 +60,20 @@ Related work
 Example
 -------
 
-Read in the built-in example .bgm file with `read_bgm`, and plot it as box-polygons.
+Read in the built-in example .bgm file with `bgmfile`, and plot it as box-polygons.
 
 ``` r
 library(rbgm)
 library(scales)  ## for alpha function
 ## example data set in package
 fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
-bgm <- read_bgm(fname)
+bgm <- bgmfile(fname)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
 ```
 
 ![](figure/README-unnamed-chunk-3-1.png)<!-- -->
 
-The function `read_bgm` returns a generic list structure of tables, which currently includes the following. More on these later.
+The function `bgmfile` returns a generic list structure of tables, which currently includes the following. More on these later.
 
 ``` r
 print(names(bgm))
@@ -173,3 +173,90 @@ More information
 ----------------
 
 The BGM format and usage is described at the (registration-required) Atlantis wiki: <http://atlantis.cmar.csiro.au/>
+
+Extended examples
+-----------------
+
+Obtain every available BGM file and plot in native coordinates, with a graticule.
+
+``` r
+library(rbgm)
+library(bgmfiles)
+
+library(rgdal)
+#> rgdal: version: 1.1-8, (SVN revision 616)
+#>  Geospatial Data Abstraction Library extensions to R successfully loaded
+#>  Loaded GDAL runtime: GDAL 2.0.1, released 2015/09/15
+#>  Path to GDAL shared files: E:/inst/R/R/library/rgdal/gdal
+#>  GDAL does not use iconv for recoding strings.
+#>  Loaded PROJ.4 runtime: Rel. 4.9.1, 04 March 2015, [PJ_VERSION: 491]
+#>  Path to PROJ.4 shared files: E:/inst/R/R/library/rgdal/proj
+#>  Linking to sp version: 1.2-2
+
+## turn +proj into line separated text
+breakproj <- function(x) {
+  paste(strsplit(x, " ")[[1]], collapse = "\n")
+}
+files <- bgmfiles()
+for (i in seq_along(files)) {
+  bgm <- bgmfile(files[i])
+  boxes <- boxSpatial(bgm)
+  plot(boxes, col = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))))
+  op <- par(xpd = NA)
+  llgridlines(boxes)
+  par(op)
+  title(basename(files[i]), cex = 0.8)
+  mtext(breakproj(proj4string(boxes)), cex = 0.75, side = 2, las = 1, adj = 0, line = 2, at = par("usr")[3], xpd = NA)
+ 
+}
+```
+
+![](figure/README-unnamed-chunk-10-1.png)<!-- -->![](figure/README-unnamed-chunk-10-2.png)<!-- -->![](figure/README-unnamed-chunk-10-3.png)<!-- -->![](figure/README-unnamed-chunk-10-4.png)<!-- -->![](figure/README-unnamed-chunk-10-5.png)<!-- -->![](figure/README-unnamed-chunk-10-6.png)<!-- -->![](figure/README-unnamed-chunk-10-7.png)<!-- -->
+
+Make a single map of every BGM.
+
+``` r
+library(mapview)
+#> Loading required package: leaflet
+m <- mapView()
+library(maptools);data(wrld_simpl);plot(wrld_simpl)
+#> Checking rgeos availability: TRUE
+ centroids <- matrix(NA_real_, nrow = length(files), ncol = 2)
+
+for (i in seq_along(files)) {
+  bgm <- bgmfile(files[i])
+  boxes <- boxSpatial(bgm)
+  bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
+  m <- m + mapView(bll,  color = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))),  layer.name = basename(files[i]))
+  plot(bll, add = TRUE)
+ 
+
+   centroids[i, ] <- coordinates(rgeos::gCentroid(bll))
+}
+points(centroids, col = "red", pch = 19)
+```
+
+![](figure/README-unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+m 
+```
+
+Convert each to XYZ on the globe and plot.
+
+``` r
+#devtools::install_github("mdsumner/gris", ref = "cran-sprint")
+library(gris)
+for (i in seq_along(files)) {
+  bgm <- bgmfile(files[i])
+  boxes <- boxSpatial(bgm)
+  bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
+ g <- gris(bll)
+ gt <- triangulate(g)
+ plot3d(gt, add = i > 1)
+}
+
+plot3d(triangulate(gris(wrld_simpl)), add = TRUE, col = "black")
+rgl::light3d(specular = "aliceblue", viewpoint.rel = FALSE)
+rgl::bg3d("black")
+```
