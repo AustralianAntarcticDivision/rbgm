@@ -186,11 +186,12 @@ for (i in seq_along(files)) {
 ```
 
 
+
+```{r, eval=FALSE, include = FALSE}
 ## In-dev plot methods, see mapview and mdsumner/gris
 
-Make a single map of every BGM. 
+#Make a single map of every BGM. 
 
-```{r, eval=FALSE}
 library(mapview)
 m <- mapView()
 library(maptools);data(wrld_simpl);plot(wrld_simpl)
@@ -213,9 +214,10 @@ m
 
 
 
+
+```{r,eval=FALSE, include = FALSE}
 Convert each to XYZ on the globe and plot. 
 
-```{r,eval=FALSE}
 #devtools::install_github("mdsumner/gris", ref = "cran-sprint")
 library(gris)
 for (i in seq_along(files)) {
