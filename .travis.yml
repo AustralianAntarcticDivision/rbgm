@@ -23,6 +23,6 @@ before_install:
   - ./configure --prefix=/usr
   - make
   - sudo make install
-
+  - cd 
 install:
   - ./pkg-build.sh install_deps
