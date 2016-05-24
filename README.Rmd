@@ -3,7 +3,7 @@ output:
   md_document:
     variant: markdown_github
 ---
-[![Build Status](https://travis-ci.org/AustralianAntarcticDivision/mdsumner.png?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/mdsumner)
+[![Build Status](https://travis-ci.org/AustralianAntarcticDivision/rbgm.png?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/rbgm)
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE, message=FALSE}

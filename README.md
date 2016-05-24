@@ -1,6 +1,5 @@
-[![Travis-CI Build Status](https://travis-ci.org/mdsumner/rbgm.svg?branch=master)](https://travis-ci.org/mdsumner/rbgm)
+[![Build Status](https://travis-ci.org/AustralianAntarcticDivision/rbgm.png?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/rbgm) <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 rbgm - R tools for Box Geometry model files
 -------------------------------------------
 
