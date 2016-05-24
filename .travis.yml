@@ -23,9 +23,11 @@ before_install:
   - ./configure --prefix=/usr
   - make
   - sudo make install
-  - cd /home/travis/build/mdsumner/rbgm
-
+  - cd
+  - ./pkg-build.sh bootstrap
+  
 install:
+  - ./pkg-build.sh install_github AustralianAntarcticDivision/bgmfiles
   - ./pkg-build.sh install_deps
 
 script:
