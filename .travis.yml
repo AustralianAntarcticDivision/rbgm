@@ -22,7 +22,7 @@ before_install:
   - ./configure --prefix=/usr
   - make
   - sudo make install
-  - cd /home/travis/build/mdsumner/rbgm
+  - cd /home/travis/build/AustralianAntarcticDivision/rbgm
 
 install:
   - ./pkg-build.sh install_deps
