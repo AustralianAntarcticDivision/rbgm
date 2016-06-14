@@ -1,8 +1,18 @@
 context("parse")
-
+library(testthat)
 ## TODO: Rename context
 ## TODO: Add more tests
 
+test_that("bodgy files fail gracefully", {
+          expect_that(rbgm::bgmfile(""), throws_error("empty string"))
+          expect_that(rbgm::bgmfile("sooner_or_later"), throws_error("no file found"))
+          afile <- tempfile()
+          file.create(afile)
+          on.exit(unlink(afile))
+          expect_that(rbgm::bgmfile(afile), throws_error("no lines found in file"))
+          
+}
+          )
 boxtext_tab <- c("box0.label\tBoundaryBox0 ", "box0.inside\t1560270.052 2063299.641", 
                  "box0.nconn\t1 ", "box0.iface\t0 ", "box0.ibox\t1 ", "box0.botz\t-200 ", 
                  "box0.area\t2279336755 ", "box0.vertmix\t0.000001 ", "box0.horizmix\t1", 

@@ -26,10 +26,14 @@ read_bgm <- function(x, ...) {
 ##' @export
 #' @importFrom dplyr %>% select distinct_ as_data_frame data_frame arrange bind_rows bind_cols distinct mutate inner_join
 bgmfile <- function(x, ...) {
-  
-  
+
+  if (nchar(x) < 1) stop("file path is empty string")
+  if (!file.exists(x)) mess <- stop(sprintf("no file found '%s'\n", x))
   tx <- readLines(x)  
- 
+  nch <- length(tx)
+  if (nch == 0) {
+    stop(sprintf("no lines found in file %s", x))
+  }
   ## all indexes
   facesInd <- grep("^face", tx)
   boxesInd <- grep("^box", tx)
