@@ -81,7 +81,7 @@ pointSpatial <- function(bgm) {
 #' @rdname rbgm-Spatial
 faceSpatial <- function(bgm) {
   data <- bgm$faces 
-  data$label <- sprintf("face%i", data$.fx0)
+  #data$label <- sprintf("face%i", data$.fx0)
   faceverts <- data %>% dplyr::select_(".fx0", "label") %>% 
     inner_join(bgm$facesXverts, ".fx0") %>% 
     inner_join(bgm$vertices, ".vx0") %>% 

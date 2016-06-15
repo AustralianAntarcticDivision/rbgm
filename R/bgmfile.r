@@ -54,7 +54,7 @@ bgmfile <- function(x, ...) {
   ## remove len, cs, lr from faceparse, all belong on the face not the face verts
   faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
   faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
-  
+  faces$label <- unlist(lapply(faceslist, function(x) strsplit(x[1], "\\.")[[1]][1]))
   
   boxeslist <- grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
   boxes0 <- lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$.bx0 <- xi - 1; a})
