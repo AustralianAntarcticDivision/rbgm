@@ -21,7 +21,7 @@ facedataparse <- function(x) {
   len <- as.numeric(x0[[ind]][2])
   cs <- as.numeric(x0[[grep("cs", x)]][2:3])
   lr <- as.integer(x0[[grep("lr", x)]][2:3])
-  data_frame(cosine = cs[1], sine = cs[2], leftbox = lr[1], rightbox = lr[2], length = len)
+  data_frame(cosine = cs[1], sine = cs[2], left = lr[1], right = lr[2], length = len)
   
 }
 

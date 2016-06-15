@@ -1,5 +1,7 @@
 # dev
 
+* renamed "leftbox" and "rightbox" to "left" and "right"
+
 * readme includes all example files in bgmfiles
 
 * new example files added
