@@ -5,7 +5,7 @@ context("round-trip of BGM links")
 library(rbgm)
 library(dplyr)
 library(spdplyr)
-#bfile <- grep("antarctica_99", bgmfiles::bgmfiles(), value = TRUE)
+bfile <- grep("antarctica_99", bgmfiles::bgmfiles(), value = TRUE)
 #for (bfile in bgmfiles::bgmfiles()) {
   context(sprintf("reading file %s", basename(bfile)))
   bgm <- bgmfile(bfile)
