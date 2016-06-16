@@ -7,7 +7,8 @@ test_that("bgmfile works", {
   expect_that(
   bgmfile(files[1])
   , is_a("list"))
-  expect_silent(lapply(files, bgmfile))
+  ## this might change if the numfaces/actual_numfaces thing is fixed
+  expect_output(lapply(files, bgmfile))
 })
 
 for (i in seq_along(files)) {

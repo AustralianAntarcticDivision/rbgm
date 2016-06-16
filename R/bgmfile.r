@@ -55,7 +55,7 @@ bgmfile <- function(x, ...) {
   ## actual numfaces is
   actual_numfaces <- length(unique(unlist(lapply(strsplit(tx[facesInd], "\\."), "[", 1L))))
   if (!numfaces == actual_numfaces) {
-    cat(sprintf("%s \nfile declares %i faces but contains data for %i faces\n\n ... returning all %i faces", bfile, numfaces, actual_numfaces, actual_numfaces))
+    cat(sprintf("%s \nfile declares %i faces but contains data for %i faces\n\n ... returning all %i faces", x, numfaces, actual_numfaces, actual_numfaces))
     
   }
   
