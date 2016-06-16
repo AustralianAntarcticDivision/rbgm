@@ -89,13 +89,15 @@ faceSpatial <- function(bgm) {
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
-  SpatialLinesDataFrame(sptableFace(faceverts, object = "label", crs = bgm$extra$projection), data)
+  SpatialLinesDataFrame(rbgm:::sptableFace(faceverts, object = "label", crs = bgm$extra$projection), data)
   
 }
 
 sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character_) {
-  l1 <- lapply(split(x[, xy], x[[object]]), function(x) Line(as.matrix(x)))
   IDs <- unique(x[[object]])
+  ## ouch, lapply returns sorted on x[[object]] - ouch!  
+  l1 <- lapply(split(x[, xy], x[[object]]), function(x) Line(as.matrix(x)))[IDs]
+
   l2 <- lapply(seq_along(l1), function(ii) Lines(l1[ii], IDs[ii]))
   SpatialLines(l2, proj4string = CRS(crs))
 }
