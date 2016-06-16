@@ -49,8 +49,17 @@ bgmfile <- function(x, ...) {
   ## some (most?) .bgm have PROJ.4 strings without "+" denoting arguments
   extra$projection <- rbgm:::fixproj(extra$projection)  # <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
   ## nface is repeated in Guam_utm1.bgm
+  
+  ## numfaces by declaration in the file
   numfaces <- as.numeric(strsplit(extra["nface"][[1]], "\\s+")[[1]][1])
-  faceslist <- rbgm:::grepItems(tx[facesInd], "face", numfaces)
+  ## actual numfaces is
+  actual_numfaces <- length(unique(unlist(lapply(strsplit(tx[facesInd], "\\."), "[", 1L))))
+  if (!numfaces == actual_numfaces) {
+    cat(sprintf("%s \nfile declares %i faces but contains data for %i faces\n\n ... returning all %i faces", bfile, numfaces, actual_numfaces, actual_numfaces))
+    
+  }
+  
+  faceslist <- rbgm:::grepItems(tx[facesInd], "face", actual_numfaces)
   ## remove len, cs, lr from faceparse, all belong on the face not the face verts
   faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
   faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <-rbgm:::facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
