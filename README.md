@@ -70,7 +70,7 @@ bgm <- bgmfile(fname)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
 ```
 
-![](figure/README-unnamed-chunk-3-1.png)<!-- -->
+![](figure/README-unnamed-chunk-3-1.png)
 
 The function `bgmfile` returns a generic list structure of tables, which currently includes the following. More on these later.
 
@@ -109,9 +109,9 @@ These converter functions provide fully-functional objects with complete coordin
 #> extent      : -1542253, 1469523, -685013.8, 696650.8  (xmin, xmax, ymin, ymax)
 #> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #> variables   : 7
-#> names       :       cosine,          sine, leftbox, rightbox,    length, .fx0, label 
-#> min values  : -0.027850857, -0.0433564821,       0,        0,  28877.31,    0, face0 
-#> max values  :  0.999999619,  0.9999999938,      27,       25, 456745.20,   89, face9
+#> names       :       cosine,          sine, left, right,    length, .fx0, label 
+#> min values  : -0.027850857, -0.0433564821,    0,     0,  28877.31,    0, face0 
+#> max values  :  0.999999619,  0.9999999938,   27,    25, 456745.20,   89, face9
 ```
 
 Subset based on attribute
@@ -132,7 +132,7 @@ plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.
 text(coordinates(spdf), labels = spdf$label, col = grey(seq(1, 0, length = nrow(bgm$boxes))), cex = 0.8)
 ```
 
-![](figure/README-unnamed-chunk-6-1.png)<!-- -->
+![](figure/README-unnamed-chunk-6-1.png)
 
 For illustration isolate boxes that are outside the boundary.
 
@@ -144,7 +144,7 @@ plot(subset(spdf, boundary), border = "firebrick", lwd = 3)
 plot(boundarySpatial(bgm), border = alpha("dodgerblue", 0.3), lwd = 7, add = TRUE)
 ```
 
-![](figure/README-unnamed-chunk-7-1.png)<!-- -->
+![](figure/README-unnamed-chunk-7-1.png)
 
 Plot the boxes and then label the faces.
 
@@ -157,7 +157,7 @@ text(do.call(rbind, lapply(coordinates(sldf), function(x) apply(x[[1]], 2, mean)
      labels = gsub("ace", "", sldf$label), cex = 0.8, col = rainbow(nrow(sldf)), pos = 3)
 ```
 
-![](figure/README-unnamed-chunk-8-1.png)<!-- -->
+![](figure/README-unnamed-chunk-8-1.png)
 
 Obtain the boundary polygon and plot.
 
@@ -166,7 +166,7 @@ plot(boundarySpatial(bgm), lwd = 4, col = "grey")
 plot(boxSpatial(bgm), add = TRUE)
 ```
 
-![](figure/README-unnamed-chunk-9-1.png)<!-- -->
+![](figure/README-unnamed-chunk-9-1.png)
 
 More information
 ----------------
@@ -187,8 +187,7 @@ library(rgdal)
 #>  Geospatial Data Abstraction Library extensions to R successfully loaded
 #>  Loaded GDAL runtime: GDAL 2.0.1, released 2015/09/15
 #>  Path to GDAL shared files: E:/inst/R/R/library/rgdal/gdal
-#>  GDAL does not use iconv for recoding strings.
-#>  Loaded PROJ.4 runtime: Rel. 4.9.1, 04 March 2015, [PJ_VERSION: 491]
+#>  Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
 #>  Path to PROJ.4 shared files: E:/inst/R/R/library/rgdal/proj
 #>  Linking to sp version: 1.2-3
 
@@ -210,4 +209,11 @@ for (i in seq_along(files)) {
 }
 ```
 
-![](figure/README-unnamed-chunk-10-1.png)<!-- -->![](figure/README-unnamed-chunk-10-2.png)<!-- -->![](figure/README-unnamed-chunk-10-3.png)<!-- -->![](figure/README-unnamed-chunk-10-4.png)<!-- -->![](figure/README-unnamed-chunk-10-5.png)<!-- -->![](figure/README-unnamed-chunk-10-6.png)<!-- -->![](figure/README-unnamed-chunk-10-7.png)<!-- -->![](figure/README-unnamed-chunk-10-8.png)<!-- -->![](figure/README-unnamed-chunk-10-9.png)<!-- -->
+![](figure/README-unnamed-chunk-10-1.png)
+
+    #> E:/inst/R/R/library/bgmfiles/extdata/bgm/ams71.bgm 
+    #> file declares 187 faces but contains data for 193 faces
+    #> 
+    #>  ... returning all 193 faces
+
+![](figure/README-unnamed-chunk-10-2.png)![](figure/README-unnamed-chunk-10-3.png)![](figure/README-unnamed-chunk-10-4.png)![](figure/README-unnamed-chunk-10-5.png)![](figure/README-unnamed-chunk-10-6.png)![](figure/README-unnamed-chunk-10-7.png)![](figure/README-unnamed-chunk-10-8.png)![](figure/README-unnamed-chunk-10-9.png)![](figure/README-unnamed-chunk-10-10.png)![](figure/README-unnamed-chunk-10-11.png)![](figure/README-unnamed-chunk-10-12.png)
