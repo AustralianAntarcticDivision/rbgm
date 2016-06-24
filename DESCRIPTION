@@ -1,7 +1,7 @@
 Package: rbgm
 Type: Package
 Title: Utilities for BGM files for Atlantis
-Version: 0.0.2.9001
+Version: 0.0.3
 Authors@R: c(
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
     )

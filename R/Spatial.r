@@ -34,7 +34,10 @@ boxSpatial <- function(bgm) {
   ## test for inside boundary
   inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
   data$boundary <- inside < 1
-  SpatialPolygonsDataFrame(sptableBox(boxverts, object = "label", crs = bgm$extra$projection), data)
+  out <- SpatialPolygonsDataFrame(sptableBox(boxverts, object = "label", crs = bgm$extra$projection), data)
+  ## add on box_id for bgmeriser
+  out$box_id <- seq(0, nrow(out) - 1)
+  out
 }
 
 sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_) {
