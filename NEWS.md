@@ -1,5 +1,7 @@
 # dev
 
+* read_bgm is now defunct
+
 * fixed a gnarly bug due to lexicographic sorting on a list! Lines from faceSpatial were coming out in the sorted order of "face0", "face1", "face10", "face30" etc.
 
 * renamed "leftbox" and "rightbox" to "left" and "right"

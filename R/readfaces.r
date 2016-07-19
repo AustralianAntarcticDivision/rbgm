@@ -17,7 +17,7 @@
 ##' \dontrun{
 ##' x <- read.faces("file.bgm", densify = 30, sp = TRUE)
 ##' }
-##' @export
+##' @noRd
 read.faces <- function(x, sp = TRUE, densify, ...) {
   xlines <- readLines(x)
   

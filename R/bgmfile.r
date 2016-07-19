@@ -1,16 +1,16 @@
-#' Functions now deprecated
+#' Functions now defunct
 #' 
 #' read_bgm - use bgmfile
-#' @name rbgm-deprecated
-#' @rdname rbgm-deprecated
+#' @name rbgm-defunct
+#' @rdname rbgm-defunct
 #' @aliases read_bgm
 #' 
 #' @param x path to a bgm file
 #' @param ... reserved
 #' @export
 read_bgm <- function(x, ...) {
-  .Deprecated(new = "bgmfile", package = "rbgm")
-  bgm(x)
+  .Defunct(new = "bgmfile", package = "rbgm")
+  bgmfile(x)
 }
 
 
@@ -24,7 +24,8 @@ read_bgm <- function(x, ...) {
 ##' @param ... ignored for now
 ##'
 ##' @export
-#' @importFrom dplyr %>% select distinct_ as_data_frame data_frame arrange bind_rows bind_cols distinct mutate inner_join
+#' @importFrom dplyr %>% select distinct_ as_data_frame data_frame arrange bind_rows bind_cols distinct mutate mutate_ inner_join
+#' @importFrom utils  head type.convert
 bgmfile <- function(x, ...) {
 
   if (nchar(x) < 1) stop("file path is empty string")
@@ -47,7 +48,7 @@ bgmfile <- function(x, ...) {
   extra <- lapply(ust, function(x) gsub("\\s+$", "", gsub("^\\s+", "", gsub(x, "", grep(x, tx, value = TRUE)))))
   names(extra) <- ust
   ## some (most?) .bgm have PROJ.4 strings without "+" denoting arguments
-  extra$projection <- rbgm:::fixproj(extra$projection)  # <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
+  extra$projection <- fixproj(extra$projection)  # <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
   ## nface is repeated in Guam_utm1.bgm
   
   ## numfaces by declaration in the file
@@ -59,14 +60,14 @@ bgmfile <- function(x, ...) {
     
   }
   
-  faceslist <- rbgm:::grepItems(tx[facesInd], "face", actual_numfaces)
+  faceslist <- grepItems(tx[facesInd], "face", actual_numfaces)
   ## remove len, cs, lr from faceparse, all belong on the face not the face verts
-  faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
-  faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <-rbgm:::facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+  faceverts <-  do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <- facevertsparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
+  faces <-   do.call(dplyr::bind_rows, lapply(seq_along(faceslist), function(xi) {a <-facedataparse(faceslist[[xi]]); a$.fx0 <- xi - 1; a}))
   faces$label <- unlist(lapply(faceslist, function(x) strsplit(x[1], "\\.")[[1]][1]))
   
-  boxeslist <- rbgm:::grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
-  boxes0 <- lapply(seq_along(boxeslist), function(xi) {a <- rbgm:::boxparse(boxeslist[[xi]]); a$.bx0 <- xi - 1; a})
+  boxeslist <- grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
+  boxes0 <- lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$.bx0 <- xi - 1; a})
   ## we only need boxverts for non-face boxes (boundary faces), but use to check data sense
   boxverts <- do.call(dplyr::bind_rows, lapply(seq_along(boxes0), function(xa) {aa <- boxes0[[xa]]$verts; .bx0 = rep(xa - 1, nrow(boxes0[[xa]]$verts)); aa$.bx0 <- .bx0; aa}))
   boxes<- do.call(dplyr::bind_rows, 
@@ -74,7 +75,7 @@ bgmfile <- function(x, ...) {
                                                               dplyr::as_data_frame(a[c("insideX", "insideY", ".bx0")]))))
   ## ibox/iface are the component faces, and ibox the neighbouring box (.bx0 is the box we belong to!)
   facesXboxes <- dplyr::bind_rows(lapply(boxes0, "[[", "faces"), .id = ".bx0") %>% 
-    mutate(.bx0 = as.numeric(.bx0) - 1)
+    dplyr::mutate_(.bx0 = quote(as.numeric(.bx0) - 1))
   
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
   boundaryverts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))

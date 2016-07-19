@@ -3,7 +3,7 @@
 \name{nodeSpatial}
 \alias{nodeSpatial}
 \alias{pointSpatial}
-\title{Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}.}
+\title{Vertices as Spatial points.}
 \usage{
 nodeSpatial(bgm)
 
@@ -17,5 +17,9 @@ pointSpatial(bgm)
 }
 \description{
 Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}.
+}
+\details{
+\code{\link{pointSpatial}} returns all instances of the vertices with information about which boxes they belong to. 
+\code{\link{nodeSpatial}} returns all vertices.
 }
 

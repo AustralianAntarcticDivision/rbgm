@@ -1,5 +1,5 @@
 
-#' Extract 
+#' Convert to Spatial
 #'
 #' Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object. 
 #' @param bgm BGM file
@@ -55,16 +55,18 @@ boundarySpatial <- function(bgm) {
                            data.frame(label = "boundary", row.names = "bdy"))
 }
 
-
-# Compare this to \code{\link{pointSpatial}} which returns all instances of the vertices with information about which boxes. 
-
+#' Vertices as Spatial points. 
+#' 
 #' Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}. 
-#'
+#' 
+#' \code{\link{pointSpatial}} returns all instances of the vertices with information about which boxes they belong to. 
+#' \code{\link{nodeSpatial}} returns all vertices. 
+#' 
 #' @param bgm BGM object from \code{\link{bgmfile}}
 #'
 #' @return  \code{\link[sp]{SpatialPointsDataFrame}}
 #' @export
-#'
+#' @importFrom sp SpatialPointsDataFrame proj4string 
 nodeSpatial <- function(bgm) {
   SpatialPointsDataFrame(as.matrix(bgm$vertices[, c("x", "y")]), data.frame(.vx0 = bgm$vertices$.vx0), 
                          proj4string = CRS(bgm$extra["projection"][[1]]))
@@ -92,7 +94,7 @@ faceSpatial <- function(bgm) {
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
-  SpatialLinesDataFrame(rbgm:::sptableFace(faceverts, object = "label", crs = bgm$extra$projection), data)
+  SpatialLinesDataFrame(sptableFace(faceverts, object = "label", crs = bgm$extra$projection), data)
   
 }
 

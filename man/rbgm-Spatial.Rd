@@ -4,7 +4,7 @@
 \alias{boundarySpatial}
 \alias{boxSpatial}
 \alias{faceSpatial}
-\title{Extract}
+\title{Convert to Spatial}
 \usage{
 boxSpatial(bgm)
 

@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/AustralianAntarcticDivision/rbgm.png?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/rbgm) <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Build Status](https://travis-ci.org/AustralianAntarcticDivision/rbgm.png?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/rbgm) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/rbgm?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/rbgm) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rbgm)](https://cran.r-project.org/package=rbgm) [![Coverage Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/rbgm/master.svg)](https://codecov.io/github/AustralianAntarcticDivision/rbgm?branch=master)
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 rbgm - R tools for Box Geometry model files
 -------------------------------------------
 
@@ -98,10 +99,10 @@ These converter functions provide fully-functional objects with complete coordin
 #> features    : 28 
 #> extent      : -1991376, 1840092, -1049317, 1042354  (xmin, xmax, ymin, ymax)
 #> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
-#> variables   : 10
-#> names       : label, nconn,  botz,         area, vertmix, horizmix,    insideX,    insideY, .bx0, boundary 
-#> min values  :  Box0,     3, -2120,  12850972822,   0e+00,        0, -1128926.5, -135019.93,    0,     TRUE 
-#> max values  :  Box9,    13,  -499, 823802623354,   1e-05,        1,  1521521.9,  387882.74,   27,    FALSE
+#> variables   : 11
+#> names       : label, nconn,  botz,         area, vertmix, horizmix,    insideX,    insideY, .bx0, boundary, box_id 
+#> min values  :  Box0,     3, -2120,  12850972822,   0e+00,        0, -1128926.5, -135019.93,    0,     TRUE,      0 
+#> max values  :  Box9,    13,  -499, 823802623354,   1e-05,        1,  1521521.9,  387882.74,   27,    FALSE,     27
 
 (sldf <- faceSpatial(bgm))
 #> class       : SpatialLinesDataFrame 

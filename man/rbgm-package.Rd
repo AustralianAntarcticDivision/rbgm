@@ -21,8 +21,7 @@ model (BGM) files
 \section{I. Import}{
  
 \tabular{ll}{
- \code{\link{bgm}} \tab read directly from a .bgm file  \cr
- \code{\link{read.faces}} \tab read faces in with option to densify vertices \cr
+ \code{\link{bgmfile}} \tab read directly from a .bgm file  \cr
 }
 }
 
@@ -32,6 +31,8 @@ model (BGM) files
  \code{\link{boxSpatial}} \tab convert boxes to a \code{\link{SpatialPolygonsDataFrame}}\cr
  \code{\link{faceSpatial}} \tab convert faces to a \code{\link{SpatialLinesDataFrame}} \cr
  \code{\link{boundarySpatial}} \tab convert boundary to a single-row \code{\link{SpatialPolygonsDataFrame}}\cr
+ \code{\link{nodeSpatial}} \tab obtain all vertices as points \cr
+ \code{\link{pointSpatial}} \tab obtain all instances of vertices as points \cr
 }
 }
 

@@ -4,3 +4,4 @@
 ^figure/README-.*\.png$
 ^figure$
 ^\.travis\.yml$
+^appveyor\.yml$

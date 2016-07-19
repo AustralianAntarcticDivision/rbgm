@@ -31,10 +31,10 @@ extra["projection"] <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
 ## sanity check
 ##if (!length(facesInd) == length(unlist(tx[facesInd]))) warning("faces data and count out of synch")
 faceslist <- grepItems(tx[facesInd], "face", as.numeric(extra["nface"]))
-facepairs <- do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- rbgm:::faceparse(faceslist[[xi]]); a$face <- xi - 1; a}))
+facepairs <- do.call(bind_rows, lapply(seq_along(faceslist), function(xi) {a <- faceparse(faceslist[[xi]]); a$face <- xi - 1; a}))
 boxeslist <- grepItems(tx[boxesInd], "box", as.numeric(extra["nbox"]))
 #boxes <- do.call(bind_rows, 
-boxes <-                  lapply(seq_along(boxeslist), function(xi) {a <- rbgm:::boxparse(boxeslist[[xi]]); a$box <- xi - 1; a})
+boxes <-                  lapply(seq_along(boxeslist), function(xi) {a <- boxparse(boxeslist[[xi]]); a$box <- xi - 1; a})
                  #)
 
 
@@ -54,7 +54,7 @@ ll <- cbind(values(lon), values(lat))
 
 
 ## triangle identity
-tri_ <- rbgm:::ptTriangle(tri$T, tri$P, ll)
+tri_ <- ptTriangle(tri$T, tri$P, ll)
 
 ## box identity
 box <- ptPolygon(boxes, ll)

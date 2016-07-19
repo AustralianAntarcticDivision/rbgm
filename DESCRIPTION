@@ -1,7 +1,7 @@
 Package: rbgm
 Type: Package
 Title: Utilities for BGM files for Atlantis
-Version: 0.0.3
+Version: 0.0.3.9001
 Authors@R: c(
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
     )
@@ -12,7 +12,8 @@ Imports:
     dplyr,
     geosphere
 Suggests:
-    bgmfiles, graticule, roxygen2, RTriangle, scales, testthat
+    bgmfiles, graticule, roxygen2, RTriangle, scales, testthat,
+    covr
 Description: Tools for Atlantis box-geometry model (BGM) files. 
 NeedsCompilation: no
 ByteCompile: yes
