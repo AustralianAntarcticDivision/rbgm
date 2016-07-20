@@ -7,33 +7,29 @@
 
 0 ERRORs | 0 WARNINGS | 1 NOTE
 
-> * checking CRAN incoming feasibility ... NOTE
-> Maintainer: 'Michael D. Sumner <mdsumner@gmail.com>'
-> 
-> New submission
-> 
-> Possibly mis-spelled words in DESCRIPTION:
->   BGM (3:40, 13:71, 15:38)
->   biogeochemical (14:38)
-> 
-> Found the following (possibly) invalid URLs:
->   URL: http://atlantis.cmar.csiro.au/
->     From: DESCRIPTION
->           inst/doc/BGM_Spatial.html
->     Status: 403
->     Message: Forbidden
->   URL: http://cran.r-project.org/web/packages/rbgm/index.html
->     From: README.md
->     Status: 404
->     Message: Not Found
->     CRAN URL not in canonical form
->   URL: https://cran.r-project.org/package=rbgm
->     From: README.md
->     Status: 404
->     Message: Not Found
->   The canonical URL of the CRAN page for a package is 
->   https://cran.r-project.org/package=pkgname
-> 
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Michael D. Sumner <mdsumner@gmail.com>'
+
+New submission
+
+Possibly mis-spelled words in DESCRIPTION:
+  BGM (3:40, 13:71, 15:38)
+  biogeochemical (14:38)
+
+Found the following (possibly) invalid URLs:
+  URL: http://atlantis.cmar.csiro.au/
+    From: DESCRIPTION
+          inst/doc/BGM_Spatial.html
+    Status: 403
+    Message: Forbidden
+  URL: https://cran.r-project.org/package=rbgm
+    From: README.md
+    Status: 404
+    Message: Not Found
+  The canonical URL of the CRAN page for a package is 
+  https://cran.r-project.org/package=pkgname
+  
+## Response to check results
 
 * This is a new release.
 * The spellings are intended. 
