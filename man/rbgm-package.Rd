@@ -42,7 +42,4 @@ model (BGM) files
  \code{\link{build_dz}} \tab Build Atlantis dz Values \cr
  }
 }
-\author{
-Michael D. Sumner
-}
 

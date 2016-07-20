@@ -35,7 +35,6 @@
 #' @importFrom sp spDistsN1 Line Lines SpatialLines CRS SpatialLinesDataFrame
 #' @name rbgm-package
 #' @docType package
-#' @author Michael D. Sumner
 NULL
 
 

@@ -12,37 +12,27 @@ Rbgm aims to make all of the following straightforward:
 -   use of the BGM specification for visualization and data extraction
 -   creation of BGM from from shapefiles, R spatial objects and whatever else
 
-There is some overlapping functionality with [angstroms](https://github.com/mdsumner/angstroms), for coupling with ROMS output and with [gris](https://github.com/mdsumner/gris), for building topological data structures, and [spbabel](https://github.com/mdsumner/babel) for interfacing Spatial with ggplot2, dplyr and other database-based tools. *All of these packages are in development and are subject to change, please let me know if you are interested and/or I can help with their use.*
-
 Installation
 ------------
 
-Install from Github using `devtools`.
+Install from CRAN:
+
+``` r
+install.packages("rbgm")
+```
+
+Install the development version from Github using `devtools`.
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("mdsumner/rbgm")
 ```
 
-Development
------------
-
-To obtain the development version of `rbgm` use the following steps in RStudio.
-
-1.  Install packages `install.packages("devtools", "roxygen2", "knitr", "htmltools")`.
-2.  Create a New Project in RStudio, select Version Control, and then Git. [See here to get Git](https://support.rstudio.com/hc/en-us/articles/200532077?version=0.99.892&mode=desktop)
-3.  Enter "<https://github.com/mdsumner/rbgm.git>".
-4.  Run this to install all required dependencies for building and testing: `devtools::install_deps(dependencies = TRUE)`
-5.  Go to Tools/Options/Project Options ... and under Build Tools select "Generate documentation with roxygen", click on all options.
-6.  Ctrl-SHIFT-B to build the package and reload.
-7.  Ctrl-SHIFT-T to run the tests.
-8.  Ctrl-SHIFT-E to run R CMD check.
-
 ### How can I contribute to rbgm?
 
 Install, use, test the package, and let me know!
 
-Please use the Issues tab on GitHub to add feature requests and bug reports.
+Please use the Issues tab on GitHub to add feature requests and bug reports: <https://github.com/AustralianAntarcticDivision/rbgm/issues/>
 
 use [Pull Requests](http://r-pkgs.had.co.nz/git.html#git-pullreq) if you have changes you'd like to contribute.
 
@@ -60,18 +50,19 @@ Related work
 Example
 -------
 
-Read in the built-in example .bgm file with `bgmfile`, and plot it as box-polygons.
+Read in an example .bgm file with `bgmfile`, and plot it as box-polygons.
 
 ``` r
 library(rbgm)
 library(scales)  ## for alpha function
+library(bgmfiles) ## example files
 ## example data set in package
-fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
+fname <- sample(bgmfiles(), 1L)
 bgm <- bgmfile(fname)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
 ```
 
-![](figure/README-unnamed-chunk-3-1.png)
+![](figure/README-unnamed-chunk-4-1.png)
 
 The function `bgmfile` returns a generic list structure of tables, which currently includes the following. More on these later.
 
@@ -82,12 +73,15 @@ print(names(bgm))
 #> [7] "boundaryvertices" "extra"
 ```
 
-There are two functions for converting from the raw .bgm data structures to `Spatial` objects, as defined in the `sp` package. (Spatial objects are formal GIS-like data that store a table of attribute data against a set of matching polygons, lines or points.)
+There are functions for converting from the raw .bgm data structures to `Spatial` objects, as defined in the `sp` package. (Spatial objects are formal GIS-like data that store a table of attribute data against a set of matching polygons, lines or points.)
 
 -   `boxSpatial` converts to a `SpatialPolygonsDataFrame`, with a table of attributes relevant to the boxes
--   `faceSpatial` converts to a `SpatialLinesDataFram`, with attributes for the faces (straight line edges that define box boundaries)
+-   `faceSpatial` converts to a `SpatialLinesDataFrame`, with attributes for the faces (straight line edges that define box boundaries)
+-   `nodeSpatial` converts to a \`SpatialPointsDataFrame, with attributes for the unique vertices in the model
+-   `pointSpatial` converts to a `SpatialPointsDataFrame`, with attributes for all instances of the vertices in the model (faces share vertices)
+-   `boundarySpatial` converts just the boundary path to `SpatialPolygonsDataFrame`
 
-From these conversions we can export to GIS formats like shapefiles.
+From these conversions we can export to GIS formats like GeoPackage.
 
 It's important to note that the Spatial objects cannot store the full topological and attribute information present in the .bgm, so these are convenience converters that are one-way. We can generate .bgm from these objects, but it cannot be stored in just one Spatial object.
 
@@ -96,23 +90,23 @@ These converter functions provide fully-functional objects with complete coordin
 ``` r
 (spdf <- boxSpatial(bgm))
 #> class       : SpatialPolygonsDataFrame 
-#> features    : 28 
-#> extent      : -1991376, 1840092, -1049317, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> features    : 11 
+#> extent      : 3998613, 4730976, 805175.3, 1517099  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=3000000 +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
 #> variables   : 11
-#> names       : label, nconn,  botz,         area, vertmix, horizmix,    insideX,    insideY, .bx0, boundary, box_id 
-#> min values  :  Box0,     3, -2120,  12850972822,   0e+00,        0, -1128926.5, -135019.93,    0,     TRUE,      0 
-#> max values  :  Box9,    13,  -499, 823802623354,   1e-05,        1,  1521521.9,  387882.74,   27,    FALSE,     27
+#> names       : label, nconn,  botz,        area, vertmix, horizmix, insideX,   insideY, .bx0, boundary, box_id 
+#> min values  :  Box0,     1, -3405,  2920024932,   1e-06,        1, 4043668,  967318.3,    0,     TRUE,      0 
+#> max values  :  Box9,     9,  -511, 85057277224,   1e-06,        1, 4603016, 1480676.5,   10,    FALSE,     10
 
 (sldf <- faceSpatial(bgm))
 #> class       : SpatialLinesDataFrame 
-#> features    : 90 
-#> extent      : -1542253, 1469523, -685013.8, 696650.8  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> features    : 22 
+#> extent      : 4005592, 4684173, 857210.3, 1451038  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=3000000 +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
 #> variables   : 7
-#> names       :       cosine,          sine, left, right,    length, .fx0, label 
-#> min values  : -0.027850857, -0.0433564821,    0,     0,  28877.31,    0, face0 
-#> max values  :  0.999999619,  0.9999999938,   27,    25, 456745.20,   89, face9
+#> names       :     cosine,       sine, left, right,     length, .fx0, label 
+#> min values  : -0.3414389, 0.03452719,    1,     0,   5381.563,    0, face0 
+#> max values  :  0.9994038, 0.98936601,   10,     9, 414601.134,   21, face9
 ```
 
 Subset based on attribute
@@ -120,20 +114,17 @@ Subset based on attribute
 ``` r
 subset(spdf, horizmix == 0, select = label)
 #> class       : SpatialPolygonsDataFrame 
-#> features    : 4 
-#> extent      : -1991376, 1840092, -916229.8, 1042354  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=laea +lat_0=-63 +lon_0=82 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> features    : 0 
+#> coord. ref. : +proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=3000000 +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
 #> variables   : 1
-#> names       : label 
-#> min values  :  Box0 
-#> max values  : Box27
+#> names       : label
 
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
 
 text(coordinates(spdf), labels = spdf$label, col = grey(seq(1, 0, length = nrow(bgm$boxes))), cex = 0.8)
 ```
 
-![](figure/README-unnamed-chunk-6-1.png)
+![](figure/README-unnamed-chunk-7-1.png)
 
 For illustration isolate boxes that are outside the boundary.
 
@@ -145,7 +136,7 @@ plot(subset(spdf, boundary), border = "firebrick", lwd = 3)
 plot(boundarySpatial(bgm), border = alpha("dodgerblue", 0.3), lwd = 7, add = TRUE)
 ```
 
-![](figure/README-unnamed-chunk-7-1.png)
+![](figure/README-unnamed-chunk-8-1.png)
 
 Plot the boxes and then label the faces.
 
@@ -158,7 +149,7 @@ text(do.call(rbind, lapply(coordinates(sldf), function(x) apply(x[[1]], 2, mean)
      labels = gsub("ace", "", sldf$label), cex = 0.8, col = rainbow(nrow(sldf)), pos = 3)
 ```
 
-![](figure/README-unnamed-chunk-8-1.png)
+![](figure/README-unnamed-chunk-9-1.png)
 
 Obtain the boundary polygon and plot.
 
@@ -167,7 +158,7 @@ plot(boundarySpatial(bgm), lwd = 4, col = "grey")
 plot(boxSpatial(bgm), add = TRUE)
 ```
 
-![](figure/README-unnamed-chunk-9-1.png)
+![](figure/README-unnamed-chunk-10-1.png)
 
 More information
 ----------------
@@ -187,9 +178,9 @@ library(rgdal)
 #> rgdal: version: 1.1-10, (SVN revision 622)
 #>  Geospatial Data Abstraction Library extensions to R successfully loaded
 #>  Loaded GDAL runtime: GDAL 2.0.1, released 2015/09/15
-#>  Path to GDAL shared files: E:/inst/R/R/library/rgdal/gdal
+#>  Path to GDAL shared files: C:/inst/R/R/library/rgdal/gdal
 #>  Loaded PROJ.4 runtime: Rel. 4.9.2, 08 September 2015, [PJ_VERSION: 492]
-#>  Path to PROJ.4 shared files: E:/inst/R/R/library/rgdal/proj
+#>  Path to PROJ.4 shared files: C:/inst/R/R/library/rgdal/proj
 #>  Linking to sp version: 1.2-3
 
 ## turn +proj into line separated text
@@ -210,11 +201,11 @@ for (i in seq_along(files)) {
 }
 ```
 
-![](figure/README-unnamed-chunk-10-1.png)
+![](figure/README-unnamed-chunk-11-1.png)
 
-    #> E:/inst/R/R/library/bgmfiles/extdata/bgm/ams71.bgm 
+    #> C:/inst/R/R/library/bgmfiles/extdata/bgm/ams71.bgm 
     #> file declares 187 faces but contains data for 193 faces
     #> 
     #>  ... returning all 193 faces
 
-![](figure/README-unnamed-chunk-10-2.png)![](figure/README-unnamed-chunk-10-3.png)![](figure/README-unnamed-chunk-10-4.png)![](figure/README-unnamed-chunk-10-5.png)![](figure/README-unnamed-chunk-10-6.png)![](figure/README-unnamed-chunk-10-7.png)![](figure/README-unnamed-chunk-10-8.png)![](figure/README-unnamed-chunk-10-9.png)![](figure/README-unnamed-chunk-10-10.png)![](figure/README-unnamed-chunk-10-11.png)![](figure/README-unnamed-chunk-10-12.png)
+![](figure/README-unnamed-chunk-11-2.png)![](figure/README-unnamed-chunk-11-3.png)![](figure/README-unnamed-chunk-11-4.png)![](figure/README-unnamed-chunk-11-5.png)![](figure/README-unnamed-chunk-11-6.png)![](figure/README-unnamed-chunk-11-7.png)![](figure/README-unnamed-chunk-11-8.png)![](figure/README-unnamed-chunk-11-9.png)![](figure/README-unnamed-chunk-11-10.png)![](figure/README-unnamed-chunk-11-11.png)![](figure/README-unnamed-chunk-11-12.png)
