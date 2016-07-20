@@ -7,7 +7,7 @@ output:
     fig_width: 9
     fig_height: 9
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{BGM examples
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
