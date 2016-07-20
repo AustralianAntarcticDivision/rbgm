@@ -10,7 +10,8 @@ Depends:
     sp
 Imports:
     dplyr,
-    geosphere
+    geosphere, 
+    tibble
 Suggests:
     bgmfiles, graticule, roxygen2, scales, testthat, covr
 Description: Facilities for working with Atlantis box-geometry model (BGM) 

@@ -12,9 +12,13 @@ bgmfile(x, ...)
 \item{...}{ignored for now}
 }
 \description{
-Partial read for .bgm files
+Read geometry and full topology from BGM files.
 }
 \details{
-Read geometry from BGM files
+BGM is a file format used for the 'Box Geometry Model' in the Atlantis Ecosystem Model. 
+This function reads everything from the .bgm file and returns it as linked tables.
+}
+\seealso{
+See helper functions to convert the bgm tables to `Spatial` objects. \code{\link{boxSpatial}} \code{\link{faceSpatial}} \code{\link{nodeSpatial}} \code{\link{boundarySpatial}} \code{\link{pointSpatial}}
 }
 

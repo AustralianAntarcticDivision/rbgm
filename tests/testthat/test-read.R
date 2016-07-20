@@ -26,7 +26,7 @@ verts <- function(x, type, app = "") {
   
   x6 <- setNames(read.delim(text = x5, sep= " ", header = FALSE, stringsAsFactors = FALSE), c("name", "x", "y"))
   if (!app == "") x6$number <- namenumber(x6$name)
-  as_data_frame(x6)
+  tibble::as_tibble(x6)
 }
 
 
@@ -40,7 +40,7 @@ basetoks <- c("#", "bnd_vert", "box.area", "box.botz", "box.horizmix", "box.ibox
 
 for (i in seq_along(files)) {
   f <- files[i]
-  d <- data_frame(tx = readLines(f))
+  d <- tibble::tibble(tx = readLines(f))
   xtoks <- spaceseparate1(d$tx) 
   ## remove any lines that start with "##A"nyletter 
   bad <- grep("^##[[:alpha:]]", xtoks)

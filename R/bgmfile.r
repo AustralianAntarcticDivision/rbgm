@@ -1,16 +1,19 @@
 
 
-##' Partial read for .bgm files
-##'
-##' Read geometry from BGM files
-##'
-##' @title Read BGM
-##'
-##' @param x path to a bgm file
-##' @param ... ignored for now
-##'
-##' @export
-#' @importFrom dplyr %>% select distinct_ as_data_frame data_frame arrange bind_rows bind_cols distinct mutate mutate_ inner_join
+#' Read BGM
+#'
+#' Read geometry and full topology from BGM files. 
+#' 
+#' BGM is a file format used for the 'Box Geometry Model' in the Atlantis Ecosystem Model. 
+#' This function reads everything from the .bgm file and returns it as linked tables. 
+#' @param x path to a bgm file
+#' @param ... ignored for now
+#'
+#' @export
+#' @seealso 
+#' See helper functions to convert the bgm tables to `Spatial` objects. \code{\link{boxSpatial}} \code{\link{faceSpatial}} \code{\link{nodeSpatial}} \code{\link{boundarySpatial}} \code{\link{pointSpatial}}
+#' @importFrom dplyr %>% select distinct_ arrange bind_rows bind_cols distinct mutate mutate_ inner_join
+#' @importFrom tibble as_tibble tibble
 #' @importFrom utils  head type.convert
 bgmfile <- function(x, ...) {
 
@@ -57,14 +60,14 @@ bgmfile <- function(x, ...) {
   ## we only need boxverts for non-face boxes (boundary faces), but use to check data sense
   boxverts <- do.call(dplyr::bind_rows, lapply(seq_along(boxes0), function(xa) {aa <- boxes0[[xa]]$verts; .bx0 = rep(xa - 1, nrow(boxes0[[xa]]$verts)); aa$.bx0 <- .bx0; aa}))
   boxes<- do.call(dplyr::bind_rows, 
-                  lapply(boxes0, function(a) dplyr::bind_cols(dplyr::as_data_frame(a[["meta"]]), 
-                                                              dplyr::as_data_frame(a[c("insideX", "insideY", ".bx0")]))))
+                  lapply(boxes0, function(a) dplyr::bind_cols(tibble::as_tibble(a[["meta"]]), 
+                                                              tibble::as_tibble(a[c("insideX", "insideY", ".bx0")]))))
   ## ibox/iface are the component faces, and ibox the neighbouring box (.bx0 is the box we belong to!)
   facesXboxes <- dplyr::bind_rows(lapply(boxes0, "[[", "faces"), .id = ".bx0") %>% 
     dplyr::mutate_(.bx0 = quote(as.numeric(.bx0) - 1))
   
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
-  boundaryverts <- data_frame(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
+  boundaryverts <- tibble::tibble(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
   
   for (i in seq(ncol(boxes))) {
     if (is.character(boxes[[i]])) {

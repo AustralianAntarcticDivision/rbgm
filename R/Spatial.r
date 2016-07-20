@@ -15,7 +15,7 @@
 #' @importFrom sp point.in.polygon Polygon Polygons SpatialPolygons SpatialPolygonsDataFrame 
 #' @importFrom dplyr inner_join select_
 #' @examples
-#' fname <- bgmfiles::bgmfiles(pattern = "Antarctica_28")
+#' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(fname)
 #' spdf <- boxSpatial(bgm)
 #' sldf <- faceSpatial(bgm)

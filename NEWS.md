@@ -1,4 +1,6 @@
-# dev
+# rbgm 0.0.4
+
+* updated to use tibble rather than data_frame
 
 * read_bgm is now defunct
 
