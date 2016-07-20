@@ -6,12 +6,13 @@ Authors@R: c(
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
     )
 Depends:
+   R (≥ 3.2.1)
     raster,
     sp
 Imports:
     dplyr,
     geosphere, 
-    tibble
+    tibble (>= 1.1)
 Suggests:
     bgmfiles, 
     covr,
