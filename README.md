@@ -4,9 +4,7 @@
 rbgm - R tools for Box Geometry model files
 -------------------------------------------
 
-`rbgm` allows reading of geometry from BGM files, either in raw coordinate form or as Spatial objects.
-
-Rbgm aims to make all of the following straightforward:
+`rbgm` allows reading of geometry from BGM files, either in raw coordinate form or as Spatial objects. The aim is to make all of the following straightforward:
 
 -   read of the BGM format, maintaining all topology and attributes
 -   use of the BGM specification for visualization and data extraction
@@ -57,7 +55,7 @@ library(rbgm)
 library(scales)  ## for alpha function
 library(bgmfiles) ## example files
 ## example data set in package
-fname <- sample(bgmfiles(), 1L)
+fname <- bgmfiles(pattern = "Nordic")[1L]
 bgm <- bgmfile(fname)
 plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
 ```
@@ -81,7 +79,7 @@ There are functions for converting from the raw .bgm data structures to `Spatial
 -   `pointSpatial` converts to a `SpatialPointsDataFrame`, with attributes for all instances of the vertices in the model (faces share vertices)
 -   `boundarySpatial` converts just the boundary path to `SpatialPolygonsDataFrame`
 
-From these conversions we can export to GIS formats like GeoPackage.
+From these conversions we can export to GIS formats such as [GeoPackage](http://www.geopackage.org/).
 
 It's important to note that the Spatial objects cannot store the full topological and attribute information present in the .bgm, so these are convenience converters that are one-way. We can generate .bgm from these objects, but it cannot be stored in just one Spatial object.
 
@@ -90,23 +88,23 @@ These converter functions provide fully-functional objects with complete coordin
 ``` r
 (spdf <- boxSpatial(bgm))
 #> class       : SpatialPolygonsDataFrame 
-#> features    : 11 
-#> extent      : 3998613, 4730976, 805175.3, 1517099  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=3000000 +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+#> features    : 60 
+#> extent      : -1411988, 1849768, 3463169, 6117110  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs 
 #> variables   : 11
-#> names       : label, nconn,  botz,        area, vertmix, horizmix, insideX,   insideY, .bx0, boundary, box_id 
-#> min values  :  Box0,     1, -3405,  2920024932,   1e-06,        1, 4043668,  967318.3,    0,     TRUE,      0 
-#> max values  :  Box9,     9,  -511, 85057277224,   1e-06,        1, 4603016, 1480676.5,   10,    FALSE,     10
+#> names       : label, nconn,  botz,         area, vertmix, horizmix,     insideX, insideY, .bx0, boundary, box_id 
+#> min values  :  Box0,     0, -1218,   1317077442,   1e-03,        1, -1020546.43, 3543086,    0,     TRUE,      0 
+#> max values  :  Box9,    21,     0, 525138111863,   1e-04,        2,  1668909.28, 5889207,   59,    FALSE,     59
 
 (sldf <- faceSpatial(bgm))
 #> class       : SpatialLinesDataFrame 
-#> features    : 22 
-#> extent      : 4005592, 4684173, 857210.3, 1451038  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=3000000 +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+#> features    : 253 
+#> extent      : -1116549, 1703682, 3521699, 6035115  (xmin, xmax, ymin, ymax)
+#> coord. ref. : +proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs 
 #> variables   : 7
-#> names       :     cosine,       sine, left, right,     length, .fx0, label 
-#> min values  : -0.3414389, 0.03452719,    1,     0,   5381.563,    0, face0 
-#> max values  :  0.9994038, 0.98936601,   10,     9, 414601.134,   21, face9
+#> names       :      cosine,         sine, left, right,      length, .fx0,  label 
+#> min values  : -0.08379870, -0.081555061,    0,     1,    711.2566,    0,  face0 
+#> max values  :  0.99997697,  0.999666398,   59,    59, 803970.8529,  252, face99
 ```
 
 Subset based on attribute
@@ -115,7 +113,7 @@ Subset based on attribute
 subset(spdf, horizmix == 0, select = label)
 #> class       : SpatialPolygonsDataFrame 
 #> features    : 0 
-#> coord. ref. : +proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=3000000 +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+#> coord. ref. : +proj=aea +lat_1=43 +lat_2=62 +lat_0=30 +lon_0=10 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs 
 #> variables   : 1
 #> names       : label
 

@@ -1,17 +1,3 @@
-#' Functions now defunct
-#' 
-#' read_bgm - use bgmfile
-#' @name rbgm-defunct
-#' @rdname rbgm-defunct
-#' @aliases read_bgm
-#' 
-#' @param x path to a bgm file
-#' @param ... reserved
-#' @export
-read_bgm <- function(x, ...) {
-  .Defunct(new = "bgmfile", package = "rbgm")
-  bgmfile(x)
-}
 
 
 ##' Partial read for .bgm files
@@ -109,14 +95,14 @@ bgmfile <- function(x, ...) {
 
 
 
-#' @importFrom dplyr select_
-box2pslg <- function(x) {
-  x <- head(x$verts, -1) %>% dplyr::select_("x", "y") %>% as.matrix
-  RTriangle::pslg(x, S = segmaker(x))
-}
-segmaker <- function(x) {
-  on.exit(options(op))
-  op <- options(warn = -1)
-  matrix(seq(nrow(x)), nrow = nrow(x) + 1, ncol  = 2)[seq(nrow(x)), ]
-}
+# #' @importFrom dplyr select_
+# box2pslg <- function(x) {
+#   x <- head(x$verts, -1) %>% dplyr::select_("x", "y") %>% as.matrix
+#   RTriangle::pslg(x, S = segmaker(x))
+# }
+# segmaker <- function(x) {
+#   on.exit(options(op))
+#   op <- options(warn = -1)
+#   matrix(seq(nrow(x)), nrow = nrow(x) + 1, ncol  = 2)[seq(nrow(x)), ]
+# }
 

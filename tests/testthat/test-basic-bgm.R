@@ -1,8 +1,6 @@
 context("basic-bgm")
 
-files <- list.files(system.file("extdata/bgm", package = "bgmfiles"), pattern = "bgm$", 
-                    full.names = TRUE)
-
+files <- bgmfiles::bgmfiles()
 test_that("bgmfile works", {
   expect_that(
   bgmfile(files[1])

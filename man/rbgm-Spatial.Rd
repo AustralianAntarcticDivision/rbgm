@@ -27,7 +27,7 @@ Spatial* object
 Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object.
 }
 \examples{
-fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
+fname <- bgmfiles::bgmfiles(pattern = "Antarctica_28")
 bgm <- bgmfile(fname)
 spdf <- boxSpatial(bgm)
 sldf <- faceSpatial(bgm)

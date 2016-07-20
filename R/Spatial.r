@@ -13,9 +13,9 @@
 #' @export
 #' @rdname rbgm-Spatial
 #' @importFrom sp point.in.polygon Polygon Polygons SpatialPolygons SpatialPolygonsDataFrame 
-#' @importFrom dplyr inner_join select
+#' @importFrom dplyr inner_join select_
 #' @examples
-#' fname <- system.file("extdata", "Antarctica_28.bgm", package = "rbgm")
+#' fname <- bgmfiles::bgmfiles(pattern = "Antarctica_28")
 #' bgm <- bgmfile(fname)
 #' spdf <- boxSpatial(bgm)
 #' sldf <- faceSpatial(bgm)

@@ -12,8 +12,7 @@ Imports:
     dplyr,
     geosphere
 Suggests:
-    bgmfiles, graticule, roxygen2, RTriangle, scales, testthat,
-    covr
+    bgmfiles, graticule, roxygen2, scales, testthat, covr
 Description: Facilities for working with Atlantis box-geometry model (BGM) 
  files. Atlantis is a deterministic, biogeochemical, whole-of-ecosystem model. 
  Functions are provided to read from BGM files directly, preserving their 
