@@ -13,10 +13,15 @@ Imports:
     geosphere, 
     tibble
 Suggests:
-    bgmfiles, graticule, roxygen2, scales, testthat, covr,
+    bgmfiles, 
+    covr,
+    graticule, 
     knitr,
     rgdal,
-    rmarkdown
+    rmarkdown,
+    roxygen2, 
+    scales, 
+    testthat
 Description: Facilities for working with Atlantis box-geometry model (BGM) 
  files. Atlantis is a deterministic, biogeochemical, whole-of-ecosystem model. 
  Functions are provided to read from BGM files directly, preserving their 
