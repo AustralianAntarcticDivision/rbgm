@@ -4,6 +4,9 @@
 language: c
 sudo: required
 
+after_success:
+  - Rscript -e 'covr::codecov()
+  
 before_install:
   - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
   - chmod 755 pkg-build.sh
@@ -44,5 +47,3 @@ env:
     - RVERSION=release
     - RVERSION=devel
 
-after_success:
-  - Rscript -e 'covr::codecov()
