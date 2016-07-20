@@ -4,9 +4,12 @@ output:
     variant: markdown_github
 ---
 
+
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Build Status](https://travis-ci.org/AustralianAntarcticDivision/rbgm.png?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/rbgm)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/rbgm?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/rbgm)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rbgm)](https://cran.r-project.org/package=rbgm)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/rbgm)](http://cran.r-project.org/web/packages/rbgm/index.html)
 [![Coverage Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/rbgm/master.svg)](https://codecov.io/github/AustralianAntarcticDivision/rbgm?branch=master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -66,165 +69,7 @@ use [Pull Requests](http://r-pkgs.had.co.nz/git.html#git-pullreq) if you have ch
 * [AtlantisNEUS_R](https://github.com/erikjsolsen/AtlantisNEUS_R) R code (scripts and functions) to interact with and analyze output from the Atlantis NEAU End-2-end marine ecosystem model
 
 
-## Example
+## Examples
 
-Read in an example .bgm file with `bgmfile`, and plot it as box-polygons. 
+See the package vignettes for examples. 
 
-```{r}
-library(rbgm)
-library(scales)  ## for alpha function
-library(bgmfiles) ## example files
-## example data set in package
-fname <- bgmfiles(pattern = "Nordic")[1L]
-bgm <- bgmfile(fname)
-plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
-```
-
-The function `bgmfile` returns a generic list structure of tables, which currently includes the following. More on these later. 
-
-```{r}
-print(names(bgm))
-```
-
-There are functions for converting from the raw .bgm data structures to `Spatial` objects, as defined in the `sp` package. (Spatial objects are formal GIS-like data that store a table of attribute data against a set of matching polygons, lines or points.)
-
-* `boxSpatial` converts to a `SpatialPolygonsDataFrame`, with a table of attributes relevant to the boxes
-* `faceSpatial` converts to a `SpatialLinesDataFrame`, with attributes for the faces (straight line edges that define box boundaries)
-* `nodeSpatial` converts to a `SpatialPointsDataFrame, with attributes for the unique vertices in the model 
-* `pointSpatial` converts to a `SpatialPointsDataFrame`, with attributes for all instances of the vertices in the model (faces share vertices)
-* `boundarySpatial` converts just the boundary path to `SpatialPolygonsDataFrame`
-
-From these conversions we can export to GIS formats such as [GeoPackage](http://www.geopackage.org/). 
-
-It's important to note that the Spatial objects cannot store the full topological and attribute information present in the .bgm, so these are convenience converters that are one-way. We can generate .bgm from these objects, but it cannot be stored in just one Spatial object. 
-
-These converter functions provide fully-functional objects with complete coordinate system metadata, that we can subset, interrogate and plot. 
-
-```{r}
-(spdf <- boxSpatial(bgm))
-
-(sldf <- faceSpatial(bgm))
-```
-
-
-Subset based on attribute
-
-```{r}
-subset(spdf, horizmix == 0, select = label)
-
-plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
-
-text(coordinates(spdf), labels = spdf$label, col = grey(seq(1, 0, length = nrow(bgm$boxes))), cex = 0.8)
-```
-
-For illustration isolate boxes that are outside the boundary. 
-
-```{r}
-## subset the boundary boxes
-plot(subset(spdf, boundary), border = "firebrick", lwd = 3)
-
-## or just get a single boundary for the inner
-plot(boundarySpatial(bgm), border = alpha("dodgerblue", 0.3), lwd = 7, add = TRUE)
-```
-
-Plot the boxes and then label the faces. 
-
-```{r}
-plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes)), alpha = 0.5))
-
-
-plot(sldf, col = rainbow(nrow(sldf)), lwd = 2,  add = TRUE)
-text(do.call(rbind, lapply(coordinates(sldf), function(x) apply(x[[1]], 2, mean))), 
-     labels = gsub("ace", "", sldf$label), cex = 0.8, col = rainbow(nrow(sldf)), pos = 3)
-```
-
-Obtain the boundary polygon and plot. 
-
-```{r}
-plot(boundarySpatial(bgm), lwd = 4, col = "grey")
-plot(boxSpatial(bgm), add = TRUE)
-```
-
-## More information
-
-The BGM format and usage is described at the (registration-required) Atlantis wiki: http://atlantis.cmar.csiro.au/
-
-## Extended examples
-
-Obtain every available BGM file and plot in native coordinates, with a graticule. 
-
-
-```{r,fig.width=7, fig.height = 7}
-library(rbgm)
-library(bgmfiles)
-
-library(rgdal)
-
-## turn +proj into line separated text
-breakproj <- function(x) {
-  paste(strsplit(x, " ")[[1]], collapse = "\n")
-}
-files <- bgmfiles()
-for (i in seq_along(files)) {
-  bgm <- bgmfile(files[i])
-  boxes <- boxSpatial(bgm)
-  plot(boxes, col = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))))
-  op <- par(xpd = NA)
-  llgridlines(boxes)
-  par(op)
-  title(basename(files[i]), cex = 0.8)
-  mtext(breakproj(proj4string(boxes)), cex = 0.75, side = 2, las = 1, adj = 0, line = 2, at = par("usr")[3], xpd = NA)
- 
-}
-
-
-```
-
-
-
-```{r, eval=FALSE, include = FALSE}
-## In-dev plot methods, see mapview and mdsumner/gris
-
-#Make a single map of every BGM. 
-
-library(mapview)
-m <- mapView()
-library(maptools);data(wrld_simpl);plot(wrld_simpl)
- centroids <- matrix(NA_real_, nrow = length(files), ncol = 2)
-
-for (i in seq_along(files)) {
-  bgm <- bgmfile(files[i])
-  boxes <- boxSpatial(bgm)
-  bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
-  m <- m + mapView(bll,  color = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))),  layer.name = basename(files[i]))
-  plot(bll, add = TRUE)
- 
-
-   centroids[i, ] <- coordinates(rgeos::gCentroid(bll))
-}
-points(centroids, col = "red", pch = 19)
-m 
-```
-
-
-
-
-
-```{r,eval=FALSE, include = FALSE}
-Convert each to XYZ on the globe and plot. 
-
-#devtools::install_github("mdsumner/gris", ref = "cran-sprint")
-library(gris)
-for (i in seq_along(files)) {
-  bgm <- bgmfile(files[i])
-  boxes <- boxSpatial(bgm)
-  bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
- g <- gris(bll)
- gt <- triangulate(g)
- plot3d(gt, add = i > 1)
-}
-
-plot3d(triangulate(gris(wrld_simpl)), add = TRUE, col = "black")
-rgl::light3d(specular = "aliceblue", viewpoint.rel = FALSE)
-rgl::bg3d("black")
-```

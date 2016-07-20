@@ -1,0 +1,66 @@
+## ----fig.width=9, fig.height = 9-----------------------------------------
+library(rbgm)
+library(bgmfiles)
+
+library(rgdal)
+
+## turn +proj into line separated text
+breakproj <- function(x) {
+  paste(strsplit(x, " ")[[1]], collapse = "\n")
+}
+files <- bgmfiles()
+for (i in seq_along(files)) {
+  bgm <- bgmfile(files[i])
+  boxes <- boxSpatial(bgm)
+  plot(boxes, col = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))))
+  op <- par(xpd = NA)
+  llgridlines(boxes)
+  par(op)
+  title(basename(files[i]), cex = 0.8)
+  mtext(breakproj(proj4string(boxes)), cex = 0.75, side = 2, las = 1, adj = 0, line = 2, at = par("usr")[3], xpd = NA)
+ 
+}
+
+
+
+## ---- eval=FALSE, include = FALSE----------------------------------------
+#  ## In-dev plot methods, see mapview and mdsumner/gris
+#  
+#  #Make a single map of every BGM.
+#  
+#  library(mapview)
+#  m <- mapView()
+#  library(maptools);data(wrld_simpl);plot(wrld_simpl)
+#   centroids <- matrix(NA_real_, nrow = length(files), ncol = 2)
+#  
+#  for (i in seq_along(files)) {
+#    bgm <- bgmfile(files[i])
+#    boxes <- boxSpatial(bgm)
+#    bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
+#    m <- m + mapView(bll,  color = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))),  layer.name = basename(files[i]))
+#    plot(bll, add = TRUE)
+#  
+#  
+#     centroids[i, ] <- coordinates(rgeos::gCentroid(bll))
+#  }
+#  points(centroids, col = "red", pch = 19)
+#  m
+
+## ----eval=FALSE, include = FALSE-----------------------------------------
+#  Convert each to XYZ on the globe and plot.
+#  
+#  #devtools::install_github("mdsumner/gris", ref = "cran-sprint")
+#  library(gris)
+#  for (i in seq_along(files)) {
+#    bgm <- bgmfile(files[i])
+#    boxes <- boxSpatial(bgm)
+#    bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
+#   g <- gris(bll)
+#   gt <- triangulate(g)
+#   plot3d(gt, add = i > 1)
+#  }
+#  
+#  plot3d(triangulate(gris(wrld_simpl)), add = TRUE, col = "black")
+#  rgl::light3d(specular = "aliceblue", viewpoint.rel = FALSE)
+#  rgl::bg3d("black")
+

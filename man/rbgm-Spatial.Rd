@@ -13,7 +13,7 @@ boundarySpatial(bgm)
 faceSpatial(bgm)
 }
 \arguments{
-\item{bgm}{BGM file}
+\item{bgm}{output of a BGM file, as returned by \code{\link{bgmfile}}}
 }
 \value{
 Spatial* object 

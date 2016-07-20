@@ -1,0 +1,101 @@
+---
+title: "Box Geometry Model (BGM) files"
+author: "Michael D. Sumner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{BGM Files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}		
+knitr::opts_chunk$set(echo = TRUE)
+library(raster)
+library(sp)
+library(dplyr)
+library(tibble)
+```
+# Box Geometry Model files		
+
+Box Geometry Model files are text files that store a spatially-explicit model domain used by the Atlantis Ecosystem Model. 
+
+The model domain consists of **boxes** (polygons) composed of **faces** (line segments) and an overall **boundary** that delimits the domain of the model. 		
+ 
+ The boundary will include boundary polygons that are not boxes in the model, but some box edges are on this boundary, for example some models bounded by land do not have boundary boxes on this edge. 		
+ 
+ The **rbgm** package includes tools to read the BGM format, returning tables of all X/Y vertices and tables of indices for the boxes and faces. 
+
+```{r}
+library(rbgm)
+library(dplyr)
+library(tibble)
+mfile <- bgmfiles::bgmfiles()[1]
+
+bgm <- bgmfile(mfile)
+
+names(bgm)
+```
+
+# Box and face attributes, and model topology
+
+Both boxes and faces have attributes stored row-wise in the respective table.
+
+These are the box attributes for this example
+
+```{r}
+print(bgm$boxes)
+```
+
+and these are the face attributes. 
+
+
+```{r}
+print(bgm$faces)
+```
+By using relations between these tables we can reconstruct the geometry appropriately. (This is pretty painful, but shows that we have all the information required.)
+
+```{r}
+bgm$boxes %>% 
+  filter(label %in% c("Box1", "Box11"))  %>% 
+  inner_join(bgm$boxesXverts, ".bx0") %>% 
+  print()
+```
+
+# Convert to Spatial objects
+
+To avoid constructing boxes and faces manually, `rbgm` provides several helper functions to create the boxes, faces, coordinates, and boundary as `Spatial` objects from the `sp` package.
+
+Since Spatial objects cannot store the full connectivity of the BGM structure, it is best to consider these as one-way conversions, keeping all the details in the raw tables as above. 
+
+To generate an object with just "Box1" and "Box11", use the function `boxSpatial` and then subset on box labels. 
+
+```{r}
+boxes <- subset(boxSpatial(bgm), label %in% c("Box2", "Box16"))
+```
+
+
+To determine which faces belong to these boxes, first create all faces and then join. 
+
+```{r}
+allfaces <- faceSpatial(bgm)
+faces <- allfaces[match(bgm$facesXboxes$iface[which(bgm$facesXboxes$.bx0 %in% boxes$.bx0)], allfaces$.fx0), ]
+
+## this method needs spdplyr
+#face <- romsface %>% inner_join(as.data.frame(box) %>% inner_join(bgm$facesXboxes, ".bx0") %>% transmute(.fx0 = iface), ".fx0")
+  
+```
+
+Plot the two layers together. 
+
+```{r}
+plot(boxes, main = "boxes only")
+text(coordinates(boxes), lab = sprintf("%s\nnconn: %s", boxes$label, boxes$nconn))
+
+plot(boxes, main = "boxes and faces overlaid")
+text(coordinates(boxes), lab = sprintf("%s\nnconn: %s", boxes$label, boxes$nconn))
+plot(faces, col = c("firebrick"), lwd = 1, add = TRUE)
+```
+(Future releases will provide simpler tools to do this kind of matching).
+
+ 

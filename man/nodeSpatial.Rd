@@ -19,7 +19,20 @@ pointSpatial(bgm)
 Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}.
 }
 \details{
+Nodes are the unique coordinates (or vertices), points are the instances of those coordinates that exist in the model. 
 \code{\link{pointSpatial}} returns all instances of the vertices with information about which boxes they belong to. 
 \code{\link{nodeSpatial}} returns all vertices.
+}
+\examples{
+fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
+bgm <- bgmfile(fname)
+spnode <- nodeSpatial(bgm)
+names(spnode)
+nrow(spnode)  ## only unique vertices
+nrow(bgm$vertices)
+
+sppoints <- pointSpatial(bgm)
+names(sppoints)
+nrow(sppoints)
 }
 

@@ -2,7 +2,7 @@
 #' Convert to Spatial
 #'
 #' Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object. 
-#' @param bgm BGM file
+#' @param bgm output of a BGM file, as returned by \code{\link{bgmfile}} 
 #'
 #' @return Spatial* object 
 #' \itemize{
@@ -59,6 +59,7 @@ boundarySpatial <- function(bgm) {
 #' 
 #' Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}. 
 #' 
+#' Nodes are the unique coordinates (or vertices), points are the instances of those coordinates that exist in the model. 
 #' \code{\link{pointSpatial}} returns all instances of the vertices with information about which boxes they belong to. 
 #' \code{\link{nodeSpatial}} returns all vertices. 
 #' 
@@ -67,6 +68,17 @@ boundarySpatial <- function(bgm) {
 #' @return  \code{\link[sp]{SpatialPointsDataFrame}}
 #' @export
 #' @importFrom sp SpatialPointsDataFrame proj4string 
+#' @examples
+#' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
+#' bgm <- bgmfile(fname)
+#' spnode <- nodeSpatial(bgm)
+#' names(spnode)
+#' nrow(spnode)  ## only unique vertices
+#' nrow(bgm$vertices)
+#' 
+#' sppoints <- pointSpatial(bgm)
+#' names(sppoints)
+#' nrow(sppoints)
 nodeSpatial <- function(bgm) {
   SpatialPointsDataFrame(as.matrix(bgm$vertices[, c("x", "y")]), data.frame(.vx0 = bgm$vertices$.vx0), 
                          proj4string = CRS(bgm$extra["projection"][[1]]))

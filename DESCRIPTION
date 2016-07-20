@@ -13,7 +13,10 @@ Imports:
     geosphere, 
     tibble
 Suggests:
-    bgmfiles, graticule, roxygen2, scales, testthat, covr
+    bgmfiles, graticule, roxygen2, scales, testthat, covr,
+    knitr,
+    rgdal,
+    rmarkdown
 Description: Facilities for working with Atlantis box-geometry model (BGM) 
  files. Atlantis is a deterministic, biogeochemical, whole-of-ecosystem model. 
  Functions are provided to read from BGM files directly, preserving their 
@@ -24,5 +27,6 @@ NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
 RoxygenNote: 5.0.1
-URL:	https://github.com/AustralianAntarcticDivision/rbgm/, http://atlantis.cmar.csiro.au/
-BugReports:	https://github.com/AustralianAntarcticDivision/rbgm/issues/
+URL: https://github.com/AustralianAntarcticDivision/rbgm/, http://atlantis.cmar.csiro.au/
+BugReports: https://github.com/AustralianAntarcticDivision/rbgm/issues/
+VignetteBuilder: knitr

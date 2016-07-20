@@ -33,6 +33,7 @@ prependplus <- function(x) {
 ##' @param mindist minimum distance in km if \code{longlat} is \code{TRUE}, otherwise in the units of the projection used (probably metres)
 ##' @param longlat calculate distance on great circle or Cartesian
 ##' @return matrix of (possibly) densified coordinates
+##' @noRd
 densifymindist <- function(x, mindist, longlat = longlat) {
   if (missing(mindist)) {
     warning("No minimum distance specified, no densifying done")
