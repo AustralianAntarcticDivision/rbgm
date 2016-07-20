@@ -1,8 +1,10 @@
 # rbgm 0.0.4
 
-* updated to use tibble rather than data_frame
+* added vignettes, examples, more doc
 
-* read_bgm is now defunct
+* removed some old functions
+
+* cleaned up for CRAN
 
 * fixed a gnarly bug due to lexicographic sorting on a list! Lines from faceSpatial were coming out in the sorted order of "face0", "face1", "face10", "face30" etc.
 
