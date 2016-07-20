@@ -5,6 +5,8 @@
 
 ## R CMD check results
 
+0 ERRORs | 0 WARNINGS | 1 NOTE
+
 > * checking CRAN incoming feasibility ... NOTE
 > Maintainer: 'Michael D. Sumner <mdsumner@gmail.com>'
 > 
@@ -36,7 +38,6 @@
 * This is a new release.
 * The spellings are intended. 
 * The URLS do exist - or will once this is on CRAN.
-* The non-canonical form of the CRAN URL in README.md is as per devtools template. 
 
 Thanks very much!
 
