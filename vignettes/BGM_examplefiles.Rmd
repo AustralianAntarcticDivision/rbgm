@@ -47,29 +47,26 @@ for (i in seq_along(files)) {
 ```
 
 
+Make one interactive map with all. 
 
-```{r, eval=FALSE, include = FALSE}
-## In-dev plot methods, see mapview and mdsumner/gris
-
-#Make a single map of every BGM. 
-
+```{r, eval = FALSE}
+library(rbgm)
+library(bgmfiles)
 library(mapview)
-m <- mapView()
-library(maptools);data(wrld_simpl);plot(wrld_simpl)
- centroids <- matrix(NA_real_, nrow = length(files), ncol = 2)
 
-for (i in seq_along(files)) {
-  bgm <- bgmfile(files[i])
-  boxes <- boxSpatial(bgm)
-  bll <- if (isLonLat(boxes)) boxes else spTransform(boxes, "+proj=longlat +ellps=WGS84")
-  m <- m + mapView(bll,  color = ifelse(boxes$boundary, "#88888880", sample(rainbow(nrow(boxes), alpha = 0.5))),  layer.name = basename(files[i]))
-  plot(bll, add = TRUE)
- 
 
-   centroids[i, ] <- coordinates(rgeos::gCentroid(bll))
+mp <- mapview()  ## empty map view
+
+fs <- bgmfiles::bgmfiles()  ## paths of all files collected
+cols <- rainbow(length(fs), alpha = 0.2)
+## read in all boxes, convert to SpatialPolygonsDataFrame, and add to the map view
+for (i in seq_along(fs)) {
+  mp <- mp + mapview(boxSpatial(bgmfile(fs[i])), color = cols[i], alpha = 0.3, layer.name = basename(fs[i]))
 }
-points(centroids, col = "red", pch = 19)
-m 
+
+## view the mapview
+mp
+
 ```
 
 
