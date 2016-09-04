@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>rbgm-package. rbgm 0.0.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">rbgm 0.0.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Utilities for BGM files for Atlantis</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Tools for handling network data for Atlantis from box-geometry
+model (BGM) files</p>
+
+    </div>
+
+    <div class="rbgm features">
+      <h2>rbgm features</h2>
+
+      <p></p>
+
+      <p><ul>
+<li> read .bgm files and faithfully store all information so it can be round-tripped
+ </li>
+<li> conversion from .bgm forms to Spatial classes (lines and polygons)
+ </li>
+<li> (not yet implemented: write to .bgm)
+</li>
+</ul></p>
+
+      <p></p>
+
+    </div>
+
+    <div class="I. Import">
+      <h2>I. Import</h2>
+
+      <p></p>
+
+      <p><table><tr><td>
+ <code><a href='bgmfile.html'>bgmfile</a></code> </td>
+</tr><tr><td> read directly from a .bgm file  </td>
+</tr></table></p>
+
+    </div>
+
+    <div class="II. Conversion">
+      <h2>II. Conversion</h2>
+
+      <p></p>
+
+      <p><table><tr><td>
+ <code><a href='rbgm-Spatial.html'>boxSpatial</a></code> </td>
+</tr><tr><td> convert boxes to a <code><a href='http://www.rdocumentation.org/packages/sp/topics/SpatialPolygons'>SpatialPolygonsDataFrame</a></code></td>
+</tr><tr><td>
+ <code><a href='rbgm-Spatial.html'>faceSpatial</a></code> </td>
+</tr><tr><td> convert faces to a <code><a href='http://www.rdocumentation.org/packages/sp/topics/SpatialLines'>SpatialLinesDataFrame</a></code> </td>
+</tr><tr><td>
+ <code><a href='rbgm-Spatial.html'>boundarySpatial</a></code> </td>
+</tr><tr><td> convert boundary to a single-row <code><a href='http://www.rdocumentation.org/packages/sp/topics/SpatialPolygons'>SpatialPolygonsDataFrame</a></code></td>
+</tr><tr><td>
+ <code><a href='nodeSpatial.html'>nodeSpatial</a></code> </td>
+</tr><tr><td> obtain all vertices as points </td>
+</tr><tr><td>
+ <code><a href='nodeSpatial.html'>pointSpatial</a></code> </td>
+</tr><tr><td> obtain all instances of vertices as points </td>
+</tr></table></p>
+
+    </div>
+
+    <div class="III. Miscellaneous">
+      <h2>III. Miscellaneous</h2>
+
+      <p></p>
+
+      <p><table><tr><td>
+ <code><a href='build_dz.html'>build_dz</a></code> </td>
+</tr><tr><td> Build Atlantis dz Values </td>
+</tr></table></p>
+
+    </div>
+      </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>rbgm-package</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

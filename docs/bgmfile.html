@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>bgmfile. rbgm 0.0.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">rbgm 0.0.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Read BGM</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='bgmfile.html'>bgmfile</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x</dt>
+      <dd>path to a bgm file</dd>
+      <dt>...</dt>
+      <dd>ignored for now</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>Read geometry and full topology from BGM files.</p>
+
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>BGM is a file format used for the &#39;Box Geometry Model&#39; in the Atlantis Ecosystem Model. 
+This function reads everything from the .bgm file and returns it as linked tables.</p>
+
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/library'>library</a></span><span class="keyword">(</span><span class="symbol">bgmfiles</span><span class="keyword">)</span>
+<span class="symbol">bfile</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.rdocumentation.org/packages/dplyr/topics/sample'>sample</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.rdocumentation.org/packages/bgmfiles/topics/bgmfiles'>bgmfiles</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="number">1L</span><span class="keyword">)</span>
+<span class="symbol">bgm</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='bgmfile.html'>bgmfile</a></span><span class="keyword">(</span><span class="symbol">bfile</span><span class="keyword">)</span></div>
+<div class='output'>C:/inst/R/R/library/bgmfiles/extdata/bgm/ams71.bgm 
+file declares 187 faces but contains data for 193 faces
+
+ ... returning all 193 faces</div>
+<div class='input'><span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/library'>library</a></span><span class="keyword">(</span><span class="symbol">tibble</span><span class="keyword">)</span>
+<span class="symbol">bgm</span></div>
+<div class='output'>$vertices
+# A tibble: 196 × 3
+         x       y  .vx0
+     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;
+1  1529167 2084608     1
+2  1535624 2033062     2
+3  1538150 2013366     3
+4  1564898 2089063     4
+5  1603981 2072002     5
+6  1617781 2051053     6
+7  1663541 2168770     7
+8  1694033 2155419     8
+9  1707112 2220880     9
+10 1722830 2137410    10
+# ... with 186 more rows
+
+$facesXverts
+# A tibble: 386 × 3
+    .fx0   .p0  .vx0
+   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1      0     1     4
+2      0     2     5
+3      1     1   149
+4      1     2   155
+5      2     1   155
+6      2     2   159
+7      3     1   159
+8      3     2   172
+9      4     1   172
+10     4     2   179
+# ... with 376 more rows
+
+$faces
+# A tibble: 193 × 7
+        cosine       sine  left right    length  .fx0 label
+         &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;
+1  -0.91648273 0.40007425     1     0  42644.89     0 face0
+2  -0.99326818 0.11583746    20    22  31404.53     1 face1
+3  -0.98651191 0.16368948    23    24  13055.24     2 face2
+4  -0.99883874 0.04817849    47    48 123323.96     3 face3
+5  -0.98408116 0.17771967    49    50 115328.51     4 face4
+6  -0.99701854 0.07716237    54    49 308798.85     5 face5
+7  -0.97551285 0.21994246    49    56  96618.49     6 face6
+8   0.04213626 0.99911187    24    20 158232.50     7 face7
+9   0.06564522 0.99784303    47    24 159084.28     8 face8
+10  0.66566271 0.74625274    24    20  37031.67     9 face9
+# ... with 183 more rows
+
+$facesXboxes
+# A tibble: 385 × 3
+    .bx0 iface  ibox
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1      0     0     1
+2      1     0     0
+3      1    62     2
+4      1    70    34
+5      1    81    34
+6      2    42     3
+7      2    43    32
+8      2    44    33
+9      2    61    33
+10     2    62     1
+# ... with 375 more rows
+
+$boxesXverts
+# A tibble: 542 × 2
+    .bx0  .vx0
+   &lt;dbl&gt; &lt;int&gt;
+1      0     1
+2      0     4
+3      0     5
+4      0     2
+5      0     1
+6      1     9
+7      1    13
+8      1    14
+9      1     8
+10     1     5
+# ... with 532 more rows
+
+$boxes
+# A tibble: 71 × 9
+          label nconn  botz         area vertmix horizmix insideX insideY
+          &lt;chr&gt; &lt;int&gt; &lt;int&gt;        &lt;dbl&gt;   &lt;dbl&gt;    &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1  BoundaryBox0     1  -200   2279336755   1e-06        1 1560270 2063300
+2          box1     4  -200  33076861706   1e-06        1 1848738 2182818
+3          box2     5  -200 106000000000   1e-06        1 2461586 2395124
+4          box3     4  -200  52960144011   1e-06        1 2846262 2423700
+5          box4     7  -200  57204362952   1e-06        1 3043747 2204414
+6          box5     1   -20  20794488111   1e-06        1 3271770 2274790
+7          box6     7  -200  32236659536   1e-06        1 3367598 2017187
+8          box7     3  -200   9839460116   5e-05        1 3571038 1860595
+9          box8     9  -200  30312646954   1e-06        1 3828736 1629875
+10         box9     7   -50  71053969415   1e-06        1 4036585 1604810
+# ... with 61 more rows, and 1 more variables: .bx0 &lt;dbl&gt;
+
+$boundaryvertices
+# A tibble: 67 × 3
+         x       y bndvert
+     &lt;dbl&gt;   &lt;dbl&gt;   &lt;int&gt;
+1  4952047 3145085       1
+2  4964926 3142948       2
+3  5088107 3137007       3
+4  5201600 3116510       4
+5  5509478 3092683       5
+6  5603730 3071432       6
+7  5545009 2853190       7
+8  5643228 2683493       8
+9  5487038 2568810       9
+10 5373099 2279576      10
+# ... with 57 more rows
+
+$extra
+$extra$maxwcbotz
+[1] &quot;-1800&quot;
+
+$extra$nbox
+[1] &quot;71&quot;
+
+$extra$nface
+[1] &quot;187&quot;
+
+$extra$projection
+[1] &quot;+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=134 +x_0=3000000 +y_0=6000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs&quot;
+
+
+</div></pre>
+  </div>
+  <div class="span4 sidebar">
+    <!-- <ul>
+      <li>bgmfile</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+
+    <h2>See also</h2>
+      <p>See helper functions to convert the bgm tables to `Spatial` objects, <code><a href='rbgm-Spatial.html'>boxSpatial</a></code>, 
+<code><a href='rbgm-Spatial.html'>faceSpatial</a></code>, <code><a href='nodeSpatial.html'>nodeSpatial</a></code>, <code><a href='rbgm-Spatial.html'>boundarySpatial</a></code>, <code><a href='nodeSpatial.html'>pointSpatial</a></code></p>
+
+    
+
+
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

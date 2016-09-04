@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>Home. rbgm 0.0.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="index.html">rbgm 0.0.4</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="reference.html">Reference</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <div class="row">
+  <div class="span8">
+    <p><a href="http://www.repostatus.org/#active"><img src="http://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active - The project has reached a stable, usable state and is being actively developed."/></a> <a href="https://travis-ci.org/AustralianAntarcticDivision/rbgm"><img src="https://travis-ci.org/AustralianAntarcticDivision/rbgm.png?branch=master" alt="Build Status"/></a> <a href="https://ci.appveyor.com/project/AustralianAntarcticDivision/rbgm"><img src="https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/rbgm?branch=master&amp;svg=true" alt="AppVeyor Build Status"/></a> <a href="https://cran.r-project.org/package=rbgm"><img src="http://www.r-pkg.org/badges/version/rbgm" alt="CRAN\_Status\_Badge"/></a> <a href="https://cran.r-project.org/package=rbgm"><img src="http://cranlogs.r-pkg.org/badges/rbgm" alt="CRAN RStudio mirror downloads"/></a> <a href="https://codecov.io/github/AustralianAntarcticDivision/rbgm?branch=master"><img src="https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/rbgm/master.svg" alt="Coverage Status"/></a></p>
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<h2>rbgm - R tools for Box Geometry model files</h2>
+
+<p><code>rbgm</code> allows reading of geometry from BGM files, either in raw coordinate form or as Spatial objects. The aim is to make all of the following straightforward:</p>
+
+<ul>
+<li>  read of the BGM format, maintaining all topology and attributes</li>
+<li>  use of the BGM specification for visualization and data extraction</li>
+<li>  creation of BGM from from shapefiles, R spatial objects and whatever else</li>
+</ul>
+
+<h2>Installation</h2>
+
+<p>Install from CRAN:</p>
+
+<pre><code class="r">install.packages(&quot;rbgm&quot;)
+</code></pre>
+
+<p>Install the development version from Github using <code>devtools</code>.</p>
+
+<pre><code class="r"># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;mdsumner/rbgm&quot;)
+</code></pre>
+
+<h3>How can I contribute to rbgm?</h3>
+
+<p>Install, use, test the package, and let me know!</p>
+
+<p>Please use the Issues tab on GitHub to add feature requests and bug reports: <a href="https://github.com/AustralianAntarcticDivision/rbgm/issues/">https://github.com/AustralianAntarcticDivision/rbgm/issues/</a></p>
+
+<p>use <a href="http://r-pkgs.had.co.nz/git.html#git-pullreq">Pull Requests</a> if you have changes you&#39;d like to contribute.</p>
+
+<h2>Related work</h2>
+
+<ul>
+<li>  <a href="https://github.com/mareframe/mfdbatlantis">mfdbatlantis</a> MareFrame Atlantis routines</li>
+<li>  <a href="https://github.com/alketh/atlantistools">atlantistools</a> data processing and visualisation tool for R</li>
+<li>  <a href="https://github.com/shanearichards/shinyrAtlantis">shinyrAtlantis</a></li>
+<li>  <a href="https://github.com/jsgosnell/ratlantis">ratlantis</a> R code for interfacing with Atlantis ecosystem modeling software</li>
+<li>  <a href="https://github.com/mareframe/vat">vat</a> Visualizing Atlantis Tool (vat)</li>
+<li>  <a href="https://github.com/AustralianAntarcticDivision/EastAntarctica_Atlantis">EastAntarctica_Atlantis</a> Project work at Australian Antarctic Division and the Antarctic Climate and Ecosystems CRC</li>
+<li>  <a href="https://github.com/erikjsolsen/AtlantisNEUS_R">AtlantisNEUS_R</a> R code (scripts and functions) to interact with and analyze output from the Atlantis NEAU End-2-end marine ecosystem model</li>
+</ul>
+
+<h2>Examples</h2>
+
+<p>See the package vignettes for examples.</p>
+
+  </div>
+
+  <div class="span3 offset1 sidebar">
+    <h2>Vignettes</h2>
+    <ul>
+      <li><a href="vignettes/BGM_examplefiles.html">BGM examples</a></li>
+      <li><a href="vignettes/BGM_Spatial.html">BGM and Spatial</a></li>
+      <li><a href="vignettes/BGMfiles.html">BGM Files</a></li>
+    </ul>
+        <h2>Authors</h2>
+    <ul>
+      <li><a href='mailto:mdsumner@gmail.com'>Michael D. Sumner</a> [aut, cre]</li>
+    </ul>
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="https://getbootstrap.com/2.0.4/">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
