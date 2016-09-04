@@ -33,6 +33,6 @@ NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
 RoxygenNote: 5.0.1
-URL: https://github.com/AustralianAntarcticDivision/rbgm/, http://atlantis.cmar.csiro.au/
+URL: https://AustralianAntarcticDivision.github.io/rbgm/, http://atlantis.cmar.csiro.au/
 BugReports: https://github.com/AustralianAntarcticDivision/rbgm/issues/
 VignetteBuilder: knitr
