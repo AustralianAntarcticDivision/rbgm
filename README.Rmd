@@ -31,7 +31,7 @@ coordinate form or as Spatial objects. The aim is to make all of the following s
 
 * read of the BGM format, maintaining all topology and attributes
 * use of the BGM specification for visualization and data extraction
-* creation of BGM from from shapefiles, R spatial objects and whatever else
+* creation of BGM from shapefiles, R spatial objects and whatever else
 
 
 ## Installation
