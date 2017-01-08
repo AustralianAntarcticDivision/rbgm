@@ -8,7 +8,7 @@ rbgm - R tools for Box Geometry model files
 
 -   read of the BGM format, maintaining all topology and attributes
 -   use of the BGM specification for visualization and data extraction
--   creation of BGM from from shapefiles, R spatial objects and whatever else
+-   creation of BGM from shapefiles, R spatial objects and whatever else
 
 Installation
 ------------
