@@ -1,3 +1,7 @@
+# rbgm dev
+
+* removed names from component sp lists to avoid troubles in sf causing troubles in mapview
+
 # rbgm 0.0.4
 
 * added vignettes, examples, more doc

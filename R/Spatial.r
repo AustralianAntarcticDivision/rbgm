@@ -44,6 +44,7 @@ sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_
   p1 <- lapply(split(x[, xy], x[[object]]), function(x) Polygon(as.matrix(x)))
   IDs <- unique(x[[object]])
   p1 <- p1[IDs]  ## override the lex sort
+  p1 <- unname(p1)  ## save us, sp can't have named elements
   p2 <- lapply(seq_along(p1), function(ii) Polygons(p1[ii], IDs[ii]))
   SpatialPolygons(p2, proj4string = CRS(crs))             
 } 
@@ -114,7 +115,8 @@ sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character
   IDs <- unique(x[[object]])
   ## ouch, lapply returns sorted on x[[object]] - ouch!  
   l1 <- lapply(split(x[, xy], x[[object]]), function(x) Line(as.matrix(x)))[IDs]
-
+  l1 <- unname(l1)
   l2 <- lapply(seq_along(l1), function(ii) Lines(l1[ii], IDs[ii]))
+  l2 <- unname(l2) ## no names or sp fail
   SpatialLines(l2, proj4string = CRS(crs))
 }
