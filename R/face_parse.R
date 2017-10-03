@@ -29,7 +29,7 @@ read_bgm <- function(x) {
 }
 
 iface_parse <- function(tx) {
-  bind_rows(lapply(strsplit(str_subset(tx, "box[0-9]{1,}.iface"), " "), function(x) tibble::tibble(name = x[1], iface = as.integer(x[-1])))) %>% 
+  bind_rows(lapply(strsplit(stringr::str_subset(tx, "box[0-9]{1,}.iface"), " "), function(x) tibble::tibble(name = x[1], iface = as.integer(x[-1])))) %>% 
     mutate(name = gsub("\\.iface", "", name))
 }
 verts_parse <- function(tx) {
@@ -59,5 +59,5 @@ faces_parse <- function(tx) {
   bind_cols(p1, p2[, -1], len[, -1], cs[, -1], lr[, -1])
 }
 read_delim_pattern <- function(x, pattern, col_names = FALSE) {
-  read_delim(paste(str_subset(tx, pattern), collapse = "\n"), delim = " ", col_names = col_names)
+  readr::read_delim(paste(stringr::str_subset(x, pattern), collapse = "\n"), delim = " ", col_names = col_names)
 }
