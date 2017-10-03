@@ -15,6 +15,7 @@ make_boxes <- function(tab) {
 make_faces <- function(tab) {
   lapply(split(tab[, c("x1", "y1", "x2", "y2")], tab$face), function(x) sf::st_linestring(matrix(unlist(x), ncol = 2, byrow = TRUE)))
 }
+
 read_bgm <- function(x) {
   if (nchar(x) < 1) stop("file path is empty string")
   if (!file.exists(x)) mess <- stop(sprintf("no file found '%s'\n", x))
@@ -25,9 +26,18 @@ read_bgm <- function(x) {
     stop(sprintf("no lines found in file %s", x))
   }
   tx <- gsub("\\t", " ", tx)
-  list(face = faces_parse(tx), box = boxes_parse(tx), verts = verts_parse(tx), iface = iface_parse(tx))
+  list(face = faces_parse(tx), 
+       box = boxes_parse(tx), 
+       vertex = verts_parse(tx), 
+       iface = iface_parse(tx), 
+       meta = meta_parse(tx) %>% dplyr::mutate(projection = fixproj(projection)))
 }
-
+meta_parse <- function(tx) {
+  tags <- c("maxwcbotz", "nbox", "nface", "projection")
+  tibble::as_tibble(lapply(stats::setNames(purrr::map(tags, 
+             function(a) gsub("^\\s+", "", gsub(a, "", grep(a, tx, value = TRUE)))), 
+             tags), type.convert, as.is = TRUE))
+}
 iface_parse <- function(tx) {
   bind_rows(lapply(strsplit(stringr::str_subset(tx, "box[0-9]{1,}.iface"), " "), function(x) tibble::tibble(name = x[1], iface = as.integer(x[-1])))) %>% 
     mutate(name = gsub("\\.iface", "", name))
