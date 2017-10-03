@@ -35,4 +35,3 @@ sppoints <- pointSpatial(bgm)
 names(sppoints)
 nrow(sppoints)
 }
-

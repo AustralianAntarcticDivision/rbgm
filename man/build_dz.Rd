@@ -46,4 +46,3 @@ sprintf("morelabel,\%i,\%s", x, paste(as.integer(build_dz(dd[x])), collapse = ",
 }
 tex2 <- sapply(seq(length(dd)),  f2)
 }
-

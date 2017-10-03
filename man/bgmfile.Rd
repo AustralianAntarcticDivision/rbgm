@@ -29,4 +29,3 @@ bgm
 See helper functions to convert the bgm tables to `Spatial` objects, \code{\link{boxSpatial}}, 
 \code{\link{faceSpatial}}, \code{\link{nodeSpatial}}, \code{\link{boundarySpatial}}, \code{\link{pointSpatial}}
 }
-
