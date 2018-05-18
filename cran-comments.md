@@ -6,6 +6,3 @@
 
 0 ERRORs | 0 WARNINGS | 0 NOTES
 
-
-## Response to check results
-

@@ -1,6 +1,6 @@
-# rbgm dev
+# rbgm 0.0.5
 
-* Included `rgeos` and `spdplyr` in Suggests. 
+* Included `rgeos` and `spdplyr` in Suggests, thanks to CRAN. 
 
 * added new function 'read_bgm' as a more obvious version of the original read function 'bgmfile'
 
