@@ -1,7 +1,7 @@
 Package: rbgm
 Type: Package
 Title: Tools for 'Box Geometry Model' (BGM) Files and Topology for the Atlantis Ecosystem Model
-Version: 0.0.4.9001
+Version: 0.0.5
 Authors@R: c(
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
     )
@@ -9,19 +9,24 @@ Depends:
    R (>= 3.2.2), 
     raster,
     sp
-Imports:
+Imports: 
     dplyr,
-    geosphere, 
-    tibble (>= 1.1)
+    geosphere,
+    tibble (>= 1.1),
+    stringr,
+    readr, 
+    rlang
 Suggests:
     bgmfiles, 
     covr,
     graticule, 
     knitr,
     rgdal,
+    rgeos,
     rmarkdown,
     roxygen2, 
     scales, 
+    spdplyr,
     testthat
 Description: Facilities for working with Atlantis box-geometry model (BGM) 
  files. Atlantis is a deterministic, biogeochemical, whole-of-ecosystem model. 
@@ -33,6 +38,6 @@ NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
 RoxygenNote: 6.0.1
-URL: https://AustralianAntarcticDivision.github.io/rbgm/, http://atlantis.cmar.csiro.au/
+URL: https://research.csiro.au/atlantis/
 BugReports: https://github.com/AustralianAntarcticDivision/rbgm/issues/
 VignetteBuilder: knitr

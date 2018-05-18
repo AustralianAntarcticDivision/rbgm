@@ -110,7 +110,11 @@ bgmfile <- function(x, ...) {
 }
 
 
-
+#' @name bgmfile
+#' @export
+read_bgm <- function(x, ...) {
+  bgmfile(x, ...)
+}
 # #' @importFrom dplyr select_
 # box2pslg <- function(x) {
 #   x <- head(x$verts, -1) %>% dplyr::select_("x", "y") %>% as.matrix

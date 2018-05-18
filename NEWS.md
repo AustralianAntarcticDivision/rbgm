@@ -1,5 +1,9 @@
 # rbgm dev
 
+* Included `rgeos` and `spdplyr` in Suggests. 
+
+* added new function 'read_bgm' as a more obvious version of the original read function 'bgmfile'
+
 * removed names from component sp lists to avoid troubles in sf causing troubles in mapview
 
 # rbgm 0.0.4

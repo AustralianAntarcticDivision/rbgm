@@ -102,5 +102,6 @@ plot(boxSpatial(bgm), add = TRUE)
 
 ## More information
 
-The BGM format and usage is described at the (registration-required) Atlantis wiki: http://atlantis.cmar.csiro.au/
+The BGM format and usage is described at the Atlantis site. https://research.csiro.au/atlantis/
+
 

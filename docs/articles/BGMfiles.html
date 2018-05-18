@@ -8,14 +8,17 @@
 <title>Box Geometry Model (BGM) files • rbgm</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Box Geometry Model (BGM) files">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -24,18 +27,43 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">rbgm</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">rbgm</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../articles/index.html">Articles</a>
+      <a href="../articles/BGM_Spatial.html">BGM as Spatial objects</a>
+    </li>
+    <li>
+      <a href="../articles/BGM_examplefiles.html">BGM examples</a>
+    </li>
+    <li>
+      <a href="../articles/BGMfiles.html">Box Geometry Model (BGM) files</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -48,20 +76,23 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Box Geometry Model (BGM) files</h1>
                         <h4 class="author">Michael D. Sumner</h4>
             
-            <h4 class="date">2017-01-08</h4>
-          </div>
+            <h4 class="date">2018-05-18</h4>
+      
+      
+      <div class="hidden name"><code>BGMfiles.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <div id="box-geometry-model-files" class="section level1">
 <h1 class="hasAnchor">
-<html><body><a href="#box-geometry-model-files" class="anchor"> </a></body></html>Box Geometry Model files</h1>
+<a href="#box-geometry-model-files" class="anchor"></a>Box Geometry Model files</h1>
 <p>Box Geometry Model files are text files that store a spatially-explicit model domain used by the Atlantis Ecosystem Model.</p>
 <p>The model domain consists of <strong>boxes</strong> (polygons) composed of <strong>faces</strong> (line segments) and an overall <strong>boundary</strong> that delimits the domain of the model.</p>
 <p>The boundary will include boundary polygons that are not boxes in the model, but some box edges are on this boundary, for example some models bounded by land do not have boundary boxes on this edge.</p>
@@ -69,9 +100,9 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rbgm)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tibble)
-mfile &lt;-<span class="st"> </span>bgmfiles::<span class="kw">bgmfiles</span>()[<span class="dv">1</span>]
+mfile &lt;-<span class="st"> </span>bgmfiles<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/bgmfiles/topics/bgmfiles">bgmfiles</a></span>()[<span class="dv">1</span>]
 
-bgm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/bgmfile.html">bgmfile</a></span>(mfile)
+bgm &lt;-<span class="st"> </span><span class="kw">bgmfile</span>(mfile)
 
 <span class="kw">names</span>(bgm)</code></pre></div>
 <pre><code>## [1] "vertices"         "facesXverts"      "faces"           
@@ -80,88 +111,88 @@ bgm &lt;-<span class="st"> </span><span class="kw"><a href="../reference/bgmfile
 </div>
 <div id="box-and-face-attributes-and-model-topology" class="section level1">
 <h1 class="hasAnchor">
-<html><body><a href="#box-and-face-attributes-and-model-topology" class="anchor"> </a></body></html>Box and face attributes, and model topology</h1>
+<a href="#box-and-face-attributes-and-model-topology" class="anchor"></a>Box and face attributes, and model topology</h1>
 <p>Both boxes and faces have attributes stored row-wise in the respective table.</p>
 <p>These are the box attributes for this example</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(bgm$boxes)</code></pre></div>
-<pre><code>## # A tibble: 35 × 9
-##    label nconn  botz       area vertmix horizmix insideX insideY  .bx0
-##    &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt;   &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1   Box0     7 -53.7 9254788445       1        1 3430169 3073000     0
-## 2   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 3   Box2   120 -55.7 3922348664       1        1 3521055 3050400     2
-## 4   Box3   105 -53.4 3576072582       1        1 3523085 3077300     3
-## 5   Box4    83 -30.0 1672921591       1        1 3522699 3102469     4
-## 6   Box5    12 -24.1  411048577       1        1 3496968 3124359     5
-## 7   Box6    16 -10.2  447377917       1        1 3520947 3133926     6
-## 8   Box7    18   0.0  402661184       1        1 3523883 3122610     7
-## 9   Box8    13 -15.0  705100219       1        1 3562646 3115917     8
-## 10  Box9     3  -5.4   93312196       1        1 3581060 3127380     9
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(bgm<span class="op">$</span>boxes)</code></pre></div>
+<pre><code>## # A tibble: 35 x 9
+##    label nconn  botz        area vertmix horizmix  insideX  insideY  .bx0
+##    &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;   &lt;int&gt;    &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+##  1 Box0      7 -53.7 9254788445.       1        1 3430169. 3073000.     0
+##  2 Box1     81 -48.9 1996056923.       1        1 3498567. 3029308.     1
+##  3 Box2    120 -55.7 3922348664.       1        1 3521055. 3050400.     2
+##  4 Box3    105 -53.4 3576072582.       1        1 3523085. 3077300.     3
+##  5 Box4     83 -30   1672921591.       1        1 3522699. 3102469.     4
+##  6 Box5     12 -24.1  411048577.       1        1 3496968. 3124359.     5
+##  7 Box6     16 -10.2  447377917.       1        1 3520947. 3133926.     6
+##  8 Box7     18   0    402661184.       1        1 3523883. 3122610.     7
+##  9 Box8     13 -15    705100219.       1        1 3562646. 3115917.     8
+## 10 Box9      3  -5.4   93312196.       1        1 3581060. 3127380.     9
 ## # ... with 25 more rows</code></pre>
 <p>and these are the face attributes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(bgm$faces)</code></pre></div>
-<pre><code>## # A tibble: 824 × 7
-##       cosine      sine  left right     length  .fx0 label
-##        &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt; &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;
-## 1  0.1117110 0.9937407    34    32 29876.1751     0 face0
-## 2  0.5063539 0.8623257    32    33 17890.9481     1 face1
-## 3  0.1156084 0.9932949    34    33 10168.5158     2 face2
-## 4  0.1166131 0.9931774    34    33   155.3584     3 face3
-## 5  0.8692497 0.4943733    33    27  9390.6169     4 face4
-## 6  0.1178758 0.9930283    34    27 12817.8024     5 face5
-## 7  0.1211979 0.9926284    34    27 21316.3942     6 face6
-## 8  0.2764643 0.9610242    32    33 25393.5801     7 face7
-## 9  0.5142367 0.8576483    32    33  8425.2753     8 face8
-## 10 0.1356335 0.9907591    32    30 14366.1017     9 face9
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(bgm<span class="op">$</span>faces)</code></pre></div>
+<pre><code>## # A tibble: 824 x 7
+##    cosine  sine  left right length  .fx0 label
+##     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;
+##  1  0.112 0.994    34    32 29876.     0 face0
+##  2  0.506 0.862    32    33 17891.     1 face1
+##  3  0.116 0.993    34    33 10169.     2 face2
+##  4  0.117 0.993    34    33   155.     3 face3
+##  5  0.869 0.494    33    27  9391.     4 face4
+##  6  0.118 0.993    34    27 12818.     5 face5
+##  7  0.121 0.993    34    27 21316.     6 face6
+##  8  0.276 0.961    32    33 25394.     7 face7
+##  9  0.514 0.858    32    33  8425.     8 face8
+## 10  0.136 0.991    32    30 14366.     9 face9
 ## # ... with 814 more rows</code></pre>
 <p>By using relations between these tables we can reconstruct the geometry appropriately. (This is pretty painful, but shows that we have all the information required.)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bgm$boxes %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(label %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"Box1"</span>, <span class="st">"Box11"</span>))  %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">inner_join</span>(bgm$boxesXverts, <span class="st">".bx0"</span>) %&gt;%<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bgm<span class="op">$</span>boxes <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(label <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Box1"</span>, <span class="st">"Box11"</span>))  <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/join.html">inner_join</a></span>(bgm<span class="op">$</span>boxesXverts, <span class="st">".bx0"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">print</span>()</code></pre></div>
-<pre><code>## # A tibble: 115 × 10
-##    label nconn  botz       area vertmix horizmix insideX insideY  .bx0
-##    &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt;   &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 2   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 3   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 4   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 5   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 6   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 7   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 8   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 9   Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## 10  Box1    81 -48.9 1996056923       1        1 3498567 3029308     1
-## # ... with 105 more rows, and 1 more variables: .vx0 &lt;int&gt;</code></pre>
+<pre><code>## # A tibble: 115 x 10
+##    label nconn  botz     area vertmix horizmix insideX insideY  .bx0  .vx0
+##    &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;   &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+##  1 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   157
+##  2 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   178
+##  3 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   222
+##  4 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   219
+##  5 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   218
+##  6 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   217
+##  7 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   216
+##  8 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   215
+##  9 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   214
+## 10 Box1     81 -48.9   2.00e9       1        1  3.50e6  3.03e6     1   213
+## # ... with 105 more rows</code></pre>
 </div>
 <div id="convert-to-spatial-objects" class="section level1">
 <h1 class="hasAnchor">
-<html><body><a href="#convert-to-spatial-objects" class="anchor"> </a></body></html>Convert to Spatial objects</h1>
+<a href="#convert-to-spatial-objects" class="anchor"></a>Convert to Spatial objects</h1>
 <p>To avoid constructing boxes and faces manually, <code>rbgm</code> provides several helper functions to create the boxes, faces, coordinates, and boundary as <code>Spatial</code> objects from the <code>sp</code> package.</p>
 <p>Since Spatial objects cannot store the full connectivity of the BGM structure, it is best to consider these as one-way conversions, keeping all the details in the raw tables as above.</p>
 <p>To generate an object with just “Box1” and “Box11”, use the function <code>boxSpatial</code> and then subset on box labels.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">boxes &lt;-<span class="st"> </span><span class="kw">subset</span>(<span class="kw"><a href="../reference/boxSpatial.html">boxSpatial</a></span>(bgm), label %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">"Box2"</span>, <span class="st">"Box16"</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">boxes &lt;-<span class="st"> </span><span class="kw">subset</span>(<span class="kw"><a href="../reference/rbgm-Spatial.html">boxSpatial</a></span>(bgm), label <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">"Box2"</span>, <span class="st">"Box16"</span>))</code></pre></div>
 <p>To determine which faces belong to these boxes, first create all faces and then join.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">allfaces &lt;-<span class="st"> </span><span class="kw"><a href="../reference/boxSpatial.html">faceSpatial</a></span>(bgm)
-faces &lt;-<span class="st"> </span>allfaces[<span class="kw">match</span>(bgm$facesXboxes$iface[<span class="kw">which</span>(bgm$facesXboxes$.bx0 %in%<span class="st"> </span>boxes$.bx0)], allfaces$.fx0), ]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">allfaces &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rbgm-Spatial.html">faceSpatial</a></span>(bgm)
+faces &lt;-<span class="st"> </span>allfaces[<span class="kw">match</span>(bgm<span class="op">$</span>facesXboxes<span class="op">$</span>iface[<span class="kw">which</span>(bgm<span class="op">$</span>facesXboxes<span class="op">$</span>.bx0 <span class="op">%in%</span><span class="st"> </span>boxes<span class="op">$</span>.bx0)], allfaces<span class="op">$</span>.fx0), ]
 
 ## this method needs spdplyr
 <span class="co">#face &lt;- romsface %&gt;% inner_join(as.data.frame(box) %&gt;% inner_join(bgm$facesXboxes, ".bx0") %&gt;% transmute(.fx0 = iface), ".fx0")</span></code></pre></div>
 <p>Plot the two layers together.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(boxes, <span class="dt">main =</span> <span class="st">"boxes only"</span>)
-<span class="kw">text</span>(<span class="kw">coordinates</span>(boxes), <span class="dt">lab =</span> <span class="kw">sprintf</span>(<span class="st">"%s</span><span class="ch">\n</span><span class="st">nconn: %s"</span>, boxes$label, boxes$nconn))</code></pre></div>
-<p><img src="BGMfiles_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<span class="kw">text</span>(<span class="kw">coordinates</span>(boxes), <span class="dt">lab =</span> <span class="kw">sprintf</span>(<span class="st">"%s</span><span class="ch">\n</span><span class="st">nconn: %s"</span>, boxes<span class="op">$</span>label, boxes<span class="op">$</span>nconn))</code></pre></div>
+<p><img src="BGMfiles_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(boxes, <span class="dt">main =</span> <span class="st">"boxes and faces overlaid"</span>)
-<span class="kw">text</span>(<span class="kw">coordinates</span>(boxes), <span class="dt">lab =</span> <span class="kw">sprintf</span>(<span class="st">"%s</span><span class="ch">\n</span><span class="st">nconn: %s"</span>, boxes$label, boxes$nconn))
+<span class="kw">text</span>(<span class="kw">coordinates</span>(boxes), <span class="dt">lab =</span> <span class="kw">sprintf</span>(<span class="st">"%s</span><span class="ch">\n</span><span class="st">nconn: %s"</span>, boxes<span class="op">$</span>label, boxes<span class="op">$</span>nconn))
 <span class="kw">plot</span>(faces, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">"firebrick"</span>), <span class="dt">lwd =</span> <span class="dv">1</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="BGMfiles_files/figure-html/unnamed-chunk-7-2.png" width="672"> (Future releases will provide simpler tools to do this kind of matching).</p>
-</div>
+<p><img src="BGMfiles_files/figure-html/unnamed-chunk-7-2.png" width="700"> (Future releases will provide simpler tools to do this kind of matching).</p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#box-geometry-model-files">Box Geometry Model files</a></li>
       <li><a href="#box-and-face-attributes-and-model-topology">Box and face attributes, and model topology</a></li>
@@ -178,11 +209,13 @@ faces &lt;-<span class="st"> </span>allfaces[<span class="kw">match</span>(bgm$f
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

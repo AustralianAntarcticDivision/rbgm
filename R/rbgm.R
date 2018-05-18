@@ -32,6 +32,7 @@
 #' 
 #' @importFrom dplyr row_number
 #' @importFrom raster isLonLat 
+#' @importFrom rlang .data
 #' @importFrom sp spDistsN1 Line Lines SpatialLines CRS SpatialLinesDataFrame
 #' @name rbgm-package
 #' @docType package
