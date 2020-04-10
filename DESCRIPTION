@@ -21,8 +21,6 @@ Suggests:
     covr,
     graticule, 
     knitr,
-    rgdal,
-    rgeos,
     rmarkdown,
     roxygen2, 
     scales, 

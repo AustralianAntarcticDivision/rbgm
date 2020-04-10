@@ -42,7 +42,7 @@ read.faces <- function(x, sp = TRUE, densify, ...) {
       ## single pair coordinate line, each a Lines object (so each can have attributes)
       sLines[[i]] <- Lines(list(Line(xf[[i]])), facenum[i])
     }
-    spLines <- SpatialLines(sLines, proj4string = CRS(prjstring))
+    spLines <- SpatialLines(sLines, proj4string = CRS(prjstring, doCheckCRSArgs = FALSE))
     spdf <- SpatialLinesDataFrame(spLines, data.frame(id = facenum, row.names = facenum))
     return(spdf)
   }

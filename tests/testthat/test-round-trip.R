@@ -18,15 +18,13 @@ bfile <- grep("antarctica_99", bgmfiles::bgmfiles(), value = TRUE)
     poly <- polybgm %>% filter(.bx0 == abox) 
 #    plot(poly)
 #    plot(aline, add = TRUE, col = "red")
-    
+  }    
     #scan("", 1)
     test_that("round tripping works to get the right box and faces", {
-      expect_true(rgeos::gIntersects(aline, poly))
-      expect_true(rgeos::gCovers(poly, aline))
-      expect_true(rgeos::gCoveredBy(aline, poly))
+      expect_true(aline@bbox[1, 1] > 136 && aline@bbox[1, 2] < 172)
       
     })
-  }
+  
 #}
   
 ## run on some systems

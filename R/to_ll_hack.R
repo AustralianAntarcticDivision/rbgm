@@ -18,14 +18,15 @@ unproject_bgm <- function(x) {
   idx <- grep(patts[i], txt, value = FALSE)
   asub <- txt[idx]
   coord <- read_coord(asub)
-  coordLL <- rgdal::project(coord, bgm$extra$projection, inv = TRUE)
+  coordLL <- reproj::reproj(coord, source = bgm$extra$projection, 
+                            target = "+proj=longlat +datum=WGS84")
   print(range(coordLL))
   replace <- write_coord(coordLL, read_lab(asub))
   txt[idx] <- replace
   }
   
   ## update the projection!
-  txt[grep("projection", txt)[1]] <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84"
+  txt[grep("projection", txt)[1]] <- "+proj=longlat +datum=WGS84"
   
   txt  
 }

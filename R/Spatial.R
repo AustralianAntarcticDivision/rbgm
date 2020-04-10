@@ -13,7 +13,6 @@
 #' @export
 #' @rdname rbgm-Spatial
 #' @importFrom sp point.in.polygon Polygon Polygons SpatialPolygons SpatialPolygonsDataFrame 
-#' @importFrom dplyr inner_join select_
 #' @examples
 #' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(fname)
@@ -24,10 +23,10 @@
 #' plot(faceSpatial(bgm), col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
 boxSpatial <- function(bgm) {
   data <- bgm$boxes
-  boxverts <- data %>% select_(".bx0", "label") %>% 
+  boxverts <- data %>% select(.data$.bx0, .data$label) %>% 
     inner_join(bgm$boxesXverts, ".bx0") %>% 
     inner_join(bgm$vertices, ".vx0") %>% 
-    dplyr::select_(quote(-.vx0), quote(-.bx0))
+    dplyr::select(-.data$.vx0, -.data$.bx0)
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
@@ -46,13 +45,14 @@ sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_
   p1 <- p1[IDs]  ## override the lex sort
   p1 <- unname(p1)  ## save us, sp can't have named elements
   p2 <- lapply(seq_along(p1), function(ii) Polygons(p1[ii], IDs[ii]))
-  SpatialPolygons(p2, proj4string = CRS(crs))             
+  SpatialPolygons(p2, proj4string = CRS(crs, doCheckCRSArgs = FALSE))             
 } 
 
 #' @export
 #' @rdname rbgm-Spatial
 boundarySpatial <- function(bgm) {
-  SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(bgm$boundaryvertices %>% dplyr::select_("x", "y") %>% as.matrix)), "bdy"))), 
+  SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(bgm$boundaryvertices %>% 
+                          dplyr::select(.data$x, .data$y) %>% as.matrix)), "bdy"))), 
                            data.frame(label = "boundary", row.names = "bdy"))
 }
 
@@ -82,7 +82,7 @@ boundarySpatial <- function(bgm) {
 #' nrow(sppoints)
 nodeSpatial <- function(bgm) {
   SpatialPointsDataFrame(as.matrix(bgm$vertices[, c("x", "y")]), data.frame(.vx0 = bgm$vertices$.vx0), 
-                         proj4string = CRS(bgm$extra["projection"][[1]]))
+                         proj4string = CRS(bgm$extra["projection"][[1]], doCheckCRSArgs = FALSE))
 }
 
 #' @rdname nodeSpatial
@@ -93,17 +93,17 @@ pointSpatial <- function(bgm) {
   df$x <- NULL
   df$y <- NULL
   SpatialPointsDataFrame(as.matrix(bgmv[, c("x", "y")]), as.data.frame(df), 
-                         proj4string = CRS(bgm$extra["projection"][[1]]))
+                         proj4string = CRS(bgm$extra["projection"][[1]], doCheckCRSArgs = FALSE))
 }
 #' @export
 #' @rdname rbgm-Spatial
 faceSpatial <- function(bgm) {
   data <- bgm$faces 
   #data$label <- sprintf("face%i", data$.fx0)
-  faceverts <- data %>% dplyr::select_(".fx0", "label") %>% 
+  faceverts <- data %>% dplyr::select(.data$.fx0, .data$label) %>% 
     inner_join(bgm$facesXverts, ".fx0") %>% 
     inner_join(bgm$vertices, ".vx0") %>% 
-    select_(quote(-.vx0), quote(-.fx0))
+    select(-.data$.vx0, -.data$.fx0)
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
@@ -118,5 +118,5 @@ sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character
   l1 <- unname(l1)
   l2 <- lapply(seq_along(l1), function(ii) Lines(l1[ii], IDs[ii]))
   l2 <- unname(l2) ## no names or sp fail
-  SpatialLines(l2, proj4string = CRS(crs))
+  SpatialLines(l2, proj4string = CRS(crs, doCheckCRSArgs = FALSE))
 }

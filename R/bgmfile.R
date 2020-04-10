@@ -13,7 +13,7 @@
 #' @seealso 
 #' See helper functions to convert the bgm tables to `Spatial` objects, \code{\link{boxSpatial}}, 
 #' \code{\link{faceSpatial}}, \code{\link{nodeSpatial}}, \code{\link{boundarySpatial}}, \code{\link{pointSpatial}}
-#' @importFrom dplyr %>% select distinct_ arrange bind_rows bind_cols distinct mutate mutate_ inner_join
+#' @importFrom dplyr %>% select arrange bind_rows bind_cols distinct mutate inner_join
 #' @importFrom tibble as_tibble tibble
 #' @importFrom utils  head type.convert
 #' @importFrom stringr str_split
@@ -29,11 +29,18 @@ bgmfile <- function(x, ...) {
   if (nchar(x) < 1) stop("file path is empty string")
   if (!file.exists(x)) mess <- stop(sprintf("no file found '%s'\n", x))
   #system.time(tx <- readLines(x)) 
-  tx <- stringr::str_split(readr::read_file(x), "\n")[[1]]
+  
+  x0 <- readr::read_file(x)
+  if (nchar(x0) < 1) {
+    stop(sprintf("no lines found in file %s", x))
+  }
+  
+  tx <- stringr::str_split(x0, "\n")[[1]]
   nch <- length(tx)
   if (nch == 0) {
     stop(sprintf("no lines found in file %s", x))
   }
+  
   ## all indexes
 #  facesInd <- grep("^face", tx)
   facesInd <- which(stringr::str_detect(tx, "^face"))
@@ -77,8 +84,8 @@ bgmfile <- function(x, ...) {
                                                               tibble::as_tibble(a[c("insideX", "insideY", ".bx0")]))))
   ## ibox/iface are the component faces, and ibox the neighbouring box (.bx0 is the box we belong to!)
   facesXboxes <- dplyr::bind_rows(lapply(boxes0, "[[", "faces"), .id = ".bx0") %>% 
-    dplyr::mutate_(.bx0 = quote(as.numeric(.bx0) - 1))
-  
+    dplyr::mutate(.bx0 = as.numeric(.bx0) - 1)
+
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
   boundaryverts <- tibble::tibble(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
   
@@ -99,11 +106,13 @@ bgmfile <- function(x, ...) {
   
   
   ## I think bnd_verts already all included in box_verts
-  vertices <- bind_rows(faceverts[, c("x", "y")], boxverts[, c("x", "y")], boundaryverts[, c("x", "y")]) %>% distinct_() %>% dplyr::arrange_("x", "y") %>% mutate(.vx0 = row_number())
+  vertices <- bind_rows(faceverts[, c("x", "y")], boxverts[, c("x", "y")], boundaryverts[, c("x", "y")]) %>% 
+    distinct() %>% dplyr::arrange(.data$x, .data$y) %>% mutate(.vx0 = row_number())
   
-  facesXverts <- faceverts %>% mutate(.p0 = rep(1:2, length = nrow(faceverts)))  %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% dplyr::select_(quote(-x), quote(-y))
+  facesXverts <- faceverts %>% mutate(.p0 = rep(1:2, length = nrow(faceverts)))  %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% 
+    dplyr::select(-.data$x, -.data$y)
   
-  boxesXverts <- boxverts %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% dplyr::select_(quote(-x), quote(-y))
+  boxesXverts <- boxverts %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% dplyr::select(-.data$x, -.data$y)
   
   # allverts <- allverts %>% select(x, y)
   list(vertices = vertices, facesXverts = facesXverts, faces = faces, facesXboxes = facesXboxes, boxesXverts = boxesXverts, boxes = boxes, boundaryvertices = boundaryverts, extra = extra)
@@ -115,14 +124,4 @@ bgmfile <- function(x, ...) {
 read_bgm <- function(x, ...) {
   bgmfile(x, ...)
 }
-# #' @importFrom dplyr select_
-# box2pslg <- function(x) {
-#   x <- head(x$verts, -1) %>% dplyr::select_("x", "y") %>% as.matrix
-#   RTriangle::pslg(x, S = segmaker(x))
-# }
-# segmaker <- function(x) {
-#   on.exit(options(op))
-#   op <- options(warn = -1)
-#   matrix(seq(nrow(x)), nrow = nrow(x) + 1, ncol  = 2)[seq(nrow(x)), ]
-# }
 
