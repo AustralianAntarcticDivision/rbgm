@@ -14,8 +14,9 @@ Imports:
     geosphere,
     tibble (>= 1.1),
     stringr,
-    readr, 
-    rlang
+    readr,
+    rlang,
+    reproj
 Suggests:
     bgmfiles, 
     covr,
