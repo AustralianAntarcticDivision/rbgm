@@ -34,7 +34,7 @@ read_lab <- function(x) {
   do.call(rbind, lapply(strsplit(x, "\\s+"), function(x) head(x, 1)))
 }
 read_coord <- function(x) {
-  out <- do.call(rbind, lapply(strsplit(x, "\\s+"), function(x) tail(x, 2)))
+  out <- do.call(rbind, lapply(strsplit(x, "\\s+"), function(x) utils::tail(x, 2)))
   mode(out) <- "double"
   out
 }

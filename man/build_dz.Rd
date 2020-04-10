@@ -4,8 +4,10 @@
 \alias{build_dz}
 \title{Build Atlantis dz Values}
 \usage{
-build_dz(z, zlayers = c(-Inf, -2000, -1000, -750, -400, -300, -200, -100, -50,
-  -20, 0))
+build_dz(
+  z,
+  zlayers = c(-Inf, -2000, -1000, -750, -400, -300, -200, -100, -50, -20, 0)
+)
 }
 \arguments{
 \item{z}{lowermost value}

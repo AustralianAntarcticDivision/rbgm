@@ -2,7 +2,6 @@
 % Please edit documentation in R/bgmfile.r
 \name{bgmfile}
 \alias{bgmfile}
-\alias{bgmfile}
 \alias{read_bgm}
 \title{Read BGM}
 \usage{

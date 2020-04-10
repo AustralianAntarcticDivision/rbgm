@@ -1,0 +1,4 @@
+#man/*.Rd
+*.R
+*.html
+*.Rmd
