@@ -84,7 +84,7 @@ bgmfile <- function(x, ...) {
                                                               tibble::as_tibble(a[c("insideX", "insideY", ".bx0")]))))
   ## ibox/iface are the component faces, and ibox the neighbouring box (.bx0 is the box we belong to!)
   facesXboxes <- dplyr::bind_rows(lapply(boxes0, "[[", "faces"), .id = ".bx0") %>% 
-    dplyr::mutate(.bx0 = as.numeric(.bx0) - 1)
+    dplyr::mutate(.bx0 = as.numeric(.data$.bx0) - 1)
 
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
   boundaryverts <- tibble::tibble(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
