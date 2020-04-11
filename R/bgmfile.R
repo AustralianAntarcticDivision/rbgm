@@ -14,14 +14,12 @@
 #' See helper functions to convert the bgm tables to `Spatial` objects, \code{\link{boxSpatial}}, 
 #' \code{\link{faceSpatial}}, \code{\link{nodeSpatial}}, \code{\link{boundarySpatial}}, \code{\link{pointSpatial}}
 #' @importFrom dplyr %>% select arrange bind_rows bind_cols distinct mutate inner_join
-#' @importFrom tibble as_tibble tibble
 #' @importFrom utils  head type.convert
 #' @examples 
 #' library(bgmfiles)
 #' bfile <- sample(bgmfiles(), 1L)
 #' bgm <- bgmfile(bfile)
-#' library(tibble)
-#' bgm
+#' str(bgm)
 bgmfile <- function(x, ...) {
 
   if (nchar(x) < 1) stop("file path is empty string")

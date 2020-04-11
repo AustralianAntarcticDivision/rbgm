@@ -14,8 +14,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(raster)
 library(sp)
 library(dplyr)
-library(tibble)
 ```
+
 # Box Geometry Model files		
 
 Box Geometry Model files are text files that store a spatially-explicit model domain used by the Atlantis Ecosystem Model. 
@@ -29,7 +29,6 @@ The model domain consists of **boxes** (polygons) composed of **faces** (line se
 ```{r}
 library(rbgm)
 library(dplyr)
-library(tibble)
 mfile <- bgmfiles::bgmfiles()[1]
 
 bgm <- bgmfile(mfile)
@@ -53,13 +52,16 @@ and these are the face attributes.
 ```{r}
 print(bgm$faces)
 ```
+
+
 By using relations between these tables we can reconstruct the geometry appropriately. (This is pretty painful, but shows that we have all the information required.)
 
 ```{r}
 bgm$boxes %>% 
   filter(label %in% c("Box1", "Box11"))  %>% 
   inner_join(bgm$boxesXverts, ".bx0") %>% 
-  print()
+  head()
+
 ```
 
 # Convert to Spatial objects
@@ -81,9 +83,6 @@ To determine which faces belong to these boxes, first create all faces and then 
 allfaces <- faceSpatial(bgm)
 faces <- allfaces[match(bgm$facesXboxes$iface[which(bgm$facesXboxes$.bx0 %in% boxes$.bx0)], allfaces$.fx0), ]
 
-## this method needs spdplyr
-#face <- romsface %>% inner_join(as.data.frame(box) %>% inner_join(bgm$facesXboxes, ".bx0") %>% transmute(.fx0 = iface), ".fx0")
-  
 ```
 
 Plot the two layers together. 
@@ -96,6 +95,8 @@ plot(boxes, main = "boxes and faces overlaid")
 text(coordinates(boxes), lab = sprintf("%s\nnconn: %s", boxes$label, boxes$nconn))
 plot(faces, col = c("firebrick"), lwd = 1, add = TRUE)
 ```
+
+
 (Future releases will provide simpler tools to do this kind of matching).
 
  

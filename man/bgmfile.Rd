@@ -25,8 +25,7 @@ This function reads everything from the .bgm file and returns it as linked table
 library(bgmfiles)
 bfile <- sample(bgmfiles(), 1L)
 bgm <- bgmfile(bfile)
-library(tibble)
-bgm
+str(bgm)
 }
 \seealso{
 See helper functions to convert the bgm tables to `Spatial` objects, \code{\link{boxSpatial}}, 
