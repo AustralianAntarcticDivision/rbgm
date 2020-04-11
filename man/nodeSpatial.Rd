@@ -2,12 +2,18 @@
 % Please edit documentation in R/Spatial.R
 \name{nodeSpatial}
 \alias{nodeSpatial}
+\alias{node_sf}
 \alias{pointSpatial}
+\alias{point_sf}
 \title{Vertices as Spatial points.}
 \usage{
 nodeSpatial(bgm)
 
+node_sf(bgm)
+
 pointSpatial(bgm)
+
+point_sf(bgm)
 }
 \arguments{
 \item{bgm}{BGM object from \code{\link{bgmfile}}}

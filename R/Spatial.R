@@ -1,3 +1,13 @@
+## a bit like spbabel::sp() or sfheaders::sf_pol
+sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_) {
+  p1 <- lapply(split(x[, xy], x[[object]]), function(x) Polygon(as.matrix(x)))
+  IDs <- unique(x[[object]])
+  p1 <- p1[IDs]  ## override the lex sort
+  p1 <- unname(p1)  ## save us, sp can't have named elements
+  p2 <- lapply(seq_along(p1), function(ii) Polygons(p1[ii], IDs[ii]))
+  SpatialPolygons(p2, proj4string = CRS(crs, doCheckCRSArgs = FALSE))             
+} 
+
 
 #' Convert to Spatial
 #'
@@ -23,14 +33,16 @@
 #' plot(faceSpatial(bgm), col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
 boxSpatial <- function(bgm) {
   data <- bgm$boxes
-  boxverts <- data %>% select(.data$.bx0, .data$label) %>% 
-    inner_join(bgm$boxesXverts, ".bx0") %>% 
-    inner_join(bgm$vertices, ".vx0") %>% 
+  data <- as.data.frame(data, stringsAsFactors = FALSE)
+  rownames(data) <- data$label
+
+    
+  boxverts <- data %>% dplyr::select(.data$.bx0, .data$label) %>% 
+    dplyr::inner_join(bgm$boxesXverts, ".bx0") %>% 
+    dplyr::inner_join(bgm$vertices, ".vx0") %>% 
     dplyr::select(-.data$.vx0, -.data$.bx0)
   
-  data <- as.data.frame(data)
-  rownames(data) <- data$label
-  ## test for inside boundary
+ ## test for inside boundary
   inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
   data$boundary <- inside < 1
   out <- SpatialPolygonsDataFrame(sptableBox(boxverts, object = "label", crs = bgm$extra$projection), data)
@@ -38,15 +50,40 @@ boxSpatial <- function(bgm) {
   out$box_id <- seq(0, nrow(out) - 1)
   out
 }
+#' @export
+#' @rdname rbgm-Spatial
+box_sp <- boxSpatial
 
-sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_) {
-  p1 <- lapply(split(x[, xy], x[[object]]), function(x) Polygon(as.matrix(x)))
-  IDs <- unique(x[[object]])
-  p1 <- p1[IDs]  ## override the lex sort
-  p1 <- unname(p1)  ## save us, sp can't have named elements
-  p2 <- lapply(seq_along(p1), function(ii) Polygons(p1[ii], IDs[ii]))
-  SpatialPolygons(p2, proj4string = CRS(crs, doCheckCRSArgs = FALSE))             
-} 
+#' @rdname rbgm-Spatial
+#' @export
+box_sf <- function(bgm) {
+  data <- bgm$boxes
+  data <- as.data.frame(data, stringsAsFactors = FALSE)
+  rownames(data) <- data$label
+  
+  
+  boxverts <- data %>% dplyr::select(.data$.bx0, .data$label) %>% 
+    dplyr::inner_join(bgm$boxesXverts, ".bx0") %>% 
+    dplyr::inner_join(bgm$vertices, ".vx0") %>% 
+    dplyr::select(-.data$.vx0, -.data$.bx0)
+  
+  ## test for inside boundary
+  inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
+  data$boundary <- inside < 1
+  sfc <- sfheaders::sfc_polygon(boxverts, x = "x", y = "y", polygon_id = "label", linestring_id = "label")
+  attr(sfc, "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  
+  data[["geometry"]] <- sfc
+  attr(data, "sf_column") <- "geometry"
+  class(data) <- c("sf", "tbl_df", "tbl", "data.frame")
+  ## add on box_id for bgmeriser
+  data[["box_id"]] <- seq(0, nrow(data) - 1)
+  data
+  
+}
+
+
+
 
 #' @export
 #' @rdname rbgm-Spatial
@@ -54,6 +91,22 @@ boundarySpatial <- function(bgm) {
   SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(bgm$boundaryvertices %>% 
                           dplyr::select(.data$x, .data$y) %>% as.matrix)), "bdy"))), 
                            data.frame(label = "boundary", row.names = "bdy"))
+}
+
+#' @export
+#' @rdname rbgm-Spatial
+boundary_sp <- boundarySpatial
+
+#' @export
+#' @rdname rbgm-Spatial
+boundary_sf <- function(bgm) {
+  x <- bgm$boundaryvertices %>% dplyr::select(.data$x, .data$y)
+  x$id <- 1
+  out <- sfheaders::sf_polygon(x, x= "x", y = "y", polygon_id = "id", linestring_id = "id")
+  out[["label"]] <- "boundary"
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  
+  out
 }
 
 #' Vertices as Spatial points. 
@@ -69,6 +122,7 @@ boundarySpatial <- function(bgm) {
 #' @return  \code{\link[sp]{SpatialPointsDataFrame}}
 #' @export
 #' @importFrom sp SpatialPointsDataFrame proj4string 
+#' @aliases node_sf
 #' @examples
 #' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(fname)
@@ -85,6 +139,18 @@ nodeSpatial <- function(bgm) {
                          proj4string = CRS(bgm$extra["projection"][[1]], doCheckCRSArgs = FALSE))
 }
 
+#' @export
+#' @rdname rbgm-Spatial
+node_sp <- nodeSpatial
+
+#' @rdname nodeSpatial
+#' @export 
+node_sf <- function(bgm) {
+  out <- sfheaders::sf_point(data.frame(x = bgm$vertices$x, y = bgm$vertices$y))
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  
+  out
+}
 #' @rdname nodeSpatial
 #' @export 
 pointSpatial <- function(bgm) {
@@ -94,6 +160,19 @@ pointSpatial <- function(bgm) {
   df$y <- NULL
   SpatialPointsDataFrame(as.matrix(bgmv[, c("x", "y")]), as.data.frame(df), 
                          proj4string = CRS(bgm$extra["projection"][[1]], doCheckCRSArgs = FALSE))
+}
+#' @export
+#' @rdname rbgm-Spatial
+point_sp <- pointSpatial
+
+#' @rdname nodeSpatial
+#' @export 
+point_sf <- function(bgm) {
+  bgmv <- bgm$vertices %>% inner_join(bgm$facesXverts)
+  out <- sfheaders::sf_point(bgmv, x = "x", y = "y", keep = TRUE) 
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  
+  out
 }
 #' @export
 #' @rdname rbgm-Spatial
@@ -110,7 +189,27 @@ faceSpatial <- function(bgm) {
   SpatialLinesDataFrame(sptableFace(faceverts, object = "label", crs = bgm$extra$projection), data)
   
 }
+#' @export
+#' @rdname rbgm-Spatial
+face_sp <- faceSpatial
 
+#' @export
+#' @rdname rbgm-Spatial
+face_sf <- function(bgm) {
+  data <- bgm$faces 
+  #data$label <- sprintf("face%i", data$.fx0)
+  faceverts <- data %>% dplyr::select(.data$.fx0, .data$label) %>% 
+    inner_join(bgm$facesXverts, ".fx0") %>% 
+    inner_join(bgm$vertices, ".vx0") %>% 
+    select(-.data$.vx0, -.data$.fx0)
+  
+  data <- as.data.frame(data)
+  rownames(data) <- data$label
+  faceverts$label <- as.integer(factor(faceverts$label))
+  out <- sfheaders::sf_linestring(faceverts, x = "x", y = "y", linestring_id = "label")
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  out
+}
 sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character_) {
   IDs <- unique(x[[object]])
   ## ouch, lapply returns sorted on x[[object]] - ouch!  
