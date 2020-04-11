@@ -16,8 +16,6 @@
 #' @importFrom dplyr %>% select arrange bind_rows bind_cols distinct mutate inner_join
 #' @importFrom tibble as_tibble tibble
 #' @importFrom utils  head type.convert
-#' @importFrom stringr str_split
-#' @importFrom readr read_file
 #' @examples 
 #' library(bgmfiles)
 #' bfile <- sample(bgmfiles(), 1L)
@@ -30,32 +28,33 @@ bgmfile <- function(x, ...) {
   if (!file.exists(x)) mess <- stop(sprintf("no file found '%s'\n", x))
   #system.time(tx <- readLines(x)) 
   
-  x0 <- readr::read_file(x)
-  if (nchar(x0) < 1) {
+  x0 <- readLines(x)
+  if (all(nchar(x0) < 1)) {
     stop(sprintf("no lines found in file %s", x))
   }
-  
-  tx <- stringr::str_split(x0, "\n")[[1]]
+  #browser()
+  tx <- unlist(strsplit(x0, "\n")) ##[[1]]
   nch <- length(tx)
   if (nch == 0) {
     stop(sprintf("no lines found in file %s", x))
   }
   
   ## all indexes
-#  facesInd <- grep("^face", tx)
-  facesInd <- which(stringr::str_detect(tx, "^face"))
- # boxesInd <- grep("^box", tx)
-  boxesInd <- which(stringr::str_detect(tx, "^box"))
-#  bnd_vertInd <- grep("^bnd_vert", tx)
-  bnd_vertInd <- which(stringr::str_detect(tx, "^bnd_vert"))
+  facesInd <- grep("^face", tx)
+#  facesInd <- which(stringr::str_detect(tx, "^face"))
+  boxesInd <- grep("^box", tx)
+ # boxesInd <- which(stringr::str_detect(tx, "^box"))
+  bnd_vertInd <- grep("^bnd_vert", tx)
+#  bnd_vertInd <- which(stringr::str_detect(tx, "^bnd_vert"))
   ## all comments
-#  hashInd <- grep("^#", tx)
- hashInd <- which(stringr::str_detect(tx, "^#")) 
+  hashInd <- grep("^#", tx)
+ #hashInd <- which(stringr::str_detect(tx, "^#")) 
   ## unique starting tokens
   ust <- sort(unique(unlist(lapply(strsplit(tx[-c(facesInd, boxesInd, bnd_vertInd, hashInd)], "\\s+"), "[", 1))))
   ust <- ust[nchar(ust) > 0]
   extra <- lapply(ust, function(x) gsub("\\s+$", "", gsub("^\\s+", "", gsub(x, "", grep(x, tx, value = TRUE)))))
   names(extra) <- ust
+
   ## some (most?) .bgm have PROJ.4 strings without "+" denoting arguments
   extra$projection <- fixproj(extra$projection)  # <- sprintf("+%s", gsub(" ", " +", extra["projection"]))
   ## nface is repeated in Guam_utm1.bgm

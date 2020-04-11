@@ -13,8 +13,6 @@ Imports:
     dplyr,
     geosphere,
     tibble (>= 1.1),
-    stringr,
-    readr,
     rlang,
     reproj
 Suggests:
@@ -37,6 +35,7 @@ NeedsCompilation: no
 ByteCompile: yes
 License: GPL-3
 RoxygenNote: 7.1.0
+Encoding: UTF-8
 URL: https://research.csiro.au/atlantis/
 BugReports: https://github.com/AustralianAntarcticDivision/rbgm/issues/
 VignetteBuilder: knitr
