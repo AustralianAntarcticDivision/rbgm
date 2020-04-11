@@ -11,7 +11,7 @@ facevertsparse <-
     p2 <- as.numeric(x0[[grep("p2", x)]][2:3])
     #  cs <- as.numeric(x0[[grep("cs", x)]][2:3])
     #  lr <- as.integer(x0[[grep("lr", x)]][2:3])
-    tibble::tibble(x = c(p1[1], p2[1]), y = c(p1[2], p2[2]))
+    .mk_tibble(x = c(p1[1], p2[1]), y = c(p1[2], p2[2]))
     
   }
 facedataparse <- function(x) {
@@ -21,7 +21,7 @@ facedataparse <- function(x) {
   len <- as.numeric(x0[[ind]][2])
   cs <- as.numeric(x0[[grep("cs", x)]][2:3])
   lr <- as.integer(x0[[grep("lr", x)]][2:3])
-  tibble::tibble(cosine = cs[1], sine = cs[2], left = lr[1], right = lr[2], length = len)
+  .mk_tibble(cosine = cs[1], sine = cs[2], left = lr[1], right = lr[2], length = len)
   
 }
 
@@ -40,8 +40,8 @@ boxparse <- function(x) {
   metavals <- lapply(strsplit(x[-insideind], "\\s+"), function(x) x[-1])
   names(metavals) <- metalabs
   
-  list(verts = tibble::tibble(x = verts[,1], y = verts[,2]), 
-       faces =  tibble::tibble(iface = i_parse(metavals[["iface"]]), ibox = i_parse(metavals[["ibox"]])), 
+  list(verts = .mk_tibble(x = verts[,1], y = verts[,2]), 
+       faces =  .mk_tibble(iface = i_parse(metavals[["iface"]]), ibox = i_parse(metavals[["ibox"]])), 
        meta = metavals[!names(metavals) %in% c("iface", "ibox")], insideX = centroid[1], insideY = centroid[2])
 }
 grepItems <- function(tex, itemname, nitem) {

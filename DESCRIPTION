@@ -1,7 +1,7 @@
 Package: rbgm
 Type: Package
 Title: Tools for 'Box Geometry Model' (BGM) Files and Topology for the Atlantis Ecosystem Model
-Version: 0.0.5.9002
+Version: 0.0.5.9003
 Authors@R: c(
     person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
     )
@@ -12,17 +12,14 @@ Depends:
 Imports: 
     dplyr,
     geosphere,
-    tibble (>= 1.1),
     rlang,
     reproj
 Suggests:
     bgmfiles, 
     covr,
-    graticule, 
     knitr,
     rmarkdown,
     roxygen2, 
-    scales, 
     spdplyr,
     testthat
 Description: Facilities for working with Atlantis box-geometry model (BGM) 

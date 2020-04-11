@@ -79,14 +79,14 @@ bgmfile <- function(x, ...) {
   ## we only need boxverts for non-face boxes (boundary faces), but use to check data sense
   boxverts <- dplyr::bind_rows(lapply(seq_along(boxes0), function(xa) {aa <- boxes0[[xa]]$verts; .bx0 = rep(xa - 1, nrow(boxes0[[xa]]$verts)); aa$.bx0 <- .bx0; aa}))
   boxes<- dplyr::bind_rows( 
-                  lapply(boxes0, function(a) dplyr::bind_cols(tibble::as_tibble(a[["meta"]]), 
-                                                              tibble::as_tibble(a[c("insideX", "insideY", ".bx0")]))))
+                  lapply(boxes0, function(a) dplyr::bind_cols(.as_tibble(a[["meta"]]), 
+                                                              .as_tibble(a[c("insideX", "insideY", ".bx0")]))))
   ## ibox/iface are the component faces, and ibox the neighbouring box (.bx0 is the box we belong to!)
   facesXboxes <- dplyr::bind_rows(lapply(boxes0, "[[", "faces"), .id = ".bx0") %>% 
     dplyr::mutate(.bx0 = as.numeric(.data$.bx0) - 1)
 
   bnd_verts <- do.call(rbind, lapply(strsplit(tx[bnd_vertInd], "\\s+"), function(x) as.numeric(x[-1])))
-  boundaryverts <- tibble::tibble(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
+  boundaryverts <- .mk_tibble(x = bnd_verts[,1], y = bnd_verts[,2], bndvert = seq(nrow(bnd_verts)))
   
   for (i in seq(ncol(boxes))) {
     if (is.character(boxes[[i]])) {

@@ -1,3 +1,14 @@
+.mk_tibble <- function(...) {
+  out <- as.data.frame(list(...), stringsAsFactors = FALSE)
+  class(out) <- c("tbl_df", "tbl", "data.frame")
+  out
+}
+.as_tibble <- function(x) {
+  out <- as.data.frame(x, stringsAsFactors = FALSE)
+  class(out) <- c("tbl_df", "tbl", "data.frame")
+  out
+}
+
 
 # fixproj("+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
 # fixproj("proj=aea lat_1=-18 lat_2=-36 lat_0=0 lon_0=134 x_0=3000000 y_0=6000000 ellps=GRS80 towgs84=0,0,0,0,0,0,0 units=m no_defs")

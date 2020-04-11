@@ -26,7 +26,6 @@ Read in an example .bgm file with `bgmfile`, and plot it as box-polygons.
 
 ```{r}
 library(rbgm)
-library(scales)  ## for alpha function
 library(bgmfiles) ## example files
 ## example data set in package
 fname <- bgmfiles(pattern = "Nordic")[1L]
@@ -78,7 +77,7 @@ For illustration isolate boxes that are outside the boundary.
 plot(subset(spdf, boundary), border = "firebrick", lwd = 3)
 
 ## or just get a single boundary for the inner
-plot(boundarySpatial(bgm), border = alpha("dodgerblue", 0.3), lwd = 7, add = TRUE)
+plot(boundarySpatial(bgm), border =  "#1E90FF4C", lwd = 7, add = TRUE)
 ```
 
 Plot the boxes and then label the faces. 
