@@ -2,15 +2,39 @@
 % Please edit documentation in R/Spatial.R
 \name{boxSpatial}
 \alias{boxSpatial}
+\alias{box_sp}
+\alias{box_sf}
 \alias{boundarySpatial}
+\alias{boundary_sp}
+\alias{boundary_sf}
+\alias{node_sp}
+\alias{point_sp}
 \alias{faceSpatial}
+\alias{face_sp}
+\alias{face_sf}
 \title{Convert to Spatial}
 \usage{
 boxSpatial(bgm)
 
+box_sp(bgm)
+
+box_sf(bgm)
+
 boundarySpatial(bgm)
 
+boundary_sp(bgm)
+
+boundary_sf(bgm)
+
+node_sp(bgm)
+
+point_sp(bgm)
+
 faceSpatial(bgm)
+
+face_sp(bgm)
+
+face_sf(bgm)
 }
 \arguments{
 \item{bgm}{output of a BGM file, as returned by \code{\link{bgmfile}}}

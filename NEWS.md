@@ -1,3 +1,12 @@
+# rbgm dev
+
+* New functions `box_sp()`, `boundary_sp()`, `node_sp()`, `point_sp()`,
+`face_sp`, `box_sf()`, `boundary_sf()`, `node_sf()`, `point_sf`. The `_sp`
+versions are simply aliases of `boxSpatial(), boundarySpatial(), nodeSpatial(),
+and pointSpatial()` - but with new names to be consistent with the sf versions.
+ 
+* rbgm now imports sfheaders. 
+
 # rbgm 0.0.5
 
 * Included `rgeos` and `spdplyr` in Suggests, thanks to CRAN. 
