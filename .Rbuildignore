@@ -7,7 +7,7 @@
 ^appveyor\.yml$
 ^cran-comments\.md$
 ^codecov\.yml$
-^docs$
 ^.Rhistory$
 ^CODE_OF_CONDUCT\.md$
 ^CRAN-RELEASE$
+^\.github$

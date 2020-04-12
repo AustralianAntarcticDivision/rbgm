@@ -1,16 +1,17 @@
+<!-- badges: start -->
+
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Build
-Status](https://travis-ci.org/AustralianAntarcticDivision/rbgm.png?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/rbgm)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/rbgm?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/rbgm)
+[![R build
+status](https://github.com/AustralianAntarcticDivision/rbgm/workflows/R-CMD-check/badge.svg)](https://github.com/AustralianAntarcticDivision/rbgm/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rbgm)](https://CRAN.R-project.org/package=rbgm)[![CRAN
 RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/rbgm)](https://cran.r-project.org/package=rbgm)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/rbgm/master.svg)](https://codecov.io/github/AustralianAntarcticDivision/rbgm?branch=master)
+<!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
