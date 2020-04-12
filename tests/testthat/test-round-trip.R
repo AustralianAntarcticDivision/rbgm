@@ -11,17 +11,6 @@ bfile <- grep("antarctica_99", bgmfiles::bgmfiles(), value = TRUE)
   polybgm <- rbgm::boxSpatial(bgm)
   linebgm <- rbgm::faceSpatial(bgm)
   
-  ## note the minus one on seq
-  for (abox in (seq(nrow(polybgm)) -1)) {
-    aline <- linebgm %>% filter(.fx0 %in% (bgm$facesXboxes %>% dplyr::filter(.bx0 == abox))$iface)
-    poly <- polybgm %>% filter(.bx0 == abox) 
- }    
-    #scan("", 1)
-    test_that("round tripping works to get the right box and faces", {
-      expect_true(aline@bbox[1, 1] > 136 && aline@bbox[1, 2] < 172)
-      
-    })
-  
 #}
   
 ## run on some systems
