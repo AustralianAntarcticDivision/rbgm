@@ -98,7 +98,7 @@ box_sf <- function(bgm) {
   ## but we can't generate a WKT string without manual insertion or invoking GDAL/PROJ
   ## so obviously we stick with the older style and folks will have to apply
   ## workarounds until the tools get better
-  attr(sfc, "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  attr(sfc, "crs") <- structure(list(epsg = NA_integer_, proj4string = bgm$extra$projection), class = "crs")
   
   data[["geometry"]] <- sfc
   attr(data, "sf_column") <- "geometry"
@@ -131,7 +131,7 @@ boundary_sf <- function(bgm) {
   x$id <- 1
   out <- sfheaders::sf_polygon(x, x= "x", y = "y", polygon_id = "id", linestring_id = "id")
   out[["label"]] <- "boundary"
-  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj4string = bgm$extra$projection), class = "crs")
   
   out
 }
@@ -185,7 +185,7 @@ node_sp <- nodeSpatial
 #' @export 
 node_sf <- function(bgm) {
   out <- sfheaders::sf_point(data.frame(x = bgm$vertices$x, y = bgm$vertices$y))
-  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj4string = bgm$extra$projection), class = "crs")
   
   out
 }
@@ -208,7 +208,7 @@ point_sp <- pointSpatial
 point_sf <- function(bgm) {
   bgmv <- bgm$vertices %>% inner_join(bgm$facesXverts)
   out <- sfheaders::sf_point(bgmv, x = "x", y = "y", keep = TRUE) 
-  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj4string = bgm$extra$projection), class = "crs")
   
   out
 }
@@ -245,7 +245,7 @@ face_sf <- function(bgm) {
   rownames(data) <- data$label
   faceverts$label <- as.integer(factor(faceverts$label))
   out <- sfheaders::sf_linestring(faceverts, x = "x", y = "y", linestring_id = "label")
-  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
+  attr(out[["geometry"]], "crs") <- structure(list(epsg = NA_integer_, proj4string = bgm$extra$projection), class = "crs")
   out
 }
 sptableFace <- function(x, object = ".fx0", xy = c("x", "y"), crs = NA_character_) {
