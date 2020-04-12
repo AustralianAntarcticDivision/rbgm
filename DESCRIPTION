@@ -1,10 +1,8 @@
 Package: rbgm
 Type: Package
 Title: Tools for 'Box Geometry Model' (BGM) Files and Topology for the Atlantis Ecosystem Model
-Version: 0.0.5.9004
-Authors@R: c(
-    person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
-    )
+Version: 0.1.0
+Authors@R: person("Michael D.", "Sumner", , "mdsumner@gmail.com", c("aut", "cre"))
 Depends:
    R (>= 3.2.2), 
     raster,
@@ -21,13 +19,12 @@ Suggests:
     knitr,
     rmarkdown,
     roxygen2, 
-    spdplyr,
     testthat
 Description: Facilities for working with Atlantis box-geometry model (BGM) 
  files. Atlantis is a deterministic, biogeochemical, whole-of-ecosystem model. 
  Functions are provided to read from BGM files directly, preserving their 
- internal topology, as well as helper functions to generate 'Spatial' objects.
- This functionality aims to simplify the creation and modification of box 
+ internal topology, as well as helper functions to generate spatial data from these
+ mesh forms. This functionality aims to simplify the creation and modification of box 
  and geometry as well as the ability to integrate with other data sources. 
 NeedsCompilation: no
 ByteCompile: yes

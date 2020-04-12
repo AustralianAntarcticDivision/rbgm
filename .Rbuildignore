@@ -9,3 +9,4 @@
 ^codecov\.yml$
 ^docs$
 ^.Rhistory$
+^CODE_OF_CONDUCT\.md$

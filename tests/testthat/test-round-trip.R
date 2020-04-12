@@ -4,7 +4,6 @@ context("round-trip of BGM links")
 #devtools::install_github("mdsumner/rbgm")
 library(rbgm)
 library(dplyr)
-library(spdplyr)
 bfile <- grep("antarctica_99", bgmfiles::bgmfiles(), value = TRUE)
 #for (bfile in bgmfiles::bgmfiles()) {
   context(sprintf("reading file %s", basename(bfile)))
@@ -16,9 +15,7 @@ bfile <- grep("antarctica_99", bgmfiles::bgmfiles(), value = TRUE)
   for (abox in (seq(nrow(polybgm)) -1)) {
     aline <- linebgm %>% filter(.fx0 %in% (bgm$facesXboxes %>% dplyr::filter(.bx0 == abox))$iface)
     poly <- polybgm %>% filter(.bx0 == abox) 
-#    plot(poly)
-#    plot(aline, add = TRUE, col = "red")
-  }    
+ }    
     #scan("", 1)
     test_that("round tripping works to get the right box and faces", {
       expect_true(aline@bbox[1, 1] > 136 && aline@bbox[1, 2] < 172)

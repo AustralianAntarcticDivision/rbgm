@@ -9,16 +9,37 @@ sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_
 } 
 
 
-#' Convert to Spatial
+#' Convert to spatial format
 #'
-#' Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object. 
+#' Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object 
+#' or a sf object. 
+#' 
+#'  Note that the `_sp` forms are aliased to original functions called `*Spatial`, and 
+#'  now have `_sf` counterparts to return that format.  
 #' @param bgm output of a BGM file, as returned by \code{\link{bgmfile}} 
-#'
-#' @return Spatial* object 
+#' 
+#' @section Warning: 
+#' The sf objects created by `box_sf()`, `node_sf()`, `face_sf()`, `boundary_sf()` and
+#' `point_sf()` were not created by the sf package. They were created with 
+#' reference to the sf format prior to November 2019. If you have problems 
+#' it may be necessary to recreate the 'crs' part of the of the object with code like
+#' `x <- box_sf(bgm); library(sf); st_crs(x) <- st_crs(attr(x$geometry, "crs")$proj)`. 
+#' 
+#' Get in touch ([create an issue](https://github.com/AustralianAntarcticDivision/rbgm/issues)) if you have any troubles. 
+#' @return Spatial* object or sf object
 #' \itemize{
-#' \item boxSpatial \code{\link[sp]{SpatialPolygonsDataFrame}} 
-#' \item faceSpatial  \code{\link[sp]{SpatialLinesDataFrame}} 
-#' \item boundarySpatial \code{\link[sp]{SpatialPolygonsDataFrame}} 
+#' \item box_sp \code{\link[sp]{SpatialPolygonsDataFrame}} 
+#' \item face_sp  \code{\link[sp]{SpatialLinesDataFrame}} 
+#' \item boundary_sp \code{\link[sp]{SpatialPolygonsDataFrame}} 
+#' \item node_sp \code{\link[sp]{SpatialPointsDataFrame}} 
+#' \item point_sp \code{\link[sp]{SpatialPointsDataFrame}} 
+#' }
+#' \itemize{
+#' \item box_sf \code{sf with sfc_POLYGON column} 
+#' \item face_sf  \code{sf with sfc_LINESTRING column} 
+#' \item boundary_sf \code{sf with sfc_POLYGON column} 
+#' \item node_sf \code{sf with sfc_POINT column} 
+#' \item point_sf \code{sf with sfc_POINT column}
 #' }
 #' @export
 #' @rdname rbgm-Spatial
@@ -26,11 +47,12 @@ sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_
 #' @examples
 #' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(fname)
-#' spdf <- boxSpatial(bgm)
-#' sldf <- faceSpatial(bgm)
+#' spdf <- box_sp(bgm)
+#' sfdf <- box_sf(bgm)
+#' sldf <- face_sp(bgm)
 #' 
-#' plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
-#' plot(faceSpatial(bgm), col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
+#' plot(spdf, col = grey(seq(0, 1, length = nrow(bgm$boxes))))
+#' plot(sldf, col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
 boxSpatial <- function(bgm) {
   data <- bgm$boxes
   data <- as.data.frame(data, stringsAsFactors = FALSE)
@@ -71,6 +93,11 @@ box_sf <- function(bgm) {
   inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
   data$boundary <- inside < 1
   sfc <- sfheaders::sfc_polygon(boxverts, x = "x", y = "y", polygon_id = "label", linestring_id = "label")
+
+    ## this is tricky, it seems bad not to use the going-forwards format for crs
+  ## but we can't generate a WKT string without manual insertion or invoking GDAL/PROJ
+  ## so obviously we stick with the older style and folks will have to apply
+  ## workarounds until the tools get better
   attr(sfc, "crs") <- structure(list(epsg = NA_integer_, proj = bgm$extra$projection), class = "crs")
   
   data[["geometry"]] <- sfc
@@ -111,29 +138,40 @@ boundary_sf <- function(bgm) {
 
 #' Vertices as Spatial points. 
 #' 
-#' Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}. 
+#' Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}} or
+#' a sf dataframe. 
 #' 
-#' Nodes are the unique coordinates (or vertices), points are the instances of those coordinates that exist in the model. 
-#' \code{\link{pointSpatial}} returns all instances of the vertices with information about which boxes they belong to. 
-#' \code{\link{nodeSpatial}} returns all vertices. 
+#' Nodes are the unique coordinates (or vertices), points are the instances of
+#' those coordinates that exist in the model. \code{\link{point_sp}} or \code{\link{point_sf}} 
+#' return all instances of the vertices with information about which boxes they belong
+#' to. \code{\link{node_sp}} and \code{\link{node_sf}} return all vertices.
 #' 
 #' @param bgm BGM object from \code{\link{bgmfile}}
 #'
-#' @return  \code{\link[sp]{SpatialPointsDataFrame}}
+#' @return  \code{\link[sp]{SpatialPointsDataFrame}} or sf data frame
 #' @export
 #' @importFrom sp SpatialPointsDataFrame proj4string 
 #' @aliases node_sf
+#' @section Warning: 
+#' The sf objects created by `box_sf()`, `node_sf()`, `face_sf()`, `boundary_sf()` and
+#' `point_sf()` were not created by the sf package. They were created with 
+#' reference to the sf format prior to November 2019. If you have problems 
+#' it may be necessary to recreate the 'crs' part of the of the object with code like
+#' `x <- node_sf(bgm); library(sf); st_crs(x) <- st_crs(attr(x$geometry, "crs")$proj)`. 
+#' 
+#' Get in touch ([create an issue](https://github.com/AustralianAntarcticDivision/rbgm/issues)) if you have any troubles. 
 #' @examples
 #' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(fname)
-#' spnode <- nodeSpatial(bgm)
+#' spnode <- node_sp(bgm)
 #' names(spnode)
 #' nrow(spnode)  ## only unique vertices
 #' nrow(bgm$vertices)
 #' 
-#' sppoints <- pointSpatial(bgm)
+#' sppoints <- point_sp(bgm)
 #' names(sppoints)
 #' nrow(sppoints)
+#' names(point_sf(bgm))
 nodeSpatial <- function(bgm) {
   SpatialPointsDataFrame(as.matrix(bgm$vertices[, c("x", "y")]), data.frame(.vx0 = bgm$vertices$.vx0), 
                          proj4string = CRS(bgm$extra["projection"][[1]], doCheckCRSArgs = FALSE))

@@ -12,7 +12,7 @@
 \alias{faceSpatial}
 \alias{face_sp}
 \alias{face_sf}
-\title{Convert to Spatial}
+\title{Convert to spatial format}
 \usage{
 boxSpatial(bgm)
 
@@ -40,22 +40,48 @@ face_sf(bgm)
 \item{bgm}{output of a BGM file, as returned by \code{\link{bgmfile}}}
 }
 \value{
-Spatial* object 
+Spatial* object or sf object
 \itemize{
-\item boxSpatial \code{\link[sp]{SpatialPolygonsDataFrame}} 
-\item faceSpatial  \code{\link[sp]{SpatialLinesDataFrame}} 
-\item boundarySpatial \code{\link[sp]{SpatialPolygonsDataFrame}} 
+\item box_sp \code{\link[sp]{SpatialPolygonsDataFrame}} 
+\item face_sp  \code{\link[sp]{SpatialLinesDataFrame}} 
+\item boundary_sp \code{\link[sp]{SpatialPolygonsDataFrame}} 
+\item node_sp \code{\link[sp]{SpatialPointsDataFrame}} 
+\item point_sp \code{\link[sp]{SpatialPointsDataFrame}} 
+}
+\itemize{
+\item box_sf \code{sf with sfc_POLYGON column} 
+\item face_sf  \code{sf with sfc_LINESTRING column} 
+\item boundary_sf \code{sf with sfc_POLYGON column} 
+\item node_sf \code{sf with sfc_POINT column} 
+\item point_sf \code{sf with sfc_POINT column}
 }
 }
 \description{
-Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object.
+Take the output of \code{\link{bgmfile}} and return a \code{\link[sp]{Spatial}} object 
+or a sf object.
 }
+\details{
+Note that the `_sp` forms are aliased to original functions called `*Spatial`, and 
+ now have `_sf` counterparts to return that format.
+}
+\section{Warning}{
+ 
+The sf objects created by `box_sf()`, `node_sf()`, `face_sf()`, `boundary_sf()` and
+`point_sf()` were not created by the sf package. They were created with 
+reference to the sf format prior to November 2019. If you have problems 
+it may be necessary to recreate the 'crs' part of the of the object with code like
+`x <- box_sf(bgm); library(sf); st_crs(x) <- st_crs(attr(x$geometry, "crs")$proj)`. 
+
+Get in touch ([create an issue](https://github.com/AustralianAntarcticDivision/rbgm/issues)) if you have any troubles.
+}
+
 \examples{
 fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 bgm <- bgmfile(fname)
-spdf <- boxSpatial(bgm)
-sldf <- faceSpatial(bgm)
+spdf <- box_sp(bgm)
+sfdf <- box_sf(bgm)
+sldf <- face_sp(bgm)
 
-plot(boxSpatial(bgm), col = grey(seq(0, 1, length = nrow(bgm$boxes))))
-plot(faceSpatial(bgm), col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
+plot(spdf, col = grey(seq(0, 1, length = nrow(bgm$boxes))))
+plot(sldf, col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
 }

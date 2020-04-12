@@ -19,25 +19,39 @@ point_sf(bgm)
 \item{bgm}{BGM object from \code{\link{bgmfile}}}
 }
 \value{
-\code{\link[sp]{SpatialPointsDataFrame}}
+\code{\link[sp]{SpatialPointsDataFrame}} or sf data frame
 }
 \description{
-Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}}.
+Obtain all vertices as a \code{\link[sp]{SpatialPointsDataFrame}} or
+a sf dataframe.
 }
 \details{
-Nodes are the unique coordinates (or vertices), points are the instances of those coordinates that exist in the model. 
-\code{\link{pointSpatial}} returns all instances of the vertices with information about which boxes they belong to. 
-\code{\link{nodeSpatial}} returns all vertices.
+Nodes are the unique coordinates (or vertices), points are the instances of
+those coordinates that exist in the model. \code{\link{point_sp}} or \code{\link{point_sf}} 
+return all instances of the vertices with information about which boxes they belong
+to. \code{\link{node_sp}} and \code{\link{node_sf}} return all vertices.
 }
+\section{Warning}{
+ 
+The sf objects created by `box_sf()`, `node_sf()`, `face_sf()`, `boundary_sf()` and
+`point_sf()` were not created by the sf package. They were created with 
+reference to the sf format prior to November 2019. If you have problems 
+it may be necessary to recreate the 'crs' part of the of the object with code like
+`x <- node_sf(bgm); library(sf); st_crs(x) <- st_crs(attr(x$geometry, "crs")$proj)`. 
+
+Get in touch ([create an issue](https://github.com/AustralianAntarcticDivision/rbgm/issues)) if you have any troubles.
+}
+
 \examples{
 fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 bgm <- bgmfile(fname)
-spnode <- nodeSpatial(bgm)
+spnode <- node_sp(bgm)
 names(spnode)
 nrow(spnode)  ## only unique vertices
 nrow(bgm$vertices)
 
-sppoints <- pointSpatial(bgm)
+sppoints <- point_sp(bgm)
 names(sppoints)
 nrow(sppoints)
+names(point_sf(bgm))
 }
