@@ -1,5 +1,5 @@
 ## Test environments
-* local debian 16.04, R 3.5.0
+* local debian 18.04, R 3.6.3
 * win-builder (devel and release)
 
 ## R CMD check results
