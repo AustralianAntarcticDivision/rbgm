@@ -2,7 +2,6 @@
 #'
 #' @param x bgm file name
 #'
-#' @return
 #' @noRd
 #' @examples
 #' x <- bgmfiles::bgmfiles("antarctica_28")

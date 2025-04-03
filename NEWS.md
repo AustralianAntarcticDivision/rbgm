@@ -1,3 +1,7 @@
+# rbgm 0.2.0
+
+* Fixed broken doc links, thanks CRAN. 
+
 # rbgm 0.1.0
 
 * rbgm has growed up a bit, cut a lot of ties from the anti-mesh brigade, so we celebrate with a 0.1.0 release.
