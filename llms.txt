@@ -1,0 +1,93 @@
+## rbgm - R tools for Box Geometry Model files
+
+`rbgm` allows reading of geometry from BGM files, either in raw
+coordinate form or as Spatial objects or sf objects. The aim is to make
+all of the following straightforward:
+
+- read of the BGM format, maintaining all topology and attributes
+- use of the BGM specification for visualization and data extraction
+- creation of BGM from shapefiles, R spatial objects and whatever else
+
+## Installation
+
+Install from CRAN:
+
+``` r
+
+install.packages("rbgm")
+```
+
+Install the development version from Github using `devtools`.
+
+``` r
+
+# install.packages("devtools")
+devtools::install_github("AustralianAntarcticDivision/rbgm")
+```
+
+### How can I contribute to rbgm?
+
+Install, use, test the package, and let me know!
+
+Please use the Issues tab on GitHub to add feature requests and bug
+reports: <https://github.com/AustralianAntarcticDivision/rbgm/issues/>
+
+## Examples
+
+See the package vignettes for examples.
+
+## License
+
+The code in this package is released under the MIT license; the
+copyright holder is the Department of Climate Change, Energy, the
+Environment and Water (see `LICENSE`). Versions up to 0.2.0 were
+released under GPL-3. Note that rbgm depends on other packages that
+carry their own licenses.
+
+## Code of Conduct
+
+Please note that the rbgm project is released with a [Contributor Code
+of
+Conduct](https://australianantarcticdivision.github.io/rbgm/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+# Package index
+
+## All functions
+
+- [`bgmfile()`](https://australianantarcticdivision.github.io/rbgm/reference/bgmfile.md)
+  [`read_bgm()`](https://australianantarcticdivision.github.io/rbgm/reference/bgmfile.md)
+  : Read BGM
+- [`build_dz()`](https://australianantarcticdivision.github.io/rbgm/reference/build_dz.md)
+  : Build Atlantis dz Values
+- [`nodeSpatial()`](https://australianantarcticdivision.github.io/rbgm/reference/nodeSpatial.md)
+  [`node_sf()`](https://australianantarcticdivision.github.io/rbgm/reference/nodeSpatial.md)
+  [`pointSpatial()`](https://australianantarcticdivision.github.io/rbgm/reference/nodeSpatial.md)
+  [`point_sf()`](https://australianantarcticdivision.github.io/rbgm/reference/nodeSpatial.md)
+  : Vertices as Spatial points.
+- [`boxSpatial()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`box_sp()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`box_sf()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`boundarySpatial()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`boundary_sp()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`boundary_sf()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`node_sp()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`point_sp()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`faceSpatial()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`face_sp()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  [`face_sf()`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-Spatial.md)
+  : Convert to spatial format
+- [`rbgm`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-package.md)
+  [`rbgm-package`](https://australianantarcticdivision.github.io/rbgm/reference/rbgm-package.md)
+  : Utilities for BGM files for Atlantis
+
+# Articles
+
+### All vignettes
+
+- [BGM
+  examples](https://australianantarcticdivision.github.io/rbgm/articles/BGM_examplefiles.md):
+- [BGM as Spatial
+  objects](https://australianantarcticdivision.github.io/rbgm/articles/BGM_Spatial.md):
+- [Box Geometry Model (BGM)
+  files](https://australianantarcticdivision.github.io/rbgm/articles/BGMfiles.md):

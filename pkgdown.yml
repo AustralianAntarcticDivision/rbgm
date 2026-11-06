@@ -1,9 +1,11 @@
-pandoc: 2.7.3
-pkgdown: 1.5.1.9000
-pkgdown_sha: cb74ce08c4b25adda98256ea46196b1182f4e0ea
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
 articles:
-  BGM_Spatial: BGM_Spatial.html
   BGM_examplefiles: BGM_examplefiles.html
+  BGM_Spatial: BGM_Spatial.html
   BGMfiles: BGMfiles.html
-last_built: 2020-04-12T14:05Z
-
+last_built: 2026-11-06T00:27Z
+urls:
+  reference: https://australianantarcticdivision.github.io/rbgm/reference
+  article: https://australianantarcticdivision.github.io/rbgm/articles
