@@ -1,15 +1,13 @@
-context("parse")
-library(testthat)
 ## TODO: Rename context
 ## TODO: Add more tests
 
 test_that("bodgy files fail gracefully", {
-          expect_that(rbgm::bgmfile(""), throws_error("empty string"))
-          expect_that(rbgm::bgmfile("sooner_or_later"), throws_error("no file found"))
+          expect_error(rbgm::bgmfile(""), "empty string")
+          expect_error(rbgm::bgmfile("sooner_or_later"), "no file found")
           afile <- tempfile()
           file.create(afile)
           on.exit(unlink(afile))
-          expect_that(rbgm::bgmfile(afile), throws_error("no lines found in file"))
+          expect_error(rbgm::bgmfile(afile), "no lines found in file")
           
 }
           )
@@ -21,8 +19,8 @@ boxtext_tab <- c("box0.label\tBoundaryBox0 ", "box0.inside\t1560270.052 2063299.
                  "box0.vert\t1529167.119 2084607.892")
 boxtext_space <- gsub("\\t", " ", boxtext_tab)
 test_that("box parse handles different whitespace", {
-  expect_that(rbgm:::boxparse(boxtext_tab), is_a("list"))
-  expect_that(rbgm:::boxparse(boxtext_space), is_a("list"))
+  expect_type(rbgm:::boxparse(boxtext_tab), "list")
+  expect_type(rbgm:::boxparse(boxtext_space), "list")
 })
 
 test_that("fixproj can handle many weird proj.4 strings", {

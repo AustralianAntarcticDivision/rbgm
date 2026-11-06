@@ -47,12 +47,23 @@ model (BGM) files
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://research.csiro.au/atlantis/}
+  \item \url{https://github.com/AustralianAntarcticDivision/rbgm/}
+  \item \url{https://australianantarcticdivision.github.io/rbgm/}
   \item Report bugs at \url{https://github.com/AustralianAntarcticDivision/rbgm/issues/}
 }
 
 }
 \author{
 \strong{Maintainer}: Michael D. Sumner \email{mdsumner@gmail.com}
+
+Authors:
+\itemize{
+  \item Michael D. Sumner \email{mdsumner@gmail.com}
+}
+
+Other contributors:
+\itemize{
+  \item Department of Climate Change, Energy, the Environment and Water (Australian Antarctic Division) [copyright holder]
+}
 
 }

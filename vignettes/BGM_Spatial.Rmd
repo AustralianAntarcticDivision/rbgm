@@ -47,7 +47,7 @@ There are functions for converting from the raw .bgm data structures to `Spatial
 * `pointSpatial` converts to a `SpatialPointsDataFrame`, with attributes for all instances of the vertices in the model (faces share vertices)
 * `boundarySpatial` converts just the boundary path to `SpatialPolygonsDataFrame`
 
-From these conversions we can export to GIS formats such as [GeoPackage](http://www.geopackage.org/). 
+From these conversions we can export to GIS formats such as [GeoPackage](https://www.geopackage.org/). 
 
 It's important to note that the Spatial objects cannot store the full topological and attribute information present in the .bgm, so these are convenience converters that are one-way. We can generate .bgm from these objects, but it cannot be stored in just one Spatial object. 
 

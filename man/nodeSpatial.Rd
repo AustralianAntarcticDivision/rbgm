@@ -43,6 +43,7 @@ Get in touch ([create an issue](https://github.com/AustralianAntarcticDivision/r
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("bgmfiles")) withAutoprint(\{ # examplesIf}
 fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 bgm <- bgmfile(fname)
 spnode <- node_sp(bgm)
@@ -54,4 +55,5 @@ sppoints <- point_sp(bgm)
 names(sppoints)
 nrow(sppoints)
 names(point_sf(bgm))
+\dontshow{\}) # examplesIf}
 }

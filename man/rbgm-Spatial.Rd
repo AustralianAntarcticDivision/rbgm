@@ -76,6 +76,7 @@ Get in touch ([create an issue](https://github.com/AustralianAntarcticDivision/r
 }
 
 \examples{
+\dontshow{if (rlang::is_installed("bgmfiles")) withAutoprint(\{ # examplesIf}
 fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 bgm <- bgmfile(fname)
 spdf <- box_sp(bgm)
@@ -84,4 +85,5 @@ sldf <- face_sp(bgm)
 
 plot(spdf, col = grey(seq(0, 1, length = nrow(bgm$boxes))))
 plot(sldf, col = rainbow(nrow(bgm$faces)), lwd = 2,  add = TRUE)
+\dontshow{\}) # examplesIf}
 }

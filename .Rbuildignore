@@ -3,12 +3,13 @@
 ^README\.Rmd$
 ^figure/README-.*\.png$
 ^figure$
-^\.travis\.yml$
-^appveyor\.yml$
 ^cran-comments\.md$
 ^codecov\.yml$
-^.Rhistory$
 ^CODE_OF_CONDUCT\.md$
 ^CRAN-RELEASE$
 ^\.github$
 ^rbgm\.Rproj$
+^LICENSE\.md$
+^\.Rhistory$
+^_pkgdown\.yml$
+^docs$

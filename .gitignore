@@ -4,3 +4,6 @@
 *.Rproj
 inst/doc
 .Rhistory
+docs/
+.RData
+.Ruserdata

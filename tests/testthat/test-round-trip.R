@@ -1,12 +1,11 @@
-library(testthat)
-context("round-trip of BGM links")
 
 #devtools::install_github("mdsumner/rbgm")
 library(rbgm)
 library(dplyr)
+skip_if_not_installed("bgmfiles")
+
 bfile <- grep("antarctica_99", bgmfiles::bgmfiles(), value = TRUE)
 #for (bfile in bgmfiles::bgmfiles()) {
-  context(sprintf("reading file %s", basename(bfile)))
   bgm <- bgmfile(bfile)
   polybgm <- rbgm::boxSpatial(bgm)
   linebgm <- rbgm::faceSpatial(bgm)

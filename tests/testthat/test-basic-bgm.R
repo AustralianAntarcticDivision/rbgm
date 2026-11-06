@@ -1,10 +1,9 @@
-context("basic-bgm")
+
+skip_if_not_installed("bgmfiles")
 
 files <- bgmfiles::bgmfiles()
 test_that("bgmfile works", {
-  expect_that(
-  bgmfile(files[1])
-  , is_a("list"))
+  expect_type(bgmfile(files[1]), "list")
   ## this might change if the numfaces/actual_numfaces thing is fixed
   expect_output(lapply(files, bgmfile))
 })
@@ -12,11 +11,11 @@ test_that("bgmfile works", {
 for (i in seq_along(files)) {
 b <- bgmfile(files[i])
 test_that("conversion to Spatial works", {
-          expect_that(boxSpatial(b), is_a("SpatialPolygonsDataFrame"))
-          expect_that(faceSpatial(b), is_a("SpatialLinesDataFrame"))
-          expect_that(boundarySpatial(b), is_a("SpatialPolygonsDataFrame"))
-          expect_that(pointSpatial(b), is_a("SpatialPointsDataFrame"))
-          expect_that(nodeSpatial(b), is_a("SpatialPointsDataFrame"))
+          expect_s4_class(boxSpatial(b), "SpatialPolygonsDataFrame")
+          expect_s4_class(faceSpatial(b), "SpatialLinesDataFrame")
+          expect_s4_class(boundarySpatial(b), "SpatialPolygonsDataFrame")
+          expect_s4_class(pointSpatial(b), "SpatialPointsDataFrame")
+          expect_s4_class(nodeSpatial(b), "SpatialPointsDataFrame")
          # testthat::expect_lt(nrow(pointSpatial(b)), nrow(nodeSpatial(b)))
 }
           

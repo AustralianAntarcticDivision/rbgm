@@ -65,7 +65,7 @@ densifymindist <- function(x, mindist, longlat = longlat) {
 ##' to the top of the current interval. 
 ##'
 ##' Offset values are returned to move from \code{z} against the intervals in \code{zlayers}. The intervals are assumed
-##' to be sorted and increasing in value from \code{-Inf}inity. Once the maximum layer is reached the result is padded
+##' to be sorted and increasing in value from \code{-Inf} to \code{Inf}. Once the maximum layer is reached the result is padded
 ##' by that top value. 
 ##' 
 ##' @title Build Atlantis dz Values

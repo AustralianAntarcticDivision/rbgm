@@ -1,3 +1,17 @@
+# rbgm (development version)
+
+* relicensed from GPL-3 to MIT; the copyright holder is the Department of Climate Change, Energy, the Environment and Water. Versions up to 0.2.0 were GPL-3.
+
+* default branch is now `main`; GitHub Actions refreshed (R-CMD-check, test-coverage, pkgdown) and the CRAN, check and coverage badges updated.
+
+* pkgdown site with a Bootstrap 5 theme; Code of Conduct updated to Contributor Covenant 2.1.
+
+* tests updated to testthat 3rd edition, and skipped when bgmfiles is not installed.
+
+* replaced deprecated `.data$x` in tidyselect `select()` calls.
+
+* DESCRIPTION: software name 'Atlantis' single-quoted, BGM acronym explained, `Language: en-US`, copyright holder role added; added `inst/WORDLIST`.
+
 # rbgm 0.2.0
 
 * Fixed broken doc links, thanks CRAN. 

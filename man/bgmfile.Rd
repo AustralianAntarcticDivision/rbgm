@@ -14,6 +14,11 @@ read_bgm(x, ...)
 
 \item{...}{ignored for now}
 }
+\value{
+A list of linked tables: `vertices`, `facesXverts`, `faces`, `facesXboxes`, 
+`boxesXverts`, `boxes` and `boundaryvertices`, which preserve the topology of the file, 
+plus `extra`, which holds the remaining file information (such as the projection).
+}
 \description{
 Read geometry and full topology from BGM files.
 }
@@ -22,10 +27,11 @@ BGM is a file format used for the 'Box Geometry Model' in the Atlantis Ecosystem
 This function reads everything from the .bgm file and returns it as linked tables.
 }
 \examples{
-library(bgmfiles)
-bfile <- sample(bgmfiles(), 1L)
+\dontshow{if (rlang::is_installed("bgmfiles")) withAutoprint(\{ # examplesIf}
+bfile <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 bgm <- bgmfile(bfile)
 str(bgm)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 See helper functions to convert the bgm tables to `Spatial` objects, \code{\link{boxSpatial}}, 

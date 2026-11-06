@@ -18,30 +18,36 @@ export(pointSpatial)
 export(point_sf)
 export(point_sp)
 export(read_bgm)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_cols)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,distinct)
-importFrom(dplyr,inner_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,row_number)
-importFrom(dplyr,select)
+importFrom(dplyr,
+  "%>%",
+  arrange,
+  bind_cols,
+  bind_rows,
+  distinct,
+  inner_join,
+  mutate,
+  row_number,
+  select
+)
 importFrom(geosphere,gcIntermediate)
 importFrom(raster,isLonLat)
 importFrom(rlang,.data)
-importFrom(sp,CRS)
-importFrom(sp,Line)
-importFrom(sp,Lines)
-importFrom(sp,Polygon)
-importFrom(sp,Polygons)
-importFrom(sp,SpatialLines)
-importFrom(sp,SpatialLinesDataFrame)
-importFrom(sp,SpatialPointsDataFrame)
-importFrom(sp,SpatialPolygons)
-importFrom(sp,SpatialPolygonsDataFrame)
-importFrom(sp,point.in.polygon)
-importFrom(sp,proj4string)
-importFrom(sp,spDistsN1)
-importFrom(utils,head)
-importFrom(utils,type.convert)
+importFrom(sp,
+  CRS,
+  Line,
+  Lines,
+  Polygon,
+  Polygons,
+  SpatialLines,
+  SpatialLinesDataFrame,
+  SpatialPointsDataFrame,
+  SpatialPolygons,
+  SpatialPolygonsDataFrame,
+  point.in.polygon,
+  proj4string,
+  spDistsN1
+)
+importFrom(utils,
+  head,
+  type.convert
+)

@@ -1,4 +1,5 @@
-context("no names for sp")
+
+skip_if_not_installed("bgmfiles")
 
 bgm <- bgmfile(bgmfiles::bgmfiles()[3])
 bgmbox <- boxSpatial(bgm)

@@ -1,4 +1,3 @@
-context("reading bgm")
 
 
 ## extract the number in a 
@@ -31,6 +30,7 @@ verts <- function(x, type, app = "") {
 
 
 library(dplyr)
+skip_if_not_installed("bgmfiles")
 files <- bgmfiles::bgmfiles()
 basetoks <- c("#", "bnd_vert", "box.area", "box.botz", "box.horizmix", "box.ibox",
               "box.iface", "box.inside", "box.label", "box.nconn", "box.vert",
@@ -57,16 +57,16 @@ for (i in seq_along(files)) {
     ## if this test fails it may mean we have a new kind of file
     ## with a new bit of information
     ## or without something the other files have
-    testthat::expect_that(xtoks, testthat::is_identical_to(basetoks))
+    expect_identical(xtoks, basetoks)
     
   })
   
   test_that("all vertices are read as data frames", {
     
-    testthat::expect_that(bverts <- verts(d$tx, "box", "vert"), is_a("tbl_df"))
-    testthat::expect_that(f1verts <- verts(d$tx, "face", "p1"), is_a("tbl_df"))
-    testthat::expect_that(f2verts <- verts(d$tx, "face", "p2"), is_a("tbl_df"))
-    testthat::expect_that(bndverts <- verts(d$tx, "bnd_vert", ""), is_a("tbl_df"))
+    expect_s3_class(verts(d$tx, "box", "vert"), "tbl_df")
+    expect_s3_class(verts(d$tx, "face", "p1"), "tbl_df")
+    expect_s3_class(verts(d$tx, "face", "p2"), "tbl_df")
+    expect_s3_class(verts(d$tx, "bnd_vert", ""), "tbl_df")
     
   })
   

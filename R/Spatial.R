@@ -44,7 +44,7 @@ sptableBox <- function(x, object = ".bx0", xy = c("x", "y"), crs = NA_character_
 #' @export
 #' @rdname rbgm-Spatial
 #' @importFrom sp point.in.polygon Polygon Polygons SpatialPolygons SpatialPolygonsDataFrame 
-#' @examples
+#' @examplesIf rlang::is_installed("bgmfiles")
 #' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(fname)
 #' spdf <- box_sp(bgm)
@@ -59,10 +59,10 @@ boxSpatial <- function(bgm) {
   rownames(data) <- data$label
 
     
-  boxverts <- data %>% dplyr::select(.data$.bx0, .data$label) %>% 
+  boxverts <- data %>% dplyr::select(".bx0", "label") %>% 
     dplyr::inner_join(bgm$boxesXverts, ".bx0") %>% 
     dplyr::inner_join(bgm$vertices, ".vx0") %>% 
-    dplyr::select(-.data$.vx0, -.data$.bx0)
+    dplyr::select(-".vx0", -".bx0")
   
  ## test for inside boundary
   inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
@@ -84,10 +84,10 @@ box_sf <- function(bgm) {
   rownames(data) <- data$label
   
   
-  boxverts <- data %>% dplyr::select(.data$.bx0, .data$label) %>% 
+  boxverts <- data %>% dplyr::select(".bx0", "label") %>% 
     dplyr::inner_join(bgm$boxesXverts, ".bx0") %>% 
     dplyr::inner_join(bgm$vertices, ".vx0") %>% 
-    dplyr::select(-.data$.vx0, -.data$.bx0)
+    dplyr::select(-".vx0", -".bx0")
   
   ## test for inside boundary
   inside <- point.in.polygon(data$insideX, data$insideY, bgm$boundaryvertices$x, bgm$boundaryvertices$y)
@@ -116,7 +116,7 @@ box_sf <- function(bgm) {
 #' @rdname rbgm-Spatial
 boundarySpatial <- function(bgm) {
   SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(bgm$boundaryvertices %>% 
-                          dplyr::select(.data$x, .data$y) %>% as.matrix)), "bdy"))), 
+                          dplyr::select("x", "y") %>% as.matrix)), "bdy"))), 
                            data.frame(label = "boundary", row.names = "bdy"))
 }
 
@@ -127,7 +127,7 @@ boundary_sp <- boundarySpatial
 #' @export
 #' @rdname rbgm-Spatial
 boundary_sf <- function(bgm) {
-  x <- bgm$boundaryvertices %>% dplyr::select(.data$x, .data$y)
+  x <- bgm$boundaryvertices %>% dplyr::select("x", "y")
   x$id <- 1
   out <- sfheaders::sf_polygon(x, x= "x", y = "y", polygon_id = "id", linestring_id = "id")
   out[["label"]] <- "boundary"
@@ -160,7 +160,7 @@ boundary_sf <- function(bgm) {
 #' `x <- node_sf(bgm); library(sf); st_crs(x) <- st_crs(attr(x$geometry, "crs")$proj)`. 
 #' 
 #' Get in touch ([create an issue](https://github.com/AustralianAntarcticDivision/rbgm/issues)) if you have any troubles. 
-#' @examples
+#' @examplesIf rlang::is_installed("bgmfiles")
 #' fname <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(fname)
 #' spnode <- node_sp(bgm)
@@ -217,10 +217,10 @@ point_sf <- function(bgm) {
 faceSpatial <- function(bgm) {
   data <- bgm$faces 
   #data$label <- sprintf("face%i", data$.fx0)
-  faceverts <- data %>% dplyr::select(.data$.fx0, .data$label) %>% 
+  faceverts <- data %>% dplyr::select(".fx0", "label") %>% 
     inner_join(bgm$facesXverts, ".fx0") %>% 
     inner_join(bgm$vertices, ".vx0") %>% 
-    select(-.data$.vx0, -.data$.fx0)
+    select(-".vx0", -".fx0")
   
   data <- as.data.frame(data)
   rownames(data) <- data$label
@@ -236,10 +236,10 @@ face_sp <- faceSpatial
 face_sf <- function(bgm) {
   data <- bgm$faces 
   #data$label <- sprintf("face%i", data$.fx0)
-  faceverts <- data %>% dplyr::select(.data$.fx0, .data$label) %>% 
+  faceverts <- data %>% dplyr::select(".fx0", "label") %>% 
     inner_join(bgm$facesXverts, ".fx0") %>% 
     inner_join(bgm$vertices, ".vx0") %>% 
-    select(-.data$.vx0, -.data$.fx0)
+    select(-".vx0", -".fx0")
   
   data <- as.data.frame(data)
   rownames(data) <- data$label

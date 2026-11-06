@@ -9,15 +9,17 @@
 #' @param x path to a bgm file
 #' @param ... ignored for now
 #'
+#' @return A list of linked tables: `vertices`, `facesXverts`, `faces`, `facesXboxes`, 
+#' `boxesXverts`, `boxes` and `boundaryvertices`, which preserve the topology of the file, 
+#' plus `extra`, which holds the remaining file information (such as the projection).
 #' @export
 #' @seealso 
 #' See helper functions to convert the bgm tables to `Spatial` objects, \code{\link{boxSpatial}}, 
 #' \code{\link{faceSpatial}}, \code{\link{nodeSpatial}}, \code{\link{boundarySpatial}}, \code{\link{pointSpatial}}
 #' @importFrom dplyr %>% select arrange bind_rows bind_cols distinct mutate inner_join
 #' @importFrom utils  head type.convert
-#' @examples 
-#' library(bgmfiles)
-#' bfile <- sample(bgmfiles(), 1L)
+#' @examplesIf rlang::is_installed("bgmfiles")
+#' bfile <- bgmfiles::bgmfiles(pattern = "antarctica_28")
 #' bgm <- bgmfile(bfile)
 #' str(bgm)
 bgmfile <- function(x, ...) {
@@ -107,9 +109,9 @@ bgmfile <- function(x, ...) {
     distinct() %>% dplyr::arrange(.data$x, .data$y) %>% mutate(.vx0 = row_number())
   
   facesXverts <- faceverts %>% mutate(.p0 = rep(1:2, length = nrow(faceverts)))  %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% 
-    dplyr::select(-.data$x, -.data$y)
+    dplyr::select(-"x", -"y")
   
-  boxesXverts <- boxverts %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% dplyr::select(-.data$x, -.data$y)
+  boxesXverts <- boxverts %>% inner_join(vertices, c("x" = "x", "y" = "y")) %>% dplyr::select(-"x", -"y")
   
   # allverts <- allverts %>% select(x, y)
   list(vertices = vertices, facesXverts = facesXverts, faces = faces, facesXboxes = facesXboxes, boxesXverts = boxesXverts, boxes = boxes, boundaryvertices = boundaryverts, extra = extra)
